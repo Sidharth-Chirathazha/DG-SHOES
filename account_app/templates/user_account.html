@@ -1,0 +1,1118 @@
+<!doctype html>
+
+{% load static %}
+{% load custom_filters%}
+<html class="no-js" lang="">
+    
+<!-- Mirrored from demo.hasthemes.com/fowler-preview/fowler/account.html by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 20 Jun 2024 10:16:24 GMT -->
+<head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title>Fowler - Shoes Store HTML Template</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <!-- Place favicon.ico in the root directory -->
+		<link rel="apple-touch-icon" href="apple-touch-icon.png">
+        <link rel="shortcut icon" type="image/x-icon" href="{% static 'assets/img/favicon.ico' %}">
+		
+		<!-- Google Fonts -->
+		<link href='https://fonts.googleapis.com/css?family=Raleway:400,300,500,600,700,800,900' rel='stylesheet' type='text/css'>
+		<link href='https://fonts.googleapis.com/css?family=Roboto:400,300,500,700,900' rel='stylesheet' type='text/css'>
+		<link href='https://fonts.googleapis.com/css?family=Lato:400,700,900,300' rel='stylesheet' type='text/css'>
+		<link href='https://fonts.googleapis.com/css?family=Montserrat:400,700' rel='stylesheet' type='text/css'>
+		<!-- all css here -->
+		<!-- bootstrap v3.3.6 css -->
+        <link rel="stylesheet" href="{% static 'assets/css/bootstrap.min.css' %}">
+		<!-- animate css -->
+        <link rel="stylesheet" href="{% static 'assets/css/animate.css' %}">
+        <!-- nivo slider CSS -->
+		<link rel="stylesheet" href="{% static 'assets/lib/css/nivo-slider.css' %}" type="text/css" />
+		<link rel="stylesheet" href="{% static 'assets/lib/css/preview.css' %}" type="text/css" media="screen" />
+		<!-- jquery-ui.min css -->
+        <link rel="stylesheet" href="{% static 'assets/css/jquery-ui.min.css' %}">
+		<!-- meanmenu css -->
+        <link rel="stylesheet" href="{% static 'assets/css/meanmenu.min.css' %}">
+		<!-- owl.carousel css -->
+        <link rel="stylesheet" href="{% static 'assets/css/owl.carousel.css' %}">
+		<!-- font-awesome css -->
+        <link rel="stylesheet" href="{% static 'assets/css/font-awesome.min.css' %}">
+		<!-- style css -->
+		<link rel="stylesheet" href="{% static 'assets/css/style.css' %}">
+		<!-- responsive css -->
+        <link rel="stylesheet" href="{% static 'assets/css/responsive.css' %}">
+		<!-- modernizr css -->
+        <script src="{% static 'assets/js/vendor/modernizr-2.8.3.min.js' %}"></script>
+
+		{% comment %} <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/4.6.0/css/bootstrap.min.css">
+    	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">	 {% endcomment %}
+
+		<style>
+
+			.bannerhead-area {
+
+				background: rgba(0, 0, 0, 0) url('{% static 'assets/img/header-banner.jpg' %}') no-repeat scroll center center;
+				position: relative;
+
+			  }
+
+			.section-titel {
+			display: block;
+			overflow: hidden;
+			padding-bottom: 30px;
+			position: relative;
+			}
+
+		.section-titel::after {
+			background: rgba(0, 0, 0, 0) url('{% static 'assets/img/sec-titel.png' %}') no-repeat scroll 0 0;
+			content: "";
+			height: 100%;
+			left: 39%;
+			position: absolute;
+			top: 30px;
+			width: 100%;
+			}
+		.section-titel > h3 {
+			color: #666666;
+			font-family: "Montserrat",sans-serif;
+			font-size: 20px;
+			font-weight: 400;
+			text-transform: uppercase;
+			}
+		.hot-deals-area {
+			background-attachment: scroll;
+			background-image: url("{% static 'assets/img/home-1/hot-deals.jpg' %}");
+			background-position: center center;
+			background-size: cover;
+			}
+
+
+
+		</style>
+    </head>
+    <body class="other-page">
+        <!--[if lt IE 8]>
+            <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+        <![endif]-->
+
+        <!-- HEADER TOP AREA START -->
+		<section class="header-top-area">
+			<div class="container">
+				<div class="row">
+					<div class="col-md-6">
+						<div class="left-msg pull-left">
+							<h6>FREE SHIPPING ON OVER $100</h6>
+						</div>
+					</div>
+					<div class="col-md-6">
+						<div class="right-login pull-right">
+							<div class="currencies-block-top curency pull-left">
+								<div class="current">
+									<span>USD</span>
+									<i class="fa fa-angle-down"></i>
+								</div>
+								<ul class="first-currencies toggle-content">
+									<li><a href="#">Dollar (USD)</a></li>
+									<li><a href="#">Pound (GBP)</a></li>
+									<li><a href="#">Pound (GBP)</a></li>
+								</ul>
+							</div>
+							<div class="languages-block-top curency pull-left">
+								<div class="current">
+									<span>LANGUAGE</span>
+									<i class="fa fa-angle-down"></i>
+								</div>
+								<ul class="first-languages toggle-content">
+									<li><a href="#">ENGLISH</a></li>
+								</ul>
+							</div>
+							<div class="curency pull-left">
+								<div class="current">
+									{% if user.is_authenticated %}
+										<i class="fa fa-user left"></i>
+										<span><a href="">Welcome, {{ user.first_name }} | </a></span>
+										<span><a href="{% url 'logout' %}"> LOGOUT</a></span>
+									{% else %}
+										<span><a href="{% url 'login' %}">LOG IN</a></span>
+									{% endif %}
+								</div> 
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+        <!-- HEADER TOP AREA END -->
+		<!-- MENU AREA START -->
+		<div class="menu-area">
+			<div class="container">
+				<div class="row">
+					<div class="col-md-2 col-sm-2">
+						<div class="logo-area">
+							<a href="index.html"><img src="{% static 'assets/img/home-1/logo_dg_footer.png' %}" width="110" height="50" alt="" /></a>
+						</div>
+					</div>
+					<div class="col-md-8 col-sm-8">
+						<div class="main-menu">
+							<ul class="list-inline">
+							  <li class="expand active"><a href="{% url 'index' %}">HOME</a>
+								<ul class="single sub-menu">
+									<li class="sub-menu-title"><a href="index.html">Home Pages</a></li>
+									<li><a href="index.html">Home Version One</a></li>
+									<li><a href="index-2.html">Home Version Two</a></li>
+								</ul>
+							  </li>
+							  <li><a href="#">CATEGORIES</a>
+								<!-- Mega Menu Four Column -->
+								<div class="mega-menu">
+									{% for category in categories%}
+									<span>
+										<a href="{% url 'shop_list' %}?category={{category.category_name}}" class="mega-title">{{ category.category_name }}</a>
+										<a href="#"><img alt="{{category.category_name}}" src="{{category.image.url}}"/></a>
+										{% for subcategory in category.subcategories.all %}
+										{% if subcategory.is_listed %}
+										<a href="{% url 'shop_list' %}?category={{category.category_name}}&subcategory={{subcategory.subcategory_name}}">{{ subcategory.subcategory_name}}</a>
+										{% endif %}
+										{% endfor %}
+									</span>
+									{% endfor %}
+									<span class="mega-menu-img">
+										<a href="{% url 'shop_list' %}" class="mega-title">ALL PRODUCTS</a>
+										<a href="#"><img alt="" src="{% static 'assets/img/other-pg/img_menu.jpg' %}"/></a>
+									</span>
+								</div>
+							  </li>
+							  
+							  <li><a href="about-us.html">ABOUT</a></li>
+							  <li class="expand"><a href="{% url 'user_account' %}">ACCOUNT</a>
+								<ul class="single sub-menu">
+									<li><a href="about-us.html">About</a></li>
+									<li><a href="shop.html">Shop</a></li>
+									<li><a href="shoping-cart.html">Shop Cart</a></li>
+									<li><a href="shop-list.html">Shop List</a></li>
+									<li><a href="single-product.html">Single Product</a></li>
+									<li><a href="wishlist.html">Wishlist</a></li>
+									<li><a href="checkout.html">Checkout</a></li>
+									<li><a href="account.html">Account</a></li>
+									<li><a href="login.html">Log In</a></li>
+									<li><a href="contact-us.html">Contact Us</a></li>
+									<li><a href="404.html">404 Error</a></li>
+								</ul>
+							  </li>
+							  <li><a href="contact-us.html">CONTACT</a></li>
+							</ul>
+						</div>
+					</div>
+					<!-- MOBILE-MENU-AREA START --> 
+					<div class="mobile-menu-area">
+						<div class="container">
+							<div class="row">
+								<div class="col-md-12">
+								<div class="mobile-area">
+									<div class="mobile-menu">
+										<nav id="mobile-nav">
+											<ul>
+												<li><a href="index.html">Home </a>
+													<ul>
+														<li><a href="index.html">Home version one</a></li>
+														<li><a href="index-2.html">Home Version two</a></li>
+													</ul>
+												</li>
+												<li><a href="shop.html"> Shop </a></li>
+												<li><a href="about-us.html"> About Us </a></li>
+												<li><a href="{% url 'user_account'%}"> Pages </a>
+													<ul>
+														<li><a href="about-us.html">About Us</a></li>
+														<li><a href="shop.html">Shop</a></li>
+														<li><a href="shop-list.html">Shop List</a></li>
+														<li><a href="shoping-cart.html">Shop Cart</a></li>
+														<li><a href="single-product.html">Single Product</a></li>
+														<li><a href="checkout.html">Checkout</a></li>
+														<li><a href="account.html">My Account</a></li>
+														<li><a href="login.html">Login</a></li>
+														<li><a href="wishlist.html">Wishlist</a></li>
+														<li><a href="contact-us.html">Contact</a></li>
+														<li><a href="404.html">404 Error</a></li>
+													</ul>
+												</li>
+												<li><a href="#"> Returns </a></li>
+												<li><a href="#"> Orders </a></li>
+												<li><a href="contact-us.html"> Contact Us </a></li>
+											</ul>
+										</nav>
+									</div>	
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<!-- MOBILE-MENU-AREA END  -->
+					<div class="col-md-2 col-sm-2">
+						<div class="menu-right-area">
+							<ul>
+								<li>
+									<a href="#" class="cart-toggler search-icon">
+										<i class="fa fa-search"></i>
+									</a>
+									<div class="header-bottom-search">
+										<form method="POST" action="#" class="search-box">
+											<div>
+												<input type="text" autocomplete="off" placeholder="Search" value="">
+											</div>
+										</form>						            
+									</div>
+								</li>
+								<li>
+									<a href="{% url 'cart_detail' %}" class="cart-toggler mini-cart-icon">
+										<i class="fa fa-shopping-cart"></i>
+										{% if cart_item_count > 0 %}
+										<span>{{ cart_item_count }}</span>
+										{% endif %}
+									</a>
+									{% comment %} <div class="top-cart-content">
+										<div class="media header-middle-checkout">
+											<div class="media-left check-img">
+												<a href="#">
+													<img alt="" src="{% static 'assets/img/other-pg/cart-1.jpg' %}">
+												</a>
+											</div>
+											<div class="media-body checkout-content">
+												<h4 class="media-heading">
+													<a href="#">Men Pumping Show</a>
+													<span title="Remove This Item" class="btn-remove checkout-remove">
+														<i class="fa fa-trash"></i>
+													</span>
+												</h4>
+												<p>1 x $111.00</p>
+											</div>
+										</div>
+										<div class="media header-middle-checkout last-child"><!-- Cart Middle Check Out -->
+											<div class="media-left check-img">
+												<a href="#">
+													<img alt="" src="{% static 'assets/img/other-pg/cart-2.jpg' %}">
+												</a>
+											</div>
+											<div class="media-body checkout-content">
+												<h4 class="media-heading">
+													<a href="#">Women Pump Show</a>
+													<span title="Remove This Item" class="btn-remove checkout-remove">
+														<i class="fa fa-trash"></i>
+													</span>
+												</h4>
+												<p>1 x $111.00</p>
+											</div>
+										</div>
+										<div class="actions">
+											<button type="button" title="Checkout-botton" class="Checkout-botton">
+												<span>Checkout</span>
+											</button>
+										</div>
+									</div> {% endcomment %}
+								</li>
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- MENU AREA END -->
+		<!-- BANNER AREA STRAT -->
+		<section class="bannerhead-area">
+			<div class="container">
+				<div class="row">
+					<div class="col-md-12">
+						<div class="banner-heading">
+							<h2>My Account</h2>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+		<!-- BANNER AREA END -->
+		<!-- My Account Area Start -->
+		<div class="my-account-area">
+			<div class="container">
+				<div class="row">
+					<div class="col-md-12">
+						<h1 class="heading-title">Procced to Checkout </h1>
+						<p>Welcome to your account. Here you can manage all of your personal information and orders.</p>
+					</div>
+				</div>
+				<div class="row">
+					<div class="addresses-lists">
+						<div class="col-xs-12 col-sm-12 col-lg-12">
+							<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+								<!-- My personal information -->
+								<div class="panel panel-default">
+									<div class="panel-heading" role="tab" id="headingOne">
+										<h4 class="panel-title">
+											<a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+												<i class="fa fa-user"></i>
+												<span>My personal information</span>
+											</a>
+										</h4>
+									</div>
+									<div id="collapseOne" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
+										<div class="panel-body">
+											<div class="coupon-info">
+												<h1 class="heading-title">Your personal information</h1>
+												<p class="coupon-text">Please be sure to update your personal information if it has changed.</p>
+										
+                								<!-- Edit Button -->
+												<div style="display: flex; justify-content: flex-end; margin-bottom: 10px;">
+													<button id="edit-btn" class="btn btn-primary" style="background-color: #FF7575; color: white; border: none; padding: 5px 10px; margin-right: 10px; cursor: pointer;">Edit</button>
+												</div>
+																	
+
+												<!-- Display Mode -->
+												<div id="display-mode">
+													<p><strong>Your Full Name:</strong> <span id="user-name">{{ user.first_name }} {{user.last_name}}</span></p>
+													<p><strong>Gender:</strong> <span id="user-gender">{{ user.get_gender_display }}</span></p>
+													<p><strong>Date-of-birth:</strong> <span id="user-dob">{{ user.date_of_birth }}</span></p>
+													<p><strong>E-mail address:</strong> <span id="user-email">{{ user.email }}</span></p>
+													<p><strong>Phone:</strong> <span id="user-phone">{{ user.phone_number }}</span></p>
+												</div>
+
+												<!-- Edit Mode -->
+												<div id="edit-mode" style="display: none;">
+													<form id="user-form">
+														<div class="form-row gender-row">
+															<label><span class="required">*</span>Gender</label>
+															<div class="radio-inline">
+																<label>
+																	<input type="radio" name="gender" value="M" {% if user.gender == 'M' %}checked{% endif %}/> Male
+																</label>
+															</div>
+															<div class="radio-inline">
+																<label>
+																	<input type="radio" name="gender" value="F" {% if user.gender == 'F' %}checked{% endif %}/> Female
+																</label>
+															</div>
+														</div>
+														<p class="form-row">
+															<label><span class="required">*</span>First Name</label>
+															<input type="text" name="first_name" value="{{ user.first_name }}" />
+														</p>
+														<p class="form-row">
+															<label><span class="required">*</span>Last Name</label>
+															<input type="text" name="last_name" value="{{ user.last_name }}" />
+														</p>
+														<p class="form-row">
+															<label><span class="required">*</span>Date-of-birth</label>
+															<input type="date" name="dob" value="{{ user.date_of_birth|date:'Y-m-d' }}" />
+														</p>
+														<p class="form-row">
+															<label><span class="required">*</span>E-mail address</label>
+															<input type="email" name="email" value="{{ user.email }}" />
+														</p>
+														<p class="form-row">
+															<label><span class="required">*</span>Phone</label>
+															<input type="text" name="phone_number" value="{{ user.phone_number }}" />
+														</p>
+														<div style="display: flex; justify-content: flex-end;">
+															<button type="button" id="cancel-btn" class="btn btn-secondary mr-2" style="background-color: #FF7575; color: white; border: none; padding: 5px 10px; margin-right: 10px; cursor: pointer;">Cancel</button>
+															<button type="button" id="save-btn" class="btn btn-primary" style="background-color: #FF7575; color: white; border: none; padding: 5px 10px; margin-right: 10px; cursor: pointer;">Save</button>
+														</div>
+													</form>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+
+								<!-- Add  address -->
+								<div class="panel panel-default">
+									<div class="panel-heading" role="tab" id="headingTwo">
+										<h4 class="panel-title">
+											<a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+												<i class="fa fa-building"></i>
+												<span>Add Addresses</span>
+											</a>
+										</h4>
+									</div>
+									<div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
+										<div class="panel-body">
+											<div class="coupon-info">
+												<h1 class="heading-title">Your addresses </h1>
+												<p class="coupon-text">To add a new address, please fill out the form below.</p>
+												<p class="required">*Required field</p>
+												<form id="address-form" method="post" action="{% url 'add_address' %}">
+													{% csrf_token %}
+													<p class="form-row">
+														<label>Address Title<span class="required">*</span></label>
+														<input type="text" id="address-title" name="address_title" value="{{ address_title }}">
+														<span class="error">{{ errors.address_title }}</span>
+													</p>
+													<p class="form-row">
+														<label>Your Full Name<span class="required">*</span></label>
+														<input type="text" id="full-name" name="full_name" value="{{ full_name }}">
+														<span class="error">{{ errors.full_name }}</span>
+													</p>
+													<p class="form-row">
+														<label>Address<span class="required">*</span></label>
+														<input type="text" id="address" name="address" value="{{ address }}">
+														<span class="error">{{ errors.address }}</span>
+													</p>
+													<p class="form-row">
+														<label>Post Office<span class="required">*</span></label>
+														<input type="text" id="post-office" name="post_office" value="{{ post_office }}">
+														<span class="error">{{ errors.post_office }}</span>
+													</p>
+													<p class="form-row">
+														<label>Pincode<span class="required">*</span></label>
+														<input type="text" id="pincode" name="pincode" value="{{ pincode }}">
+														<span class="error">{{ errors.pincode }}</span>
+													</p>
+													<p class="form-row">
+														<label>City<span class="required">*</span></label>
+														<input type="text" id="city" name="city" value="{{ city }}">
+														<span class="error">{{ errors.city }}</span>
+													</p>
+													<p class="form-row">
+														<label>State<span class="required">*</span></label>
+														<input type="text" id="state" name="state" value="{{ state }}">
+														<span class="error">{{ errors.state }}</span>
+													</p>
+													<p class="form-row">
+														<label>Phone Number<span class="required">*</span></label>
+														<input type="text" id="phone" name="phone" value="{{ phone }}">
+														<span class="error">{{ errors.phone }}</span>
+													</p>
+													<p class="form-row">
+														<label>Landmark</label>
+														<input type="text" id="landmark" name="landmark" value="{{ landmark }}">
+														<span class="error">{{ errors.landmark }}</span>
+													</p>
+													<button type="submit" id="save-address-btn" class="btn btn-default button button-small">
+														<span>
+															Save
+															<i class="fa fa-chevron-right"></i>
+														</span>
+													</button>
+												</form>
+											</div>
+										</div>
+									</div>
+								</div>
+
+								<!-- My addresses -->
+								<div class="panel panel-default">
+									<div class="panel-heading" role="tab" id="headingThree">
+										<h4 class="panel-title">
+											<a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+												<i class="fa fa-map-marker"></i>
+												<span>My addresses</span>
+											</a>
+										</h4>
+									</div>
+									<div id="collapseThree" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
+										<div class="panel-body">
+											<div class="coupon-info">
+												<h1 class="heading-title">Your addresses</h1>
+												<p class="coupon-text">Here are the addresses you've saved for quick access.</p>
+												
+												<!-- Address List -->
+												<div id="address-list" style="display: flex; flex-wrap: wrap; gap: 20px;">
+													{% for address in user_addresses %}
+														<div class="address-item" id="address-item-{{ address.id }}" style="flex: 1 0 300px; max-width: 400px; border: 1px solid #ddd; padding: 15px; border-radius: 8px;">
+															<h3>{{ address.address_title }}</h3>
+															<p>{{ address.name }}</p>
+															<p>{{ address.address_line }}, {{ address.city }}, {{ address.state }} - {{ address.pin }}</p>
+															<p>Phone: {{ address.phone_number }}</p>
+															<p>Post Office: {{ address.post_office }}</p>
+															{% if address.landmark %}
+																<p>Landmark: {{ address.landmark }}</p>
+															{% endif %}
+															<button class="edit-address-btn" data-id="{{ address.id }}" style="background-color: #FF7575; color: white; border: none; padding: 5px 10px; margin-right: 10px; cursor: pointer;">Edit</button>
+															<form method="post" action="{% url 'delete_address' address.id %}" style="display: inline;">
+																{% csrf_token %}
+																<button type="submit" class="delete-address-btn" onclick="return confirm('Are you sure you want to delete this address?')" style="background-color: #FF7575; color: white; border: none; padding: 5px 10px; cursor: pointer;">Delete</button>
+															</form>
+														</div>
+													{% empty %}
+														<p>You have no saved addresses.</p>
+													{% endfor %}
+												</div>
+
+												<!-- Address Form (initially hidden) -->
+												<div id="address-edit-container" style="display: none;">
+													<h2>Edit Address</h2>
+													<form id="address-edit-form" method="post" action="{% url 'edit_address' %}">
+														{% csrf_token %}
+														<input type="hidden" name="address_id" id="address_id">
+														<p class="form-row">
+															<label><span class="required">*</span>Name</label>
+															<input type="text" name="name" required>
+														</p>
+														<p class="form-row">
+															<label><span class="required">*</span>Address Title</label>
+															<input type="text" name="address_title" required>
+														</p>
+														<p class="form-row">
+															<label><span class="required">*</span>State</label>
+															<input type="text" name="state" required>
+														</p>
+														<p class="form-row">
+															<label><span class="required">*</span>City</label>
+															<input type="text" name="city" required>
+														</p>
+														<p class="form-row">
+															<label><span class="required">*</span>PIN</label>
+															<input type="text" name="pin" required pattern="\d{6}" title="PIN must be exactly 6 digits">
+														</p>
+														<p class="form-row">
+															<label><span class="required">*</span>Post Office</label>
+															<input type="text" name="post_office" required>
+														</p>
+														<p class="form-row">
+															<label><span class="required">*</span>Phone Number</label>
+															<input type="tel" name="phone_number" required>
+														</p>
+														<p class="form-row">
+															<label><span class="required">*</span>Address Line</label>
+															<textarea name="address_line" required></textarea>
+														</p>
+														<p class="form-row">
+															<label>Landmark</label>
+															<input type="text" name="landmark">
+														</p>
+														<div style="display: flex; justify-content: flex-end;">
+															<button type="button" id="cancel-edit-btn" class="btn btn-secondary mr-2">Cancel</button>
+															<button type="submit" class="btn btn-primary" style="background-color: #FF7575; color: white; border: none; padding: 5px 10px; margin-right: 10px; cursor: pointer;">Save Address</button>
+														</div>
+													</form>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+
+								<!-- My wishlists -->
+								<div class="panel panel-default">
+									<div class="panel-heading" role="tab" id="headingFour">
+										<h4 class="panel-title">
+											<a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+												<i class="fa fa-heart"></i>
+												<span>My wishlists</span>
+											</a>
+										</h4>
+									</div>
+									<div id="collapseFour" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingFour">
+										<div class="panel-body">
+											<div class="coupon-info">
+												<h1 class="heading-title">My wishlists</h1>
+												<a href="{% url 'wishlist' %}"><p class="coupon-text">Go to Wishlist</p></a>
+												<!-- Add wishlist items here -->
+											</div>
+										</div>
+									</div>
+								</div>
+
+								<!-- Order history and details -->
+								<div class="panel panel-default">
+									<div class="panel-heading" role="tab" id="headingFive">
+										<h4 class="panel-title">
+											<a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
+												<i class="fa fa-list-ol"></i>
+												<span>Order history and details</span>
+											</a>
+										</h4>
+									</div>
+									<div id="collapseFive" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingFive">
+										<div class="panel-body">
+											<div class="coupon-info">
+												<h1 class="heading-title">Order history</h1>
+												<p class="coupon-text">Here are the orders you've placed since your account was created.</p>
+												<div class="order-history">
+													{% if user_orders %}
+														<table class="table table-striped">
+															<thead>
+																<tr>
+																	<th>Order ID</th>
+																	<th>Item</th>
+																	<th>Color/Size</th>
+																	<th>Quantity</th>
+																	<th>Total Price</th>
+																	<th>Status</th>
+																	<th>Actions</th>
+																</tr>
+															</thead>
+															<tbody>
+																{% for order in user_orders %}
+																	{% for item in order.order_items.all %}
+																		<tr>
+																			<td><a href="{% url 'order_details' order.id %}">{{ order.order_unique_id }}</a></td>
+																			<td><img src="{{ item.product_size.product_data.image_1.url }}" alt="{{ item.product_size.product_data.product_id.product_name }}" width="50" height="50"></td>
+																			<td>{{ item.product_size.product_data.color_name }}/{{ item.product_size.size }}</td>
+																			<td>{{ item.quantity }}</td>
+																			<td>Rs. {{ item.get_total_item_price }}</td>
+																			<td>{{ item.status }}</td>
+																			<td>
+																				{% if item.status|not_in_list:"Delivered,Cancelled,Returned,Return Confirmed,Return Processing,Waiting For Pickup,Return Completed" %}
+																					<form method="post" action="{% url 'cancel_order_item' item.id %}">
+																						{% csrf_token %}
+																						<button type="submit" class="btn btn-danger btn-sm" {% if item.status == 'Cancelled' %}disabled{% endif %}>Cancel</button>
+																					</form>
+																				{% endif %}
+																				{% if item.status == 'Delivered' %}
+																					<form method="post" action="{% url 'return_order_item' item.id %}">
+																						{% csrf_token %}
+																						<button type="submit" class="btn btn-warning btn-sm" {% if item.status == 'Returned' %}disabled{% endif %}>Return</button>
+																					</form>
+																				{% endif %}
+																			</td>
+																		</tr>
+																	{% endfor %}
+																{% endfor %}
+															</tbody>
+														</table>
+													{% else %}
+														<p class="alert">You have not placed any orders.</p>
+													{% endif %}
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+
+								<!-- Change Password -->
+								<div class="panel panel-default">
+									<div class="panel-heading" role="tab" id="headingSix">
+										<h4 class="panel-title">
+											<a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseSix" aria-expanded="false" aria-controls="collapseSix">
+												<i class="fa fa-lock"></i>
+												<span>Change Password</span>
+											</a>
+										</h4>
+									</div>
+									<div id="collapseSix" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingSix">
+										<div class="panel-body">
+											<div class="coupon-info">
+												<h1 class="heading-title">Create a new password</h1>
+												<form id="change-password-form">
+													{% csrf_token %}
+													<p class="form-row">
+														<label><span class="required">*</span>Current Password</label>
+														<input type="password" name="current_password" required/>
+													</p>
+													<p class="form-row">
+														<label>New Password</label>
+														<input type="password" name="new_password" required/>
+													</p>
+													<p class="form-row">
+														<label>Confirmation</label>
+														<input type="password" name="confirm_new_password" required/>
+													</p>
+													<button type="submit" class="btn btn-default button button-small">
+														<span>
+															Save
+															<i class="fa fa-chevron-right"></i>
+														</span>
+													</button>
+												</form>
+												<div id="message"></div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-12">
+						<div class="create-account-button pull-left">
+							<a href="index.html" class="btn btn-default button button-small" title="Home">
+								<span>
+									<i class="fa fa-chevron-left"></i>
+									Home
+								</span>
+							</a>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+<!-- My Account Area End -->
+		<!-- OUR BRAND AREA START -->
+		<section class="our-brand-area">
+			<div class="container">
+				<div class="text-center">
+					<div class="section-titel">
+						<h3>OUR BRANDS</h3>
+					</div>
+				</div>
+				<div class="row blog-area">
+					<div id="ourbrand-owl">
+						<div class="col-md-12"><img src="{% static 'assets/img/other-pg/brand-logo-1.jpg' %}" alt="" /></div>
+						<div class="col-md-12"><img src="{% static 'assets/img/other-pg/brand-logo-2.jpg' %}" alt="" /></div>
+						<div class="col-md-12"><img src="{% static 'assets/img/other-pg/brand-logo-3.jpg' %}" alt="" /></div>
+						<div class="col-md-12"><img src="{% static 'assets/img/other-pg/brand-logo-4.jpg' %}" alt="" /></div>
+						<div class="col-md-12"><img src="{% static 'assets/img/other-pg/brand-logo-5.jpg' %}" alt="" /></div>
+						<div class="col-md-12"><img src="{% static 'assets/img/other-pg/brand-logo-3.jpg' %}" alt="" /></div>
+						<div class="col-md-12"><img src="{% static 'assets/img/other-pg/brand-logo-1.jpg' %}" alt="" /></div>
+						<div class="col-md-12"><img src="{% static 'assets/img/other-pg/brand-logo-2.jpg' %}" alt="" /></div>
+					</div>
+				</div>
+			</div>
+		</section>
+		<!-- OUR BRAND AREA END -->
+
+		<!-- Footer Top Area Start -->
+		<div class="footer-top">
+			<div class="container">
+				<div class="row">
+					<div class="col-md-4 col-sm-4">
+						<div class="social-icon">
+							<ul>
+								<li><a href="#"><i class="fa fa-facebook"></i></a></li>
+								<li><a href="#"><i class="fa fa-rss"></i></a></li>
+								<li><a href="#"><i class="fa fa-instagram"></i></a></li>
+								<li><a href="#"><i class="fa fa-google-plus"></i></a></li>
+								<li><a href="#"><i class="fa fa-youtube"></i></a></li>
+							</ul>
+						</div>
+					</div>
+					<div class="col-md-8 col-sm-8">
+						<div class="foteer-news">
+							<h3>NEWSLETTER</h3>
+							<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed</p>
+						</div>
+						<div class="search-input">
+							<form action="#">
+								<input type="text" placeholder="Enter your keyword...">
+								<button class="search-button" type="submit" value="Submit">Subcribe</button>
+							</form>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- Footer Top Area End -->
+		<!-- Footer Middle Area Start -->
+		<section class="footer-middle">
+			<div class="container">
+				<div class="row">
+					<div class="col-md-3 col-sm-4 col-xs-12 xs-res-mrbtm">
+						<div class="footer-menu">
+							<h4>MY ACCOUNT</h4>
+							<ul>
+								<li><a href="#">Login</a></li>
+								<li><a href="#">My Account</a></li>
+								<li><a href="#">My Cart</a></li>
+								<li><a href="#">Wishlist</a></li>
+								<li><a href="#">Checkout</a></li>
+								<li><a href="#">Userinfor</a></li>
+							</ul>
+						</div>
+					</div>
+					<div class="col-md-3 hidden-sm hidden-xs">
+						<div class="footer-menu">
+							<h4>INFORMATION</h4>
+							<ul>
+								<li><a href="#">Sitemap</a></li>
+								<li><a href="#">Privacy Policy</a></li>
+								<li><a href="#">Your Account</a></li>
+								<li><a href="#">Advanced Search</a></li>
+								<li><a href="#">Affiliates</a></li>
+								<li><a href="#">Group Sales</a></li>
+							</ul>
+						</div>
+					</div>
+					<div class="col-md-3 col-sm-4 col-xs-12 xs-res-mrbtm">
+						<div class="footer-menu">
+							<h4>CONTACT US</h4>
+							<ul>
+								<li><a href="#">Product Recall</a></li>
+								<li><a href="#">Gift Vouchers</a></li>
+								<li><a href="#">Returns and Exchanges</a></li>
+								<li><a href="#">Shipping Options</a></li>
+								<li><a href="#">Blogs</a></li>
+								<li><a href="#">Help & Faqs</a></li>
+							</ul>
+						</div>
+					</div>
+					<div class="col-md-3 col-sm-4 col-xs-12">
+						<div class="address-area">
+							<a href="index.html"><img src="{% static 'assets/img/home-1/footer-logo.png' %}" alt="" /></a>
+							<p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard.</p>
+							<div class="contact-details">
+								<ul>
+									<li><i class="fa fa-phone"></i>+(00) 56-888-999</li>
+									<li><i class="fa fa-envelope-o"></i> admin@DevItems.com</li>
+									<li><i class="fa fa-map-marker"></i> 1212, Bigrun street, France.</li>
+								</ul>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
+
+
+		</section>
+		<!-- Footer Middle Area End -->
+		<!-- Footer Bottom Area Start -->
+		<div class="footer-bottom-area">
+			<div class="container">
+				<div class="row ">
+					<div class="col-md-6 col-sm-6 col-xs-12">
+						<p>Copyright &copy;  <a href="http://www.devitems.com/"> Devitems. </a> All Rights Reserved.</p>
+					</div>
+					<div class="col-md-6 col-sm-6 col-xs-12">
+						<img src="{% static 'assets/img/other-pg/payment.png' %}" alt="" />
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- Footer Bottom Area End -->
+
+
+		
+		
+		<!-- all js here -->
+		<!-- jquery latest version -->
+        <script src="{% static 'assets/js/vendor/jquery-1.12.0.min.js' %}"></script>
+		<!-- bootstrap js -->
+        <script src="{% static 'assets/js/bootstrap.min.js' %}"></script>
+		<!-- owl.carousel js -->
+        <script src="{% static 'assets/js/owl.carousel.min.js' %}"></script>
+		<!-- meanmenu js -->
+        <script src="{% static 'assets/js/jquery.meanmenu.js' %}"></script>
+        <!-- Nivo slider js  --> 		
+		<script src="{% static  'assets/lib/js/jquery.nivo.slider.js' %}" type="text/javascript"></script>
+		<script src="{% static 'assets/lib/home.js' %}" type="text/javascript"></script>
+		<!-- count down js  -->
+		<script src="{% static 'assets/js/jquery.countdown.js' %}"></script>
+		<!-- jquery-ui js -->
+        <script src="{% static 'assets/js/jquery-ui.min.js' %}"></script>
+		<!-- wow js -->
+        <script src="{% static 'assets/js/wow.min.js' %}"></script>
+		<!-- plugins js -->
+        <script src="{% static 'assets/js/plugins.js' %}"></script>
+		<!-- main js -->
+        <script src="{% static 'assets/js/main.js' %}"></script>
+
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+		{% comment %} <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/4.6.0/js/bootstrap.bundle.min.js"></script> {% endcomment %}
+		
+		<!--Script(incuding fetch) for user information updating-->
+		<script>
+			document.addEventListener('DOMContentLoaded', function () {
+				const editBtn = document.getElementById('edit-btn');
+				const cancelBtn = document.getElementById('cancel-btn');
+				const saveBtn = document.getElementById('save-btn');
+				const displayMode = document.getElementById('display-mode');
+				const editMode = document.getElementById('edit-mode');
+		
+				editBtn.addEventListener('click', function () {
+					if (editMode.style.display === 'none') {
+						displayMode.style.display = 'none';
+						editMode.style.display = 'block';
+						editBtn.textContent = 'Cancel';
+					} else {
+						displayMode.style.display = 'block';
+						editMode.style.display = 'none';
+						editBtn.textContent = 'Edit';
+					}
+				});
+		
+				cancelBtn.addEventListener('click', function () {
+					displayMode.style.display = 'block';
+					editMode.style.display = 'none';
+					editBtn.textContent = 'Edit';
+				});
+		
+				saveBtn.addEventListener('click', function () {
+					const form = document.getElementById('user-form');
+					const formData = new FormData(form);
+		
+					fetch('{% url 'update_user_info' %}', {
+						method: 'POST',
+						headers: {
+							'X-CSRFToken': '{{ csrf_token }}',
+							'Accept': 'application/json',
+						},
+						body: formData
+					})
+					.then(response => response.json())
+					.then(data => {
+						if (data.success) {
+							document.getElementById('user-gender').textContent = formData.get('gender') === 'M' ? 'Male' : 'Female';
+							document.getElementById('user-name').textContent = formData.get('first_name') + ' ' + formData.get('last_name');
+							document.getElementById('user-dob').textContent = formData.get('dob');
+							document.getElementById('user-email').textContent = formData.get('email');
+							document.getElementById('user-phone').textContent = formData.get('phone_number');
+							displayMode.style.display = 'block';
+							editMode.style.display = 'none';
+							editBtn.textContent = 'Edit';
+						} else {
+							alert('Failed to update information.');
+						}
+					})
+					.catch(error => {
+						console.error('Error:', error);
+					});
+				});
+			});
+			</script>
+			<!--END-->
+
+			<!--Script for Add Address Validation-->
+			<script>
+
+				document.addEventListener('DOMContentLoaded', function () {
+					const addressForm = document.getElementById('address-form');
+					const saveAddressBtn = document.getElementById('save-address-btn');
+				
+					if (addressForm && saveAddressBtn) {
+						saveAddressBtn.addEventListener('click', function (e) {
+							const addressTitle = document.getElementById('address-title').value;
+							const fullName = document.getElementById('full-name').value;
+							const address = document.getElementById('address').value;
+							const postOffice = document.getElementById('post-office').value;
+							const pincode = document.getElementById('pincode').value;
+							const city = document.getElementById('city').value;
+							const state = document.getElementById('state').value;
+							const phone = document.getElementById('phone').value;
+							const landmark = document.getElementById('landmark').value;
+				
+							const errors = validateAddressData(addressTitle, fullName, address, postOffice, pincode, city, state, phone, landmark);
+				
+							if (errors.length > 0) {
+								e.preventDefault();  // Prevent form submission
+								alert('Errors: ' + errors.join(', '));
+							}
+						});
+				
+						function validateAddressData(addressTitle, fullName, address, postOffice, pincode, city, state, phone, landmark) {
+							const errors = [];
+							const namePattern = /^[A-Za-z][A-Za-z ]*$/;
+							const addressTitlePattern = /^[A-Za-z0-9][A-Za-z0-9 ]*$/;
+							const addressPattern = /^[A-Za-z0-9][A-Za-z0-9\s!@#$%^&*()-_=+]*$/;
+							const postOfficePattern = /^[A-Za-z][A-Za-z ]*$/;
+							const pincodePattern = /^[1-9][0-9]{5}$/;
+							const cityStatePattern = /^[A-Za-z][A-Za-z ]*$/;
+							const phonePattern = /^[789][0-9]{9}$/;
+							const landmarkPattern = /^[A-Za-z0-9][A-Za-z0-9\s!@#$%^&*()-_=+]*$/;
+				
+							if (!namePattern.test(fullName)) errors.push('Invalid Full Name');
+							if (!addressTitlePattern.test(addressTitle)) errors.push('Invalid Address Title');
+							if (!addressPattern.test(address)) errors.push('Invalid Address');
+							if (!postOfficePattern.test(postOffice)) errors.push('Invalid Post Office');
+							if (!pincodePattern.test(pincode)) errors.push('Invalid Pincode');
+							if (!cityStatePattern.test(city)) errors.push('Invalid City');
+							if (!cityStatePattern.test(state)) errors.push('Invalid State');
+							if (!phonePattern.test(phone)) errors.push('Invalid Phone Number');
+							if (!landmarkPattern.test(landmark)) errors.push('Invalid Landmark');
+				
+							return errors;
+						}
+					} else {
+						console.error('Address form or save button not found.');
+					}
+				});
+			</script>
+			<!--END-->
+
+			<!--Script for Edit address-->
+			<script>
+				document.addEventListener('DOMContentLoaded', function () {
+					const addressList = document.getElementById('address-list');
+					const addressEditContainer = document.getElementById('address-edit-container');
+					const addressEditForm = document.getElementById('address-edit-form');
+					const cancelEditBtn = document.getElementById('cancel-edit-btn');
+				
+					function showEditForm(addressId) {
+						// Hide the specific address item
+						const addressItem = document.getElementById(`address-item-${addressId}`);
+						if (addressItem) {
+							addressItem.style.display = 'none';
+						}
+						// Show the edit form
+						addressEditContainer.style.display = 'block';
+						
+						 // Set the address_id in the hidden input field
+						document.getElementById('address_id').value = addressId;
+					}
+				
+					function hideEditForm() {
+						// Show all address items
+						const addressItems = document.querySelectorAll('.address-item');
+						addressItems.forEach(item => item.style.display = 'block');
+						// Hide the edit form
+						addressEditContainer.style.display = 'none';
+					}
+				
+					// Event listener for edit buttons
+					addressList.addEventListener('click', function(e) {
+						if (e.target.classList.contains('edit-address-btn')) {
+							e.preventDefault();
+							const addressId = e.target.dataset.id;
+							fetch(`{% url 'get_address_details' %}?id=${addressId}`)
+								.then(response => response.json())
+								.then(address => {
+									for (const key in address) {
+										if (addressEditForm.elements[key]) {
+											addressEditForm.elements[key].value = address[key];
+										}
+									}
+									showEditForm(addressId);
+								})
+								.catch(error => console.error('Error:', error));
+						}
+					});
+				
+					cancelEditBtn.addEventListener('click', hideEditForm);
+				});
+				</script>
+				<!--END-->
+
+				<!--Script for Change Password With help of AJAX-->
+				<script>
+					document.addEventListener('DOMContentLoaded', function() {
+						const form = document.getElementById('change-password-form');
+						const csrftoken = form.querySelector('[name=csrfmiddlewaretoken]').value;
+					
+						form.addEventListener('submit', function(e) {
+							e.preventDefault();
+							
+							const formData = new FormData(this);
+							
+							fetch('{% url "change_password" %}', {
+								method: 'POST',
+								body: formData,
+								headers: {
+									'X-Requested-With': 'XMLHttpRequest',
+									'X-CSRFToken': csrftoken
+								}
+							})
+							.then(response => response.json())
+							.then(data => {
+								const messageDiv = document.getElementById('message');
+								messageDiv.style.display = 'block';
+								
+								if (data.success) {
+									messageDiv.innerHTML = '<p style="color: green;">Password changed successfully!</p>';
+									this.reset();
+								} else {
+									const errorList = data.errors.map(error => `<li>${error}</li>`).join('');
+									messageDiv.innerHTML = `<p style="color: red;">Error(s):</p><ul>${errorList}</ul>`;
+								}
+							})
+							.catch(error => {
+								console.error('Error:', error);
+								document.getElementById('message').innerHTML = '<p style="color: red;">An error occurred. Please try again.</p>';
+							});
+						});
+					});
+					
+				</script>
+				<!--END-->
+
+
+	</body>
+
+<!-- Mirrored from demo.hasthemes.com/fowler-preview/fowler/account.html by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 20 Jun 2024 10:16:24 GMT -->
+</html>

@@ -1,0 +1,31 @@
+.order-summary-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+.order-summary-table th, .order-summary-table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+}
+.order-summary-table th {
+    background-color: #f2f2f2;
+}
+.product-name {
+    width: 40%;
+}
+.price-column, .qty-column, .subtotal-column {
+    width: 20%;
+}
+.price-wrapper {
+    display: flex;
+    align-items: center;
+}
+.currency {
+    margin-right: 4px;
+}
+.cart-btn-3 {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 20px;
+}

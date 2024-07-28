@@ -1,0 +1,720 @@
+<!DOCTYPE html>
+{% load static %}
+
+
+<!-- =========================================================
+* Materio - Bootstrap Material Design Admin Template | v2.0.1
+==============================================================
+
+* Product Page: https://themeselection.com/item/materio-bootstrap-html-admin-template/
+* Created by: ThemeSelection
+* License: You must have a valid license purchased in order to legally use the theme for your project.
+* Copyright ThemeSelection (https://themeselection.com)
+
+=========================================================
+ -->
+<!-- beautify ignore:start -->
+
+
+<html lang="en" class="light-style layout-navbar-fixed layout-menu-fixed layout-compact " dir="ltr" data-theme="theme-default" data-assets-path="assets_admin/" data-template="vertical-menu-template" data-style="light">
+
+  
+<!-- Mirrored from demos.themeselection.com/materio-bootstrap-html-admin-template/html/vertical-menu-template/app-user-list.html by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 25 Jun 2024 05:50:49 GMT -->
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
+
+    <title>User List - Pages | Materio - Bootstrap Material Design Admin Template</title>
+
+    
+    <meta name="description" content="Start your development with a Dashboard for Bootstrap 5" />
+    <meta name="keywords" content="dashboard, material, material design, bootstrap 5 dashboard, bootstrap 5 design, bootstrap 5">
+    <!-- Canonical SEO -->
+    <link rel="canonical" href="https://themeselection.com/item/materio-bootstrap-html-admin-template/">
+    
+    
+    <!-- ? PROD Only: Google Tag Manager (Default ThemeSelection: GTM-5DDHKGP, PixInvent: GTM-5J3LMKC) -->
+    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+      new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+      j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+      '../../../../www.googletagmanager.com/gtm5445.html?id='+i+dl;f.parentNode.insertBefore(j,f);
+      })(window,document,'script','dataLayer','GTM-5DDHKGP');</script>
+    <!-- End Google Tag Manager -->
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="https://demos.themeselection.com/materio-bootstrap-html-admin-template/assets/img/favicon/favicon.ico" />
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com/">
+    <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;ampdisplay=swap" rel="stylesheet">
+
+    <!-- Icons -->
+    <link rel="stylesheet" href="{% static 'assets_admin/vendor/fonts/remixicon/remixicon.css' %}" />
+    <link rel="stylesheet" href="{% static 'assets_admin/vendor/fonts/flag-icons.css' %}" />
+    
+    <!-- Menu waves for no-customizer fix -->
+    <link rel="stylesheet" href="{% static 'assets_admin/vendor/libs/node-waves/node-waves.css' %}" />
+
+    <!-- Core CSS -->
+    <link rel="stylesheet" href="{% static 'assets_admin/vendor/css/rtl/core.css' %}"  />
+    <link rel="stylesheet" href="{% static 'assets_admin/vendor/css/rtl/theme-default.css' %}"  />
+    <link rel="stylesheet" href="{% static 'assets_admin/css/demo.css' %}" />
+    
+    <!-- Vendors CSS -->
+    <link rel="stylesheet" href="{% static 'assets_admin/vendor/libs/perfect-scrollbar/perfect-scrollbar.css' %}" />
+    <link rel="stylesheet" href="{% static 'assets_admin/vendor/libs/typeahead-js/typeahead.css' %}" /> 
+    <link rel="stylesheet" href="{% static 'assets_admin/vendor/libs/datatables-bs5/datatables.bootstrap5.css' %}">
+<link rel="stylesheet" href="{% static 'assets_admin/vendor/libs/datatables-responsive-bs5/responsive.bootstrap5.css' %}">
+<link rel="stylesheet" href="{% static 'assets_admin/vendor/libs/datatables-buttons-bs5/buttons.bootstrap5.css' %}">
+<link rel="stylesheet" href="{% static 'assets_admin/vendor/libs/datatables-checkboxes-jquery/datatables.checkboxes.css' %}">
+<link rel="stylesheet" href="{% static 'assets_admin/vendor/libs/select2/select2.css' %}" />
+<link rel="stylesheet" href="{% static 'assets_admin/vendor/libs/%40form-validation/form-validation.css' %}" />
+
+    <!-- Page CSS -->
+
+  {% comment %} <link href="https://unpkg.com/cropperjs/dist/cropper.min.css" rel="stylesheet"/> {% endcomment %}
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.css">
+  
+  <!-- Include Bootstrap CSS and JS for modal support -->
+  {% comment %} <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet"> {% endcomment %}
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/assets/css/bootstrap.min.css" >
+  
+    
+
+    <!-- Helpers -->
+    <script src="{% static 'assets_admin/vendor/js/helpers.js' %}"></script>
+    <!--! Template customizer & Theme config files MUST be included after core stylesheets and helpers.js in the <head> section -->
+    <!--? Template customizer: To hide customizer set displayCustomizer value false in config.js.  -->
+    <script src="{% static 'assets_admin/vendor/js/template-customizer.js' %}"></script>
+    <!--? Config:  Mandatory theme config file contain global vars & default theme options, Set your preferred theme option in this file.  -->
+    <script src="{% static 'assets_admin/js/config.js' %}"></script>
+    
+</head>
+
+<body>
+
+  
+  <!-- ?PROD Only: Google Tag Manager (noscript) (Default ThemeSelection: GTM-5DDHKGP, PixInvent: GTM-5J3LMKC) -->
+  <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-5DDHKGP" height="0" width="0" style="display: none; visibility: hidden"></iframe></noscript>
+  <!-- End Google Tag Manager (noscript) -->
+  
+  <!-- Layout wrapper -->
+<div class="layout-wrapper layout-content-navbar  ">
+  <div class="layout-container">
+
+    
+    
+
+
+
+
+<!-- Menu -->
+
+<aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme">
+
+  
+  <div class="app-brand demo ">
+    <a href="index.html" class="app-brand-link">
+      <span class="app-brand-logo demo me-1">
+<span style="color:var(--bs-primary);">
+  <svg width="30" height="24" viewBox="0 0 250 196" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <path fill-rule="evenodd" clip-rule="evenodd" d="M12.3002 1.25469L56.655 28.6432C59.0349 30.1128 60.4839 32.711 60.4839 35.5089V160.63C60.4839 163.468 58.9941 166.097 56.5603 167.553L12.2055 194.107C8.3836 196.395 3.43136 195.15 1.14435 191.327C0.395485 190.075 0 188.643 0 187.184V8.12039C0 3.66447 3.61061 0.0522461 8.06452 0.0522461C9.56056 0.0522461 11.0271 0.468577 12.3002 1.25469Z" fill="currentColor" />
+    <path opacity="0.077704" fill-rule="evenodd" clip-rule="evenodd" d="M0 65.2656L60.4839 99.9629V133.979L0 65.2656Z" fill="black" />
+    <path opacity="0.077704" fill-rule="evenodd" clip-rule="evenodd" d="M0 65.2656L60.4839 99.0795V119.859L0 65.2656Z" fill="black" />
+    <path fill-rule="evenodd" clip-rule="evenodd" d="M237.71 1.22393L193.355 28.5207C190.97 29.9889 189.516 32.5905 189.516 35.3927V160.631C189.516 163.469 191.006 166.098 193.44 167.555L237.794 194.108C241.616 196.396 246.569 195.151 248.856 191.328C249.605 190.076 250 188.644 250 187.185V8.09597C250 3.64006 246.389 0.027832 241.935 0.027832C240.444 0.027832 238.981 0.441882 237.71 1.22393Z" fill="currentColor" />
+    <path opacity="0.077704" fill-rule="evenodd" clip-rule="evenodd" d="M250 65.2656L189.516 99.8897V135.006L250 65.2656Z" fill="black" />
+    <path opacity="0.077704" fill-rule="evenodd" clip-rule="evenodd" d="M250 65.2656L189.516 99.0497V120.886L250 65.2656Z" fill="black" />
+    <path fill-rule="evenodd" clip-rule="evenodd" d="M12.2787 1.18923L125 70.3075V136.87L0 65.2465V8.06814C0 3.61223 3.61061 0 8.06452 0C9.552 0 11.0105 0.411583 12.2787 1.18923Z" fill="currentColor" />
+    <path fill-rule="evenodd" clip-rule="evenodd" d="M12.2787 1.18923L125 70.3075V136.87L0 65.2465V8.06814C0 3.61223 3.61061 0 8.06452 0C9.552 0 11.0105 0.411583 12.2787 1.18923Z" fill="white" fill-opacity="0.15" />
+    <path fill-rule="evenodd" clip-rule="evenodd" d="M237.721 1.18923L125 70.3075V136.87L250 65.2465V8.06814C250 3.61223 246.389 0 241.935 0C240.448 0 238.99 0.411583 237.721 1.18923Z" fill="currentColor" />
+    <path fill-rule="evenodd" clip-rule="evenodd" d="M237.721 1.18923L125 70.3075V136.87L250 65.2465V8.06814C250 3.61223 246.389 0 241.935 0C240.448 0 238.99 0.411583 237.721 1.18923Z" fill="white" fill-opacity="0.3" />
+  </svg>
+</span>
+</span>
+      <span class="app-brand-text demo menu-text fw-semibold ms-2">Materio</span>
+    </a>
+
+    <a href="javascript:void(0);" class="layout-menu-toggle menu-link text-large ms-auto">
+      <i class="menu-toggle-icon d-xl-block align-middle"></i>
+    </a>
+  </div>
+
+  <div class="menu-inner-shadow"></div>
+
+  
+  
+  <ul class="menu-inner py-1">
+    
+    <!-- e-commerce-app menu start -->
+    <li class="menu-item ">
+      <a href="javascript:void(0);" class="menu-link menu-toggle">
+        <i class='menu-icon tf-icons ri-shopping-bag-3-line'></i>
+        <div data-i18n="Product Management">Product Management</div>
+      </a> 
+      <ul class="menu-sub"> 
+        <li class="menu-item">
+          <a href="javascript:void(0);" class="menu-link menu-toggle">
+            <div data-i18n="Products">Products</div>
+          </a>
+          <ul class="menu-sub">
+            <li class="menu-item">
+              <a href="{% url 'product_list' %}" class="menu-link">
+                <div data-i18n="Product List">Product List</div>
+              </a>
+            </li>
+            <li class="menu-item">
+              <a href="{% url 'product_add' %}" class="menu-link">
+                <div data-i18n="Add Product">Add Product</div>
+              </a>
+            </li>
+            <li class="menu-item">
+              <a href="{% url 'category_list' %}" class="menu-link">
+                <div data-i18n="Category List">Category List</div>
+              </a>
+            </li>
+            <li class="menu-item">
+              <a href="{% url 'subcategory_list' %}" class="menu-link">
+                <div data-i18n="Subcategory List">Subcategory List</div>
+              </a>
+            </li>
+          </ul>
+        </li>
+        <li class="menu-item">
+          <a href="javascript:void(0);" class="menu-link menu-toggle">
+            <div data-i18n="Order">Order</div>
+          </a>
+          <ul class="menu-sub">
+            <li class="menu-item">
+              <a href="app-ecommerce-order-list.html" class="menu-link">
+                <div data-i18n="Order List">Order List</div>
+              </a>
+            </li>
+            <li class="menu-item">
+              <a href="app-ecommerce-order-details.html" class="menu-link">
+                <div data-i18n="Order Details">Order Details</div>
+              </a>
+            </li>
+          </ul>
+        </li>
+
+        <li class="menu-item">
+          <a href="app-ecommerce-manage-reviews.html" class="menu-link">
+            <div data-i18n="Manage Reviews">Manage Reviews</div>
+          </a>
+        </li>
+        <li class="menu-item">
+          <a href="app-ecommerce-referral.html" class="menu-link">
+            <div data-i18n="Referrals">Referrals</div>
+          </a>
+        </li>
+        <li class="menu-item">
+          <a href="javascript:void(0);" class="menu-link menu-toggle">
+            <div data-i18n="Settings">Settings</div>
+          </a>
+          <ul class="menu-sub">
+            <li class="menu-item">
+              <a href="app-ecommerce-settings-detail.html" class="menu-link">
+                <div data-i18n="Store Details">Store Details</div>
+              </a>
+            </li>
+            <li class="menu-item">
+              <a href="app-ecommerce-settings-payments.html" class="menu-link">
+                <div data-i18n="Payments">Payments</div>
+              </a>
+            </li>
+            <li class="menu-item">
+              <a href="app-ecommerce-settings-checkout.html" class="menu-link">
+                <div data-i18n="Checkout">Checkout</div>
+              </a>
+            </li>
+            <li class="menu-item">
+              <a href="app-ecommerce-settings-shipping.html" class="menu-link">
+                <div data-i18n="Shipping & Delivery">Shipping & Delivery</div>
+              </a>
+            </li>
+            <li class="menu-item">
+              <a href="app-ecommerce-settings-locations.html" class="menu-link">
+                <div data-i18n="Locations">Locations</div>
+              </a>
+            </li>
+            <li class="menu-item">
+              <a href="app-ecommerce-settings-notifications.html" class="menu-link">
+                <div data-i18n="Notifications">Notifications</div>
+              </a>
+            </li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+
+
+     
+    <li class="menu-item">
+      <a href="javascript:void(0);" class="menu-link menu-toggle">
+        <i class="menu-icon tf-icons ri-user-line"></i>
+        <div data-i18n="User Management">Users Management</div>
+      </a>
+      <ul class="menu-sub">
+        <li class="menu-item">
+          <a href="{% url 'user_management' %}" class="menu-link">
+            <div data-i18n="All Users">All Users</div>
+          </a>
+        </li>
+
+        <li class="menu-item">
+          <a href="javascript:void(0);" class="menu-link menu-toggle">
+            <div data-i18n="User Details">User Details</div>
+          </a>
+          <ul class="menu-sub">
+            <li class="menu-item">
+              <a href="app-ecommerce-customer-details-overview.html" class="menu-link">
+                <div data-i18n="Overview">Account</div>
+              </a>
+            </li>
+            <li class="menu-item">
+              <a href="app-ecommerce-customer-details-security.html" class="menu-link">
+                <div data-i18n="Security">Security</div>
+              </a>
+            </li>
+            <li class="menu-item">
+              <a href="app-ecommerce-customer-details-billing.html" class="menu-link">
+                <div data-i18n="Address & Billing">Address & Billing</div>
+              </a>
+            </li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    
+    <li class="menu-item">
+      <a href="javascript:void(0);" class="menu-link menu-toggle">
+        <i class="menu-icon tf-icons ri-layout-left-line"></i>
+        <div data-i18n="Pages">Pages</div>
+      </a>
+      <ul class="menu-sub">
+        <li class="menu-item">
+          <a href="javascript:void(0);" class="menu-link menu-toggle">
+            <div data-i18n="User Profile">User Profile</div>
+          </a>
+          <ul class="menu-sub">
+            <li class="menu-item">
+              <a href="pages-profile-user.html" class="menu-link">
+                <div data-i18n="Profile">Profile</div>
+              </a>
+            </li>
+            <li class="menu-item">
+              <a href="pages-profile-teams.html" class="menu-link">
+                <div data-i18n="Teams">Teams</div>
+              </a>
+            </li>
+            <li class="menu-item">
+              <a href="pages-profile-projects.html" class="menu-link">
+                <div data-i18n="Projects">Projects</div>
+              </a>
+            </li>
+            <li class="menu-item">
+              <a href="pages-profile-connections.html" class="menu-link">
+                <div data-i18n="Connections">Connections</div>
+              </a>
+            </li>
+          </ul>
+        </li>
+        <li class="menu-item">
+          <a href="javascript:void(0);" class="menu-link menu-toggle">
+            <div data-i18n="Account Settings">Account Settings</div>
+          </a>
+          <ul class="menu-sub">
+            <li class="menu-item">
+              <a href="pages-account-settings-account.html" class="menu-link">
+                <div data-i18n="Account">Account</div>
+              </a>
+            </li>
+            <li class="menu-item">
+              <a href="pages-account-settings-security.html" class="menu-link">
+                <div data-i18n="Security">Security</div>
+              </a>
+            </li>
+            <li class="menu-item">
+              <a href="pages-account-settings-billing.html" class="menu-link">
+                <div data-i18n="Billing & Plans">Billing & Plans</div>
+              </a>
+            </li>
+            <li class="menu-item">
+              <a href="pages-account-settings-notifications.html" class="menu-link">
+                <div data-i18n="Notifications">Notifications</div>
+              </a>
+            </li>
+            <li class="menu-item">
+              <a href="pages-account-settings-connections.html" class="menu-link">
+                <div data-i18n="Connections">Connections</div>
+              </a>
+            </li>
+          </ul>
+        </li>
+        <li class="menu-item">
+          <a href="pages-faq.html" class="menu-link">
+            <div data-i18n="FAQ">FAQ</div>
+          </a>
+        </li>
+        <li class="menu-item">
+          <a href="pages-pricing.html" class="menu-link">
+            <div data-i18n="Pricing">Pricing</div>
+          </a>
+        </li>
+        <li class="menu-item">
+          <a href="javascript:void(0);" class="menu-link menu-toggle">
+            <div data-i18n="Misc">Misc</div>
+          </a>
+          <ul class="menu-sub">
+            <li class="menu-item">
+              <a href="pages-misc-error.html" class="menu-link" target="_blank">
+                <div data-i18n="Error">Error</div>
+              </a>
+            </li>
+            <li class="menu-item">
+              <a href="pages-misc-under-maintenance.html" class="menu-link" target="_blank">
+                <div data-i18n="Under Maintenance">Under Maintenance</div>
+              </a>
+            </li>
+            <li class="menu-item">
+              <a href="pages-misc-comingsoon.html" class="menu-link" target="_blank">
+                <div data-i18n="Coming Soon">Coming Soon</div>
+              </a>
+            </li>
+            <li class="menu-item">
+              <a href="pages-misc-not-authorized.html" class="menu-link" target="_blank">
+                <div data-i18n="Not Authorized">Not Authorized</div>
+              </a>
+            </li>
+            <li class="menu-item">
+              <a href="pages-misc-server-error.html" class="menu-link" target="_blank">
+                <div data-i18n="Server Error">Server Error</div>
+              </a>
+            </li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    
+  
+  
+
+</aside>
+<!-- / Menu -->
+
+    
+
+    <!-- Layout container -->
+    <div class="layout-page">
+      
+      
+
+
+
+<!-- Navbar -->
+
+<nav class="layout-navbar container-xxl navbar navbar-expand-xl navbar-detached align-items-center bg-navbar-theme" id="layout-navbar">
+  
+
+  
+
+      
+      
+
+      
+      
+      <div class="layout-menu-toggle navbar-nav align-items-xl-center me-4 me-xl-0   d-xl-none ">
+        <a class="nav-item nav-link px-0 me-xl-6" href="javascript:void(0)">
+          <i class="ri-menu-fill ri-24px"></i>
+        </a>
+      </div>
+      
+
+      <div class="navbar-nav-right d-flex align-items-center" id="navbar-collapse">
+
+        
+        <!-- Search -->
+        <div class="navbar-nav align-items-center">
+          <div class="nav-item navbar-search-wrapper mb-0">
+            <a class="nav-item nav-link search-toggler fw-normal px-0" href="javascript:void(0);">
+              <i class="ri-search-line ri-22px scaleX-n1-rtl me-1_5"></i>
+              <span class="d-none d-md-inline-block text-muted ms-1_5">Search (Ctrl+/)</span>
+            </a>
+          </div>
+        </div>
+        <!-- /Search -->
+        
+        
+
+        
+
+        <ul class="navbar-nav flex-row align-items-center ms-auto">
+
+          
+          
+          
+
+          <!-- User -->
+          <li class="nav-item navbar-dropdown dropdown-user dropdown">
+            <a class="nav-link dropdown-toggle hide-arrow p-0" href="javascript:void(0);" data-bs-toggle="dropdown">
+              <div class="avatar avatar-online">
+                <img src="{% static 'assets_admin/img/avatars/1.png' %}" alt class="w-px-40 h-auto rounded-circle">
+              </div>
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end mt-3 py-2">
+              <li>
+                <a class="dropdown-item" href="pages-account-settings-account.html">
+                  <div class="d-flex align-items-center">
+                    <div class="flex-shrink-0 me-2">
+                      <div class="avatar avatar-online">
+                        <img src="{% static 'assets_admin/img/avatars/1.png' %}" alt class="w-px-40 h-auto rounded-circle">
+                      </div>
+                    </div>
+                    <div class="flex-grow-1">
+                      <h6 class="mb-0 small">{{username}}</h6>
+                      <small class="text-muted">Admin</small>
+
+                    </div>
+                  </div>
+                </a>
+              </li>
+              <li>
+                <div class="dropdown-divider"></div>
+              </li>
+              <li>
+                <a class="dropdown-item" href="pages-profile-user.html">
+                  <i class="ri-user-3-line ri-22px me-2"></i>
+                  <span class="align-middle">My Profile</span>
+                </a>
+              </li>
+              <li>
+                <a class="dropdown-item" href="pages-account-settings-account.html">
+                  <i class="ri-settings-4-line ri-22px me-2"></i>
+                  <span class="align-middle">Settings</span>
+                </a>
+              </li>
+              <li>
+                <a class="dropdown-item" href="pages-account-settings-billing.html">
+                  <span class="d-flex align-items-center align-middle">
+                    <i class="flex-shrink-0 ri-file-text-line ri-22px me-2"></i>
+                    <span class="flex-grow-1 align-middle">Billing</span>
+                    <span class="flex-shrink-0 badge badge-center rounded-pill bg-danger h-px-20 d-flex align-items-center justify-content-center">4</span>
+                  </span>
+                </a>
+              </li>
+              <li>
+                <div class="dropdown-divider"></div>
+              </li>
+              <li>
+                <a class="dropdown-item" href="pages-pricing.html">
+                  <i class="ri-money-dollar-circle-line ri-22px me-2"></i>
+                  <span class="align-middle">Pricing</span>
+                </a>
+              </li>
+              <li>
+                <a class="dropdown-item" href="pages-faq.html">
+                  <i class="ri-question-line ri-22px me-2"></i>
+                  <span class="align-middle">FAQ</span>
+                </a>
+              </li>
+              <li>
+                <div class="d-grid px-4 pt-2 pb-1">
+                  <a class="btn btn-danger d-flex" href="auth-login-cover.html" target="_blank">
+                    <small class="align-middle">Logout</small>
+                    <i class="ri-logout-box-r-line ms-2 ri-16px"></i>
+                  </a>
+                </div>
+              </li>
+            </ul>
+          </li>
+          <!--/ User -->
+          
+
+
+        </ul>
+      </div>
+
+      
+      <!-- Search Small Screens -->
+      <div class="navbar-search-wrapper search-input-wrapper  d-none">
+        <input type="text" class="form-control search-input container-xxl border-0" placeholder="Search..." aria-label="Search...">
+        <i class="ri-close-fill search-toggler cursor-pointer"></i>
+      </div>
+      
+      
+  
+</nav>
+
+<!-- / Navbar -->
+
+
+<!-- UNTIL THIS POINT EVERY TEMPLATE HAS SAME CODE -->
+
+      
+
+<!-- Content wrapper -->
+<div class="content-wrapper">
+
+<!-- Content -->
+
+    <div class="container-xxl flex-grow-1 container-p-y">
+
+
+
+        <!-- Basic Layout -->
+<div class="d-flex justify-content-center">
+<div class="row w-50 " >
+    <div class="col-xl">
+      <div class="card mb-6">
+        <div class="card-header d-flex justify-content-between align-items-center">
+          <h5 class="mb-0">Add Size Variant for {{color_variant.product_id.product_name}}({{color_variant.color_name}})</h5>
+        </div>
+        <div class="card-body">
+          {% if error_message %}
+          <div class="alert alert-danger" role="alert">
+            {{ error_message }}
+        </div>
+        {% endif %}
+          <form method="post" action="" enctype="multipart/form-data" > 
+            {% csrf_token %}
+            <div id="size-container">
+              <div class="form-floating form-floating-outline mb-6 size-group">
+                  <select class="form-control size-select" name="size" required>
+                      <option value="" disabled selected>Select Size</option>
+                      {% for size in sizes %}
+                      <option value="{{ size }}">{{ size }}</option>
+                      {% endfor %}
+                  </select>
+                  <label for="size">Select Size</label>
+                  <input type="number" class="form-control mt-2" name="quantity" placeholder="Quantity" required min="1" />
+              </div>
+            </div>
+            <button type="submit" class="btn btn-primary">Add</button>
+        </form>
+        </div>
+      </div>
+    </div>
+    
+</div>
+            
+            
+
+</div>
+ 
+
+  
+</div>
+<!-- / Content -->
+
+
+          
+          
+
+<!-- Footer -->
+<footer class="content-footer footer bg-footer-theme">
+  <div class="container-xxl">
+    <div class="footer-container d-flex align-items-center justify-content-between py-4 flex-md-row flex-column">
+      <div class="text-body mb-2 mb-md-0">
+        © <script>
+        document.write(new Date().getFullYear())
+
+        </script>, made with <span class="text-danger"><i class="tf-icons ri-heart-fill"></i></span> by <a href="https://themeselection.com/" target="_blank" class="footer-link">ThemeSelection</a>
+      </div>
+      <div class="d-none d-lg-inline-block">
+        
+        <a href="https://themeselection.com/license/" class="footer-link me-4" target="_blank">License</a>
+        <a href="https://themeselection.com/" target="_blank" class="footer-link me-4">More Themes</a>
+        
+        <a href="https://demos.themeselection.com/materio-bootstrap-html-admin-template/documentation/" target="_blank" class="footer-link me-4">Documentation</a>
+        
+        
+        <a href="https://themeselection.com/support/" target="_blank" class="footer-link d-none d-sm-inline-block">Support</a>
+        
+      </div>
+    </div>
+  </div>
+</footer>
+<!-- / Footer -->
+
+          
+          <div class="content-backdrop fade"></div>
+        </div>
+        <!-- Content wrapper -->
+      </div>
+      <!-- / Layout page -->
+    </div>
+
+    
+    
+    <!-- Overlay -->
+    <div class="layout-overlay layout-menu-toggle"></div>
+    
+    
+    <!-- Drag Target Area To SlideIn Menu On Small Screens -->
+    <div class="drag-target"></div>
+    
+  </div>
+  <!-- / Layout wrapper -->
+
+  
+  <div class="buy-now">
+    <a href="https://themeselection.com/item/materio-bootstrap-html-admin-template/" target="_blank" class="btn btn-danger btn-buy-now">Buy Now</a>
+  </div>
+  
+
+  
+
+  <!-- Core JS -->
+  <!-- build:js assets/vendor/js/core.js -->
+  <script src="{% static 'assets_admin/vendor/libs/jquery/jquery.js' %}"></script>
+  <script src="{% static 'assets_admin/vendor/libs/popper/popper.js' %}"></script>
+  <script src="{% static 'assets_admin/vendor/js/bootstrap.js' %}"></script>
+  <script src="{% static 'assets_admin/vendor/libs/node-waves/node-waves.js' %}"></script>
+  <script src="{% static 'assets_admin/vendor/libs/perfect-scrollbar/perfect-scrollbar.js' %}"></script>
+  <script src="{% static 'assets_admin/vendor/libs/hammer/hammer.js' %}"></script>
+  <script src="{% static 'assets_admin/vendor/libs/i18n/i18n.js' %}"></script>
+  <script src="{% static 'assets_admin/vendor/libs/typeahead-js/typeahead.js' %}"></script>
+  <script src="{% static 'assets_admin/vendor/js/menu.js' %}"></script>
+  
+  <!-- endbuild -->
+
+  <!-- Vendors JS -->
+  <script src="{% static 'assets_admin/vendor/libs/moment/moment.js' %}"></script>
+<script src="{% static 'assets_admin/vendor/libs/datatables-bs5/datatables-bootstrap5.js' %}"></script>
+<script src="{% static 'assets_admin/vendor/libs/select2/select2.js' %}"></script>
+<script src="{% static 'assets_admin/vendor/libs/%40form-validation/popular.js' %}"></script>
+<script src="{% static 'assets_admin/vendor/libs/%40form-validation/bootstrap5.js' %}"></script>
+<script src="{% static 'assets_admin/vendor/libs/%40form-validation/auto-focus.js' %}"></script>
+<script src="{% static 'assets_admin/vendor/libs/cleavejs/cleave.js' %}"></script>
+<script src="{% static 'assets_admin/vendor/libs/cleavejs/cleave-phone.js' %}"></script>
+
+  <!-- Main JS -->
+  <script src="{% static 'assets_admin/js/main.js' %}"></script>
+  
+
+  <!-- Page JS -->
+  <script src="{% static 'assets_admin/js/app-user-list.js' %}"></script>
+
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+  {% comment %} <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script> {% endcomment %}
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" ></script>
+  {% comment %} <script src="https://unpkg.com/cropperjs"></script> {% endcomment %}
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.12/cropper.min.js"></script>
+
+  
+
+
+  <script>
+
+
+  </script>
+  
+</body>
+
+
+<!-- Mirrored from demos.themeselection.com/materio-bootstrap-html-admin-template/html/vertical-menu-template/app-user-list.html by HTTrack Website Copier/3.x [XR&CO'2014], Tue, 25 Jun 2024 05:50:49 GMT -->
+</html>
+
+<!-- beautify ignore:end -->

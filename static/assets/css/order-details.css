@@ -1,0 +1,102 @@
+.order-details-container {
+    max-width: 1200px;
+    margin: 40px auto;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    text-align: center;
+}
+.section-heading {
+    background-color: #333333;
+    color: white;
+    padding: 8px 20px;
+    border-radius: 25px;
+    display: inline-block;
+    font-size: 1.2em;
+    margin-bottom: 20px;
+    font-weight: 600;
+}
+.section-heading:hover {
+    background-color: #FF7575;
+    transform: translateY(-2px);
+}
+.card {
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    margin-bottom: 20px;
+}
+.card-header {
+    background-color:  #333333;
+    color: white;
+    font-weight: bold;
+    text-align: center;
+    padding: 12px;
+    border-radius: 10px 10px 0 0;
+    font-size: 1.1em;
+}
+.card-body {
+    padding: 20px;
+}
+.ordered-items {
+    margin-top: 40px;
+}
+.table {
+    width: 100%;
+    border-collapse: collapse;
+}
+.table th {
+    background-color: #333333;
+    color: white;
+    padding: 12px;
+    text-align: left;
+}
+.table td {
+    padding: 12px;
+    border-bottom: 1px solid #ddd;
+}
+.order-image {
+    width: 50px;
+    height: 50px;
+    object-fit: cover;
+    border-radius: 5px;
+}
+.btn-primary {
+    background-color: #333333;
+    color: white;
+    padding: 8px 16px;
+    text-decoration: none;
+    border-radius: 5px;
+    display: inline-block;
+    margin-top: 20px;
+    transition: background-color 0.3s, transform 0.3s;
+}
+.btn-primary:hover {
+    background-color: #FF7575;
+    transform: translateY(-2px);
+}
+.btn-action {
+    border: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.3s;
+}
+.btn-action:hover {
+    transform: translateY(-2px);
+}
+.btn-cancel {
+    background-color: #dc3545;
+    color: white;
+}
+.btn-cancel:hover {
+    background-color: #c82333;
+}
+.btn-return {
+    background-color: #ffc107;
+    color: #212529;
+}
+.btn-return:hover {
+    background-color: #e0a800;
+}

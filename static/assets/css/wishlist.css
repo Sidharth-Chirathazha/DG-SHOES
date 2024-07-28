@@ -1,0 +1,120 @@
+.wishlist-area {
+    font-family: 'Arial', sans-serif;
+    max-width: 1200px;
+    margin: 40px auto;
+    padding: 20px;
+}
+.wishlist-title {
+    text-align: center;
+    margin-bottom: 30px;
+    color: #333;
+}
+.wishlist-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0 15px;
+}
+.wishlist-table th {
+    background-color: #f8f8f8;
+    color: #333;
+    font-weight: bold;
+    padding: 15px;
+    text-align: left;
+}
+.wishlist-table td {
+    background-color: #ffffff;
+    padding: 15px;
+    vertical-align: middle;
+}
+.wishlist-table tr {
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+.product-image img {
+    max-width: 80px;
+    height: auto;
+    border-radius: 8px;
+}
+.product-name {
+    font-weight: bold;
+    margin-left: 15px;
+}
+.product-details p {
+    margin: 5px 0;
+}
+.btn {
+    padding: 10px 20px;
+    background-color: white;
+    color: #333;
+    border: 1px solid #ccc;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    display: inline-block;
+}
+.btn:hover {
+    background-color: #FF7575;
+    color: white;
+    border-color: #FF7575;
+}
+.remove-btn {
+    color: #ff0000;
+    font-size: 18px;
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+.remove-btn:hover {
+    color: #FF7575;
+}
+.wishlist-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 30px;
+}
+.wishlist-actions .btn {
+    margin-left: 10px;
+}
+.size-select {
+    padding: 8px 15px;
+    border-radius: 50px;
+    border: 1px solid #ccc;
+    background-color: white;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+.size-select:hover, .size-select:focus {
+    border-color: #FF7575;
+    outline: none;
+}
+
+
+
+
+
+.alert {
+    padding: 15px;
+    margin-bottom: 20px;
+    border: 1px solid transparent;
+    border-radius: 4px;
+}
+
+.alert-info {
+    color: #31708f;
+    background-color: #d9edf7;
+    border-color: #bce8f1;
+}
+
+.alert-success {
+    color: #3c763d;
+    background-color: #dff0d8;
+    border-color: #d6e9c6;
+}
+
+.alert-error {
+    color: #a94442;
+    background-color: #f2dede;
+    border-color: #ebccd1;
+}

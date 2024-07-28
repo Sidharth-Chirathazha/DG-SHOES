@@ -1,0 +1,726 @@
+<!doctype html>
+{% load static %}
+<html class="no-js" lang="">
+    
+<!-- Mirrored from demo.hasthemes.com/fowler-preview/fowler/shoping-cart.html by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 20 Jun 2024 10:16:16 GMT -->
+<head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title>Fowler - Shoes Store HTML Template</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <!-- Place favicon.ico in the root directory -->
+		<link rel="apple-touch-icon" href="{% static 'assets/apple-touch-icon.png' %}">
+        <link rel="shortcut icon" type="image/x-icon" href="{% static 'assets/img/favicon.ico' %}">
+		
+		<!-- Google Fonts -->
+		<link href='https://fonts.googleapis.com/css?family=Raleway:400,300,500,600,700,800,900' rel='stylesheet' type='text/css'>
+		<link href='https://fonts.googleapis.com/css?family=Roboto:400,300,500,700,900' rel='stylesheet' type='text/css'>
+		<link href='https://fonts.googleapis.com/css?family=Lato:400,700,900,300' rel='stylesheet' type='text/css'>
+		<link href='https://fonts.googleapis.com/css?family=Montserrat:400,700' rel='stylesheet' type='text/css'>
+		<!-- all css here -->
+		<!-- bootstrap v3.3.6 css -->
+        <link rel="stylesheet" href="{% static 'assets/css/bootstrap.min.css' %}">
+		<!-- animate css -->
+        <link rel="stylesheet" href="{% static 'assets/css/animate.css' %}">
+        <!-- nivo slider CSS -->
+		<link rel="stylesheet" href="{% static 'assets/lib/css/nivo-slider.css' %}" type="text/css" />
+		<link rel="stylesheet" href="{% static 'assets/lib/css/preview.css' %}" type="text/css" media="screen" />
+		<!-- jquery-ui.min css -->
+        <link rel="stylesheet" href="{% static 'assets/css/jquery-ui.min.css' %}">
+		<!-- meanmenu css -->
+        <link rel="stylesheet" href="{% static 'assets/css/meanmenu.min.css' %}">
+		<!-- owl.carousel css -->
+        <link rel="stylesheet" href="{% static 'assets/css/owl.carousel.css' %}">
+		<!-- font-awesome css -->
+        <link rel="stylesheet" href="{% static 'assets/css/font-awesome.min.css' %}">
+		<!-- style css -->
+		<link rel="stylesheet" href="{% static 'assets/css/style.css' %}">
+		<!-- responsive css -->
+        <link rel="stylesheet" href="{% static 'assets/css/responsive.css' %}">
+		<!-- modernizr css -->
+        <script src="{% static 'assets/js/vendor/modernizr-2.8.3.min.js' %}"></script>
+
+		<style>
+
+			.bannerhead-area {
+
+				background: rgba(0, 0, 0, 0) url('{% static 'assets/img/header-banner.jpg' %}') no-repeat scroll center center;
+				position: relative;
+
+			  }
+
+			.section-titel {
+			display: block;
+			overflow: hidden;
+			padding-bottom: 30px;
+			position: relative;
+			}
+
+		.section-titel::after {
+			background: rgba(0, 0, 0, 0) url('{% static 'assets/img/sec-titel.png' %}') no-repeat scroll 0 0;
+			content: "";
+			height: 100%;
+			left: 39%;
+			position: absolute;
+			top: 30px;
+			width: 100%;
+			}
+		.section-titel > h3 {
+			color: #666666;
+			font-family: "Montserrat",sans-serif;
+			font-size: 20px;
+			font-weight: 400;
+			text-transform: uppercase;
+			}
+		.hot-deals-area {
+			background-attachment: scroll;
+			background-image: url("{% static 'assets/img/home-1/hot-deals.jpg' %}");
+			background-position: center center;
+			background-size: cover;
+			}
+
+			.empty-cart-message {
+				display: flex;
+				justify-content: center;
+				align-items: center;
+				height: 300px; /* Adjust height as needed */
+			}
+			
+			.empty-cart-message h3 {
+				border: 2px solid #ccc; /* Adjust border color as needed */
+				padding: 20px;
+				background-color: #f9f9f9; /* Light background color for contrast */
+				color: #333; /* Dark font color for readability */
+				border-radius: 50px; /* Oval border */
+				text-align: center;
+			}
+
+
+	
+			.quantity-container {
+				display: flex;
+				flex-direction: column;
+				align-items: center;
+			}
+		
+			.quantity-input {
+				width: 60px;
+				padding: 5px;
+				border: 1px solid #ccc;
+				border-radius: 4px;
+				text-align: center;
+				background-color: #f0f0f0;
+				transition: background-color 0.3s;
+			}
+		
+			.quantity-input:hover, .quantity-input:focus {
+				background-color: #e0e0e0;
+			}
+		
+			.stock-info {
+				margin-top: 5px;
+				font-size: 0.8em;
+				text-align: center;
+				display: block;
+				width: 100%;
+			}
+
+
+		</style>
+    </head>
+    <body class="other-page">
+        <!--[if lt IE 8]>
+            <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
+        <![endif]-->
+
+        <!-- HEADER TOP AREA START -->
+		<section class="header-top-area">
+			<div class="container">
+				<div class="row">
+					<div class="col-md-6">
+						<div class="left-msg pull-left">
+							<h6>FREE SHIPPING ON OVER $100</h6>
+						</div>
+					</div>
+					<div class="col-md-6">
+						<div class="right-login pull-right">
+							<div class="currencies-block-top curency pull-left">
+								<div class="current">
+									<span>USD</span>
+									<i class="fa fa-angle-down"></i>
+								</div>
+								<ul class="first-currencies toggle-content">
+									<li><a href="#">Dollar (USD)</a></li>
+									<li><a href="#">Pound (GBP)</a></li>
+									<li><a href="#">Pound (GBP)</a></li>
+								</ul>
+							</div>
+							<div class="languages-block-top curency pull-left">
+								<div class="current">
+									<span>LANGUAGE</span>
+									<i class="fa fa-angle-down"></i>
+								</div>
+								<ul class="first-languages toggle-content">
+									<li><a href="#">ENGLISH</a></li>
+								</ul>
+							</div>
+							<div class="curency pull-left">
+								<div class="current">
+									{% if user.is_authenticated %}
+										<i class="fa fa-user left"></i>
+										<span><a href="">Welcome, {{ user.first_name }} | </a></span>
+										<span><a href="{% url 'logout' %}"> LOGOUT</a></span>
+									{% else %}
+										<span><a href="{% url 'login' %}">LOG IN</a></span>
+									{% endif %}
+								</div> 
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+        <!-- HEADER TOP AREA END -->
+		<!-- MENU AREA START -->
+		<div class="menu-area">
+			<div class="container">
+				<div class="row">
+					<div class="col-md-2 col-sm-2">
+						<div class="logo-area">
+							<a href="index.html"><img src="{% static 'assets/img/home-1/logo_dg_footer.png' %}" width="110" height="50" alt="" /></a>
+						</div>
+					</div>
+					<div class="col-md-8 col-sm-8">
+						<div class="main-menu">
+							<ul class="list-inline">
+							  <li class="expand active"><a href="{% if user.is_authenticated %}{% url 'home' %}{% else %}{% url 'index' %}{% endif %}">HOME</a>
+								<ul class="single sub-menu">
+									<li class="sub-menu-title"><a href="index.html">Home Pages</a></li>
+									<li><a href="index.html">Home Version One</a></li>
+									<li><a href="index-2.html">Home Version Two</a></li>
+								</ul>
+							  </li>
+							  <li><a href="#">CATEGORIES</a>
+								<!-- Mega Menu Four Column -->
+								<div class="mega-menu">
+									{% for category in categories%}
+									<span>
+										<a href="#" class="mega-title">{{ category.category_name }}</a>
+										<a href="#"><img alt="{{category.category_name}}" src="{{category.image.url}}"/></a>
+										{% for subcategory in category.subcategories.all %}
+										{% if subcategory.is_listed %}
+										<a href="shop.html">{{ subcategory.subcategory_name}}</a>
+										{% endif %}
+										{% endfor %}
+									</span>
+									{% endfor %}
+									<span class="mega-menu-img">
+										<a href="{% url 'shop_list' %}" class="mega-title">ALL PRODUCTS</a>
+										<a href="#"><img alt="" src="{% static 'assets/img/other-pg/img_menu.jpg' %}"></a>
+									</span>
+								</div>
+							  </li>  
+							  
+							  <li><a href="about-us.html">ABOUT</a></li>
+							  <li class="expand"><a href="{% url 'user_account' %}">ACCOUNT</a>
+								<ul class="single sub-menu">
+									<li><a href="about-us.html">About</a></li>
+									<li><a href="shop.html">Shop</a></li>
+									<li><a href="shoping-cart.html">Shop Cart</a></li>
+									<li><a href="shop-list.html">Shop List</a></li>
+									<li><a href="single-product.html">Single Product</a></li>
+									<li><a href="wishlist.html">Wishlist</a></li>
+									<li><a href="checkout.html">Checkout</a></li>
+									<li><a href="account.html">Account</a></li>
+									<li><a href="login.html">Log In</a></li>
+									<li><a href="contact-us.html">Contact Us</a></li>
+									<li><a href="404.html">404 Error</a></li>
+								</ul>
+							  </li>
+							  <li><a href="contact-us.html">CONTACT</a></li>
+							</ul>
+						</div>
+					</div>
+					<!-- MOBILE-MENU-AREA START --> 
+					<div class="mobile-menu-area">
+						<div class="container">
+							<div class="row">
+								<div class="col-md-12">
+								<div class="mobile-area">
+									<div class="mobile-menu">
+										<nav id="mobile-nav">
+											<ul>
+												<li><a href="index.html">Home </a>
+													<ul>
+														<li><a href="index.html">Home version one</a></li>
+														<li><a href="index-2.html">Home Version two</a></li>
+													</ul>
+												</li>
+												<li><a href="shop.html"> Shop </a></li>
+												<li><a href="about-us.html"> About Us </a></li>
+												<li><a href="#"> Pages </a>
+													<ul>
+														<li><a href="about-us.html">About Us</a></li>
+														<li><a href="shop.html">Shop</a></li>
+														<li><a href="shop-list.html">Shop List</a></li>
+														<li><a href="shoping-cart.html">Shop Cart</a></li>
+														<li><a href="single-product.html">Single Product</a></li>
+														<li><a href="checkout.html">Checkout</a></li>
+														<li><a href="account.html">My Account</a></li>
+														<li><a href="login.html">Login</a></li>
+														<li><a href="wishlist.html">Wishlist</a></li>
+														<li><a href="contact-us.html">Contact</a></li>
+														<li><a href="404.html">404 Error</a></li>
+													</ul>
+												</li>
+												<li><a href="#"> Returns </a></li>
+												<li><a href="#"> Orders </a></li>
+												<li><a href="contact-us.html"> Contact Us </a></li>
+											</ul>
+										</nav>
+									</div>	
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<!-- MOBILE-MENU-AREA END  -->
+					<div class="col-md-2 col-sm-2">
+						<div class="menu-right-area">
+							<ul>
+								<li>
+									<a href="#" class="cart-toggler search-icon">
+										<i class="fa fa-search"></i>
+									</a>
+									<div class="header-bottom-search">
+										<form method="POST" action="#" class="search-box">
+											<div>
+												<input type="text" autocomplete="off" placeholder="Search" value="">
+											</div>
+										</form>						            
+									</div>
+								</li>
+								<li>
+									<a href="{% url 'cart_detail' %}" class="cart-toggler mini-cart-icon">
+										<i class="fa fa-shopping-cart"></i>
+										{% if cart_item_count > 0 %}
+										<span>{{ cart_item_count }}</span>
+										{% endif %}
+									</a>
+									{% comment %} <div class="top-cart-content">
+										<div class="media header-middle-checkout">
+											<div class="media-left check-img">
+												<a href="#">
+													<img alt="" src="{% static 'assets/img/other-pg/cart-1.jpg' %}">
+												</a>
+											</div>
+											<div class="media-body checkout-content">
+												<h4 class="media-heading">
+													<a href="#">Men Pumping Show</a>
+													<span title="Remove This Item" class="btn-remove checkout-remove">
+														<i class="fa fa-trash"></i>
+													</span>
+												</h4>
+												<p>1 x $111.00</p>
+											</div>
+										</div>
+										<div class="media header-middle-checkout last-child"><!-- Cart Middle Check Out -->
+											<div class="media-left check-img">
+												<a href="#">
+													<img alt="" src="{% static 'assets/img/other-pg/cart-2.jpg' %}">
+												</a>
+											</div>
+											<div class="media-body checkout-content">
+												<h4 class="media-heading">
+													<a href="#">Women Pump Show</a>
+													<span title="Remove This Item" class="btn-remove checkout-remove">
+														<i class="fa fa-trash"></i>
+													</span>
+												</h4>
+												<p>1 x $111.00</p>
+											</div>
+										</div>
+										<div class="actions">
+											<button type="button" title="Checkout-botton" class="Checkout-botton">
+												<span>Checkout</span>
+											</button>
+										</div>
+									</div> {% endcomment %}
+								</li>
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- MENU AREA END -->
+		<!-- BANNER AREA STRAT -->
+		<section class="bannerhead-area">
+			<div class="container">
+				<div class="row">
+					<div class="col-md-12">
+						<div class="banner-heading">
+							<h1>SHOPPING CART</h1>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+		<!-- BANNER AREA END -->
+		<!-- SHOPING CART AREA START -->
+		<section class="shoping-cart-area">
+			<div class="container">
+				<div class="row">
+					<div class="col-md-12">
+						{% if message %}
+							<div class="alert alert-{{ message.tags }}">{{ message }}</div>
+						{% endif %}
+						<div class="wishlist-table-area table-responsive">
+							{% if cart_items_with_max_quantity %}
+							<table>
+								<thead>
+									<tr>
+										<th class="product-remove">Remove</th>
+										<th class="product-image">Image</th>
+										<th class="product-name">Product Name</th>
+										<th class="product-edit">Edit</th>
+										<th class="product-unit-price">Unit Price</th>
+										<th class="product-quantity">Quantity</th>
+										<th class="product-subtotal">Subtotal</th>
+									</tr>
+								</thead>
+								<tbody>
+									{%  for cart_item in cart_items_with_max_quantity %}
+									<tr>
+										<td class="product-remove">
+											<a href="{% url 'delete_cart_item' cart_item.item.id %}"><i class="fa fa-trash-o"></i></a>
+										</td>
+										<td class="product-image">
+											<a href="#"><img alt="#" src="{{ cart_item.item.product_color.image_1.url}}" width = "120px" height="60px"></a>
+										</td>
+										<td class="product-name">
+											<h3><a href="#">{{ cart_item.item.product.product_name}}</a></h3>
+											<p>Color: {{ cart_item.item.product_color.color_name }}, Size: {{ cart_item.item.product_size.size }}</p>
+										</td>
+										<td class="product-edit">
+											<p><a href="#">Edit</a></p>
+										</td>
+										<td class="product-unit-price">
+											<p>Rs. {{ cart_item.item.product.price}} </p>
+										</td>
+										<td class="product-quantity product-cart-details">
+											<div class="quantity-container">
+												<input type="number" value="{{ cart_item.item.quantity }}" min="1" max="{{ cart_item.max_quantity }}"
+													   class="quantity-input" data-item-id="{{ cart_item.item.id }}" data-item-price="{{ cart_item.item.product.price }}"
+													   data-available-quantity="{{ cart_item.item.product_size.quantity }}">
+												<span class="stock-info"></span>
+											</div>
+										</td>
+										<td class="product-quantity">
+											<p>Rs. {{ cart_item.item.get_total_price }}</p>
+										</td>
+									</tr>
+									{% endfor %}
+								</tbody>
+							</table>
+							{% else %}
+							<div class="empty-cart-message">
+								<h3>Your shopping cart is empty</h3>
+							</div>
+							{% endif %}
+						</div>
+						{% if cart_items_with_max_quantity %}
+						<div class="shopingcart-bottom-area">
+							<a href="#" class="bottoma">CONTINUE SHOPPING</a>
+							<div class="bottom-button">
+								<a href="{% url 'clear_cart' %}" class="bottomb">CLEAR SHOPPING CART</a>
+								<a href="#" class="bottomb">UPDATE SHOPPING CART</a>
+							</div>
+						</div>
+						{% endif %}
+					</div>
+				</div>
+			</div>
+		</section>
+		<!-- SHOPING CART AREA END -->
+		<!-- DISCOUNT SUBTOTAL AREA STRAT -->
+		 {% if cart_items_with_max_quantity %}
+		<section class="discount-area">
+			<div class="container">
+				<div class="row">
+					<div class="col-md-6 res-mr-btm xs-res-mrbtm">
+						<div class="discount-main-area">
+							<div class="discount-top">
+								<h3>DISCOUNT CODE</h3>
+								<p>Enter your coupon code if have one</p>
+							</div>
+							<div class="discount-middle">
+								<input type="text" placeholder=""/>
+								<a href="#" class="">APPLY COUPON</a>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-6">
+						<div class="subtotal-main-area" data-initial-cart-total="{{ cart_total }}">
+							<div class="subtotal-area">
+								<h2>SUBTOTAL<span id="cart-subtotal">Rs. {{ cart_total }}</span></h2>
+							</div>
+							<div class="subtotal-area">
+								<h2>GRAND TOTAL<span id="cart-grand-total">Rs. {{ cart_total }}</span></h2>
+							</div>
+							<a href="{% url 'checkout' %}">CHECKOUT</a>
+							<p>Checkout With Multiple Addresses</p>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+		{% endif %}
+		<!-- DISCOUNT SUBTOTAL AREA END -->
+		<!-- OUR BRAND AREA START -->
+		<section class="our-brand-area">
+			<div class="container">
+				<div class="text-center">
+					<div class="section-titel">
+						<h3>OUR BRANDS</h3>
+					</div>
+				</div>
+				<div class="row blog-area">
+					<div id="ourbrand-owl">
+						<div class="col-md-12"><img src="{% static 'assets/img/other-pg/brand-logo-1.jpg' %}" alt="" /></div>
+						<div class="col-md-12"><img src="{% static 'assets/img/other-pg/brand-logo-2.jpg' %}" alt="" /></div>
+						<div class="col-md-12"><img src="{% static 'assets/img/other-pg/brand-logo-3.jpg' %}" alt="" /></div>
+						<div class="col-md-12"><img src="{% static 'assets/img/other-pg/brand-logo-4.jpg' %}" alt="" /></div>
+						<div class="col-md-12"><img src="{% static 'assets/img/other-pg/brand-logo-5.jpg' %}" alt="" /></div>
+						<div class="col-md-12"><img src="{% static 'assets/img/other-pg/brand-logo-3.jpg' %}" alt="" /></div>
+						<div class="col-md-12"><img src="{% static 'assets/img/other-pg/brand-logo-1.jpg' %}" alt="" /></div>
+						<div class="col-md-12"><img src="{% static 'assets/img/other-pg/brand-logo-2.jpg' %}" alt="" /></div>
+					</div>
+				</div>
+			</div>
+		</section>
+		<!-- OUR BRAND AREA END -->
+		<!-- Footer Top Area Start -->
+		<div class="footer-top">
+			<div class="container">
+				<div class="row">
+					<div class="col-md-4 col-sm-4">
+						<div class="social-icon">
+							<ul>
+								<li><a href="#"><i class="fa fa-facebook"></i></a></li>
+								<li><a href="#"><i class="fa fa-rss"></i></a></li>
+								<li><a href="#"><i class="fa fa-instagram"></i></a></li>
+								<li><a href="#"><i class="fa fa-google-plus"></i></a></li>
+								<li><a href="#"><i class="fa fa-youtube"></i></a></li>
+							</ul>
+						</div>
+					</div>
+					<div class="col-md-8 col-sm-8">
+						<div class="foteer-news">
+							<h3>NEWSLETTER</h3>
+							<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed</p>
+						</div>
+						<div class="search-input">
+							<form action="#">
+								<input type="text" placeholder="Enter your keyword...">
+								<button class="search-button" type="submit" value="Submit">Subcribe</button>
+							</form>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- Footer Top Area End -->
+		<!-- Footer Middle Area Start -->
+		<section class="footer-middle">
+			<div class="container">
+				<div class="row">
+					<div class="col-md-3 col-sm-4 col-xs-12 xs-res-mrbtm">
+						<div class="footer-menu">
+							<h4>MY ACCOUNT</h4>
+							<ul>
+								<li><a href="#">Login</a></li>
+								<li><a href="#">My Account</a></li>
+								<li><a href="#">My Cart</a></li>
+								<li><a href="#">Wishlist</a></li>
+								<li><a href="#">Checkout</a></li>
+								<li><a href="#">Userinfor</a></li>
+							</ul>
+						</div>
+					</div>
+					<div class="col-md-3 hidden-sm hidden-xs">
+						<div class="footer-menu">
+							<h4>INFORMATION</h4>
+							<ul>
+								<li><a href="#">Sitemap</a></li>
+								<li><a href="#">Privacy Policy</a></li>
+								<li><a href="#">Your Account</a></li>
+								<li><a href="#">Advanced Search</a></li>
+								<li><a href="#">Affiliates</a></li>
+								<li><a href="#">Group Sales</a></li>
+							</ul>
+						</div>
+					</div>
+					<div class="col-md-3 col-sm-4 col-xs-12 xs-res-mrbtm">
+						<div class="footer-menu">
+							<h4>CONTACT US</h4>
+							<ul>
+								<li><a href="#">Product Recall</a></li>
+								<li><a href="#">Gift Vouchers</a></li>
+								<li><a href="#">Returns and Exchanges</a></li>
+								<li><a href="#">Shipping Options</a></li>
+								<li><a href="#">Blogs</a></li>
+								<li><a href="#">Help & Faqs</a></li>
+							</ul>
+						</div>
+					</div>
+					<div class="col-md-3 col-sm-4 col-xs-12">
+						<div class="address-area">
+							<a href="index.html"><img src="{% static 'assets/img/home-1/footer-logo.png' %}" alt="" /></a>
+							<p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard.</p>
+							<div class="contact-details">
+								<ul>
+									<li><i class="fa fa-phone"></i>+(00) 56-888-999</li>
+									<li><i class="fa fa-envelope-o"></i> admin@DevItems.com</li>
+									<li><i class="fa fa-map-marker"></i> 1212, Bigrun street, France.</li>
+								</ul>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+		<!-- Footer Middle Area End -->
+		<!-- Footer Bottom Area Start -->
+		<div class="footer-bottom-area">
+			<div class="container">
+				<div class="row ">
+					<div class="col-md-6 col-sm-6 col-xs-12">
+						<p>Copyright &copy;  <a href="http://www.devitems.com/"> Devitems. </a> All Rights Reserved.</p>
+					</div>
+					<div class="col-md-6 col-sm-6 col-xs-12">
+						<img src="{% static 'assets/img/other-pg/payment.png' %}" alt="" />
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- Footer Bottom Area End -->
+		
+		<!-- all js here -->
+		<!-- jquery latest version -->
+        <script src="{% static 'assets/js/vendor/jquery-1.12.0.min.js' %}"></script>
+		<!-- bootstrap js -->
+        <script src="{% static 'assets/js/bootstrap.min.js' %}"></script>
+		<!-- owl.carousel js -->
+        <script src="{% static 'assets/js/owl.carousel.min.js' %}"></script>
+		<!-- meanmenu js -->
+        <script src="{% static 'assets/js/jquery.meanmenu.js' %}"></script>
+        <!-- Nivo slider js  --> 		
+		<script src="{% static 'assets/lib/js/jquery.nivo.slider.js' %}" type="text/javascript"></script>
+		<script src="{% static 'assets/lib/home.js" type="text/javascript' %}"></script>
+		<!-- count down js  -->
+		<script src="{% static 'assets/js/jquery.countdown.js' %}"></script>
+		<!-- jquery-ui js -->
+        <script src="{% static 'assets/js/jquery-ui.min.js' %}"></script>
+		<!-- wow js -->
+        <script src="{% static 'assets/js/wow.min.js' %}"></script>
+		<!-- plugins js -->
+        <script src="{% static 'assets/js/plugins.js' %}"></script>
+		<!-- main js -->
+        <script src="{% static 'assets/js/main.js' %}"></script>
+
+		<script>
+			document.addEventListener('DOMContentLoaded', function() {
+				const quantityInputs = document.querySelectorAll('.quantity-input');
+				const subtotalElement = document.querySelector('#cart-subtotal');
+				const grandTotalElement = document.querySelector('#cart-grand-total');
+				
+				let cartTotal = 0;
+				const initialCartTotalElement = document.querySelector('[data-initial-cart-total]');
+				
+				if (initialCartTotalElement) {
+					cartTotal = parseFloat(initialCartTotalElement.dataset.initialCartTotal);
+				} else {
+					quantityInputs.forEach(input => {
+						const quantity = parseInt(input.value);
+						const price = parseFloat(input.dataset.itemPrice);
+						cartTotal += quantity * price;
+					});
+				}
+			
+				function updateCartTotal() {
+					subtotalElement.textContent = `Rs. ${cartTotal.toFixed(2)}`;
+					grandTotalElement.textContent = `Rs. ${cartTotal.toFixed(2)}`;
+				}
+			
+				updateCartTotal(); // Initial update
+			
+				quantityInputs.forEach(input => {
+					const availableQuantity = parseInt(input.dataset.availableQuantity);
+					const stockInfoElement = input.parentElement.querySelector('.stock-info');
+			
+					function updateStockInfo() {
+						if (availableQuantity === 0) {
+							input.value = 0;
+							input.disabled = true;
+							stockInfoElement.textContent = 'Out of Stock';
+							stockInfoElement.style.color = 'red';
+						} else if (availableQuantity <= 5) {
+							stockInfoElement.textContent = `Only ${availableQuantity} left in stock`;
+							stockInfoElement.style.color = 'orange';
+						} else {
+							stockInfoElement.textContent = '';
+						}
+					}
+			
+					updateStockInfo();
+			
+					input.addEventListener('change', function() {
+						const itemId = this.dataset.itemId;
+						const oldQuantity = parseInt(this.defaultValue);
+						let newQuantity = parseInt(this.value);
+						const price = parseFloat(this.dataset.itemPrice);
+			
+						if (newQuantity > availableQuantity) {
+							newQuantity = availableQuantity;
+							this.value = newQuantity;
+						}
+			
+						const totalChange = (newQuantity - oldQuantity) * price;
+						cartTotal += totalChange;
+			
+						const newItemTotal = newQuantity * price;
+						const itemTotalElement = this.closest('tr').querySelector('.product-quantity p');
+						itemTotalElement.textContent = `Rs. ${newItemTotal.toFixed(2)}`;
+			
+						updateCartTotal();
+						this.defaultValue = newQuantity;
+						updateStockInfo();
+			
+						fetch("{% url 'update_cart_item_quantity' %}", {
+							method: 'POST',
+							headers: {
+								'Content-Type': 'application/x-www-form-urlencoded',
+								'X-CSRFToken': '{{ csrf_token }}'
+							},
+							body: `item_id=${itemId}&quantity=${newQuantity}`
+						})
+						.then(response => response.json())
+						.then(data => {
+							console.log('Server updated successfully');
+							if (data.new_quantity !== newQuantity) {
+								this.value = data.new_quantity;
+								updateStockInfo();
+							}
+						})
+						.catch(error => console.error('Error:', error));
+					});
+				});
+			});
+		</script>
+    </body>
+
+<!-- Mirrored from demo.hasthemes.com/fowler-preview/fowler/shoping-cart.html by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 20 Jun 2024 10:16:17 GMT -->
+</html>

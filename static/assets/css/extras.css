@@ -1,0 +1,38 @@
+.share_buttons {
+    display: flex;
+    align-items: center;
+}
+
+.product-sizes {
+    margin-right: 30px; /* Increase margin-right for more space */
+}
+
+.product-images {
+    display: flex;
+}
+
+.product-image {
+    margin-right: 20px; /* Adjust spacing between images */
+    position: relative;
+    overflow: hidden;
+}
+
+.product-image img {
+    max-width: 60px; /* Adjust image width */
+    height: auto;
+    display: block;
+    transition: transform 0.3s ease; /* Smooth transition for zoom effect */
+    cursor: pointer; /* Change cursor to hand pointer */
+}
+
+.product-image img:hover {
+    transform: scale(1.2); /* Zoom effect on hover */
+}
+
+
+
+
+
+
+/* Category section in shoplist */
+
