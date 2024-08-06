@@ -16,6 +16,7 @@ from category_app.models import Category
 from product_app.models import Product,ProductColorImage,ProductSize
 from django.core.paginator import Paginator
 from django.db.models import Prefetch,Sum
+from offer_app.models import Offer
 # Create your views here.
 
 User = get_user_model()

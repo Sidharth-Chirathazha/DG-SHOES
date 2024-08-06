@@ -2,6 +2,7 @@ from django.db import models
 from django.core.exceptions import ValidationError
 from user.models import CustomUser
 from product_app.models import Product,ProductColorImage,ProductSize
+from coupon_app.models import Coupons
 
 # Create your models here.
 
@@ -10,6 +11,7 @@ class Cart(models.Model):
     user = models.OneToOneField(CustomUser, on_delete=models.CASCADE, related_name='users')
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    applied_coupon = models.ForeignKey(Coupons,blank=True,null=True,on_delete=models.SET_NULL)
 
     def __str__(self):
         return f"Cart of {self.user.username}"
@@ -30,7 +32,10 @@ class CartItem(models.Model):
         return f"{self.quantity} of {self.product_size} ({self.product_color.color_name})"
     
     def get_total_price(self):
-        return self.product.price * self.quantity
+        if self.product.is_offer_applied:
+            return self.product.discounted_price * self.quantity
+        else:
+            return self.product.price * self.quantity
     
     def clean(self):
         if self.quantity > self.product_size.quantity:

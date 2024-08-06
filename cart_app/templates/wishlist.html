@@ -328,6 +328,7 @@
 		 <!-- WISHLIST AREA START -->
 		<section class="wishlist-area">
 			<h1 class="wishlist-title">My Wishlist</h1>
+			{% if wishlist_data %}
 			<form action="{% url 'add_all_items_to_cart' %}" method="post" id="add-all-to-cart-form">
 				{% csrf_token %}
 			<table class="wishlist-table">
@@ -378,6 +379,12 @@
 				</div>
 			</div>
 		</form>
+		{% else %}
+		<!-- Empty wishlist message -->
+		<div class="empty-wishlist-container text-center">
+			<p>Your wishlist is currently empty. <a href="{% url 'home' %}">Continue shopping</a> to add items to your wishlist.</p>
+		</div>
+		{% endif %}
 		</section>
 		{% if messages %}
 			<div class="messages mt-5">

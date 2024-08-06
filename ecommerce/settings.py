@@ -53,6 +53,9 @@ INSTALLED_APPS = [
     'account_app',
     'cart_app',
     'order_app',
+    'coupon_app',
+    'wallet_app',
+    'offer_app',
     
 
 ]
@@ -82,6 +85,8 @@ MIDDLEWARE = [
     # 'user.middleware.SeparateSessionEngineMiddleware',
 ]
 
+MESSAGE_STORAGE = 'django.contrib.messages.storage.cookie.CookieStorage'
+
 ROOT_URLCONF = 'ecommerce.urls'
 
 TEMPLATES = [
@@ -95,6 +100,9 @@ TEMPLATES = [
             os.path.join(BASE_DIR,'account_app/templates'),
             os.path.join(BASE_DIR,'cart_app/templates'),
             os.path.join(BASE_DIR,'order_app/templates'),
+            os.path.join(BASE_DIR,'coupon_app/templates'),
+            os.path.join(BASE_DIR,'wallet_app/templates'),
+            os.path.join(BASE_DIR,'offer_app/templates'),
 
         ],
         'APP_DIRS': True,
@@ -219,3 +227,9 @@ SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 # # Admin session engine
 # ADMIN_SESSION_ENGINE = 'django.contrib.sessions.backends.cache'
 # ADMIN_SESSION_COOKIE_NAME = 'admin_sessionid'
+
+
+
+RAZORPAY_KEY_ID = 'rzp_test_XopjzyWU25YUXO'
+
+RAZORPAY_KEY_SECRET = 'UMKDynjkDYljAcaBu10vocMB'

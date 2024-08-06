@@ -29,6 +29,9 @@ urlpatterns = [
     path('',include('account_app.urls')),
     path('',include('cart_app.urls')),
     path('',include('order_app.urls')),
+    path('',include('coupon_app.urls')),
+    path('',include('wallet_app.urls')),
+    path('',include('offer_app.urls')),
     path('accounts/',include('allauth.urls')),
 ] 
 

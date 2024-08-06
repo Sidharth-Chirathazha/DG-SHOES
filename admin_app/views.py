@@ -9,6 +9,7 @@ from order_app.models import Order,OrderItem
 from django.views.decorators.http import require_POST
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.utils import timezone
+from wallet_app.models import Wallet,WalletTransaction
 # from .utils import superuser_required
 
 User = get_user_model()
@@ -18,8 +19,47 @@ User = get_user_model()
 @user_passes_test(lambda u: u.is_superuser, login_url="/admin_login/")
 def dashboard(request):
 
+    orders = Order.objects.all()
+    # Calculate overall sales count
+    overall_sales_count = orders.count()
+
+    # Calculate original total without discounts
+    overall_order_amount = sum((order.total_amount + order.discount_amount + order.offer_discount_total) for order in orders)
+
+    # Calculate total discount amount (coupons and offers)
+    total_discount_amount = sum(order.discount_amount + order.offer_discount_total for order in orders)
+
+    # Calculate final total after discounts
+    final_total_amount = overall_order_amount - total_discount_amount
+
+    detailed_orders = []
+
+    for order in orders:
+        original_amount = order.total_amount + order.discount_amount + order.offer_discount_total
+        final_amount = original_amount - (order.discount_amount + order.offer_discount_total)
+        detailed_orders.append({
+
+            'date': order.order_date,
+            'order_id': order.order_unique_id,
+            'customer_name': order.ordered_user.username,
+            'original_amount' : original_amount,
+            'coupon_discount': order.discount_amount,
+            'offer_discount': order.offer_discount_total,
+            'final_amount': final_amount,
+
+        })
+
    
-    context = { 'username' : request.user.username}
+    context ={ 
+
+        'username' : request.user.username,
+        'overall_sales_count': overall_sales_count,
+        'overall_order_amount': overall_order_amount,
+        'total_discount_amount': total_discount_amount,
+        'final_total_amount': final_total_amount,
+        'detailed_orders': detailed_orders,
+        
+        }
 
     return render(request, 'dashboard.html',context)
 
@@ -104,9 +144,9 @@ def orders_list(request):
     if query:
         orders = orders.filter(order_unique_id__icontains=query)
 
-    page = request.GET.get('page',1)
     paginator = Paginator(orders,6)
-
+    page = request.GET.get('page',1)
+    
     try:
 
         orders = paginator.page(page)
@@ -119,13 +159,19 @@ def orders_list(request):
 
         orders = paginator.page(paginator.num_pages)
 
+    
+    # Debugging print statements
+    print(f"Current Page: {page}")
+    print(f"Number of Items on Current Page: {orders.object_list.count()}")
+
+
 
     context = {
 
         'orders' : orders,
         'query' : query,
     }
-
+    
     return render(request,'order_list.html', context )
 
 def confirm_order(request,item_id):
@@ -154,6 +200,7 @@ def return_order(request,item_id):
 @require_POST
 def change_order_status(request, item_id):
     order_item = get_object_or_404(OrderItem, id=item_id)
+    wallet = get_object_or_404(Wallet,user=order_item.order.ordered_user)
     current_status = order_item.status
     next_status = order_item.get_next_status_choices()[0] if order_item.get_next_status_choices() else None
     if next_status:
@@ -166,6 +213,14 @@ def change_order_status(request, item_id):
         product_size = order_item.product_size
         product_size.quantity += order_item.quantity
         product_size.save()
+
+        wallet_transaction = WalletTransaction(
+            wallet = wallet,
+            transaction_type = 'credit',
+            amount = order_item.get_total_item_price(),
+            description = 'return'
+        )
+        wallet_transaction.save()
 
 
     return redirect('order_list') 

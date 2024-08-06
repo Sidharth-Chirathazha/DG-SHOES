@@ -8,6 +8,7 @@ from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from django.contrib import messages
 from django.views.decorators.http import require_POST
+from coupon_app.models import Coupons
 
 # Create your views here.
 
@@ -30,9 +31,7 @@ def cart_view(request):
             'max_quantity': max_quantity,
         })
 
-
-    
-
+   
     context = {
 
         'cart_items_with_max_quantity': cart_items_with_max_quantity,
@@ -285,7 +284,6 @@ def remove_wishlist_item(request, wishlist_item_id):
     else:
         messages.error(request,'Unable to delete item.')
     return redirect('wishlist')
-
 
 
 

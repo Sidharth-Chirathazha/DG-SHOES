@@ -348,6 +348,16 @@
 						<td>{{ order.order_date|date:"d M Y, H:i" }}</td>
 					</tr>
 					<tr>
+						<th>Selling Amount:</th>
+						<td>Rs. {{ order.get_subtotal }}</td>
+					</tr>
+					{% if order.discount_amount %}
+					<tr>
+						<th>Discount Amount:</th>
+						<td>Rs. {{ order.total_amount }} (Coupon: {{ order.coupon.code }})</td>
+					</tr>
+					{% endif %}
+					<tr>
 						<th>Total Amount:</th>
 						<td>Rs. {{ order.total_amount }}</td>
 					</tr>
@@ -388,7 +398,7 @@
 								<td>{{ item.product_size.size }}</td>
 								<td>{{ item.quantity }}</td>
 								<td>Rs. {{ item.price }}</td>
-								{% comment %} <td>Rs. {{ item.quantity * item.price }}</td> {% endcomment %}
+								<td>Rs. {{ item.get_total_item_price}}</td>
 							</tr>
 						{% endfor %}
 					</tbody>

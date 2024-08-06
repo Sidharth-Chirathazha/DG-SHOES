@@ -350,6 +350,10 @@
 						<div class="card-body">
 							<p><strong>Order ID:</strong> {{ order.order_unique_id }}</p>
 							<p><strong>Order Date:</strong> {{ order.order_date }}</p>
+							<p><strong>Selling Amount:</strong> Rs. {{ order.get_subtotal }}</p>
+							{% if order.discount_amount %}
+							<p><strong>Discount Amount:</strong> Rs. {{ order.discount_amount }} (Coupon: {{ order.coupon.code }})</p>
+							{% endif %}
 							<p><strong>Total Amount:</strong> Rs. {{ order.total_amount }}</p>
 							<p><strong>Payment Method:</strong> {{ order.get_payment_method_display }}</p>
 						</div>

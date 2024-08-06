@@ -1,0 +1,27 @@
+.category {
+    margin-bottom: 20px;
+}
+
+.main-category {
+    margin-bottom: 10px;
+}
+
+.subcategory-list {
+    margin-left: 20px; /* Slight indent for subcategories */
+    list-style-type: none; /* Remove default list styling */
+}
+
+.subcategory-list li {
+    margin-bottom: 5px; /* Decrease space between subcategories */
+}
+
+.subcategory-list li a {
+    text-decoration: none;
+    color: #000; /* Replace with your desired color */
+}
+
+.subcategory-list li a::before {
+    content: "• "; /* Replace icon with bullet point */
+    color: #000; /* Same color as text */
+    margin-right: 5px; /* Space between bullet and text */
+}

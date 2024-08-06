@@ -1,6 +1,7 @@
 from django.db import models
 from django.utils.text import slugify
 from PIL import Image
+from django.core.validators import MinValueValidator, MaxValueValidator
 
 # Create your models here.
 
@@ -26,6 +27,8 @@ class SubCategory(models.Model):
     created_at = models.DateTimeField(auto_now_add=True,auto_now=False)
     updated_at = models.DateTimeField(auto_now=True,auto_now_add=False)
     is_listed = models.BooleanField(default=True)
+    is_offer_applied = models.BooleanField(default=False)
+    discount_percentage = models.IntegerField(null=True, blank=True, validators=[MinValueValidator(1), MaxValueValidator(99)])
 
     class Meta:
         unique_together = ('subcategory_name', 'category')  # Ensure subcategory names are unique within a category
@@ -38,3 +41,8 @@ class SubCategory(models.Model):
     def __str__(self):
 
         return self.subcategory_name
+    
+    def get_discount_percentage(self):
+        if self.is_offer_applied:
+            return self.discount_percentage if self.discount_percentage else 0
+        return 0

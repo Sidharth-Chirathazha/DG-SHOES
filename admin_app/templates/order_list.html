@@ -149,7 +149,7 @@
   </svg>
 </span>
 </span>
-      <span class="app-brand-text demo menu-text fw-semibold ms-2">Materio</span>
+      <span class="app-brand-text demo menu-text fw-semibold ms-2">DG Shoes</span>
     </a>
 
     <a href="javascript:void(0);" class="layout-menu-toggle menu-link text-large ms-auto">
@@ -161,116 +161,89 @@
 
   
   
+  <!--SIDEBAR NAV ACCORDION START-->
   <ul class="menu-inner py-1">
     
-    <!-- e-commerce-app menu start -->
     <li class="menu-item ">
       <a href="javascript:void(0);" class="menu-link menu-toggle">
-        <i class='menu-icon tf-icons ri-shopping-bag-3-line'></i>
-        <div data-i18n="Product Management">Product Management</div>
+        <i class='menu-icon tf-icons ri-shopping-cart-line'></i>
+        <div data-i18n="Products">Products</div>
       </a> 
-      <ul class="menu-sub"> 
+      <ul class="menu-sub">
         <li class="menu-item">
-          <a href="javascript:void(0);" class="menu-link menu-toggle">
-            <div data-i18n="Products">Products</div>
+          <a href="{% url 'product_list' %}" class="menu-link">
+            <div data-i18n="Product List">Product List</div>
           </a>
-          <ul class="menu-sub">
-            <li class="menu-item">
-              <a href="{% url 'product_list' %}" class="menu-link">
-                <div data-i18n="Product List">Product List</div>
-              </a>
-            </li>
-            <li class="menu-item">
-              <a href="{% url 'product_add' %}" class="menu-link">
-                <div data-i18n="Add Product">Add Product</div>
-              </a>
-            </li>
-            <li class="menu-item">
-              <a href="{% url 'category_list' %}" class="menu-link">
-                <div data-i18n="Category List">Category List</div>
-              </a>
-            </li>
-            <li class="menu-item">
-              <a href="{% url 'subcategory_list' %}" class="menu-link">
-                <div data-i18n="Subcategory List">Subcategory List</div>
-              </a>
-            </li>
-          </ul>
         </li>
         <li class="menu-item">
-          <a href="javascript:void(0);" class="menu-link menu-toggle">
-            <div data-i18n="Order">Order</div>
+          <a href="{% url 'product_add' %}" class="menu-link">
+            <div data-i18n="Add Product">Add Product</div>
           </a>
-          <ul class="menu-sub">
-            <li class="menu-item">
-              <a href="{% url 'order_list' %}" class="menu-link">
-                <div data-i18n="Order List">Order List</div>
-              </a>
-            </li>
-            <li class="menu-item">
-              <a href="app-ecommerce-order-details.html" class="menu-link">
-                <div data-i18n="Order Details">Order Details</div>
-              </a>
-            </li>
-          </ul>
         </li>
+      </ul>
+    </li>
 
+    <li class="menu-item ">
+      <a href="javascript:void(0);" class="menu-link menu-toggle">
+        <i class='menu-icon tf-icons ri-folder-line'></i>
+        <div data-i18n="Category">Category</div>
+      </a> 
+      <ul class="menu-sub">
         <li class="menu-item">
-          <a href="app-ecommerce-manage-reviews.html" class="menu-link">
-            <div data-i18n="Manage Reviews">Manage Reviews</div>
+          <a href="{% url 'category_list' %}" class="menu-link">
+            <div data-i18n="Category List">Category List</div>
           </a>
         </li>
+        <li class="menu-item">
+          <a href="{% url 'subcategory_list' %}" class="menu-link">
+            <div data-i18n="Subcategory List">Subcategory List</div>
+          </a>
+        </li>
+      </ul>
+    </li>
+
+    <li class="menu-item">
+      <a href="javascript:void(0);" class="menu-link menu-toggle">
+        <i class='menu-icon tf-icons ri-file-list-3-line'></i>
+        <div data-i18n="Orders">Orders</div>
+      </a>
+      <ul class="menu-sub">
+        <li class="menu-item">
+          <a href="{% url 'order_list' %}" class="menu-link">
+            <div data-i18n="Order List">Order List</div>
+          </a>
+        </li>
+        <li class="menu-item">
+          <a href="app-ecommerce-order-details.html" class="menu-link">
+            <div data-i18n="Order Details">Order Details</div>
+          </a>
+        </li>
+      </ul>
+    </li>
+
+    <li class="menu-item">
+      <a href="javascript:void(0);" class="menu-link menu-toggle">
+        <i class='menu-icon tf-icons ri-star-line'></i>
+        <div data-i18n="Reviews/Referals">Reviews/Referals</div>
+      </a>
+      <ul class="menu-sub">
         <li class="menu-item">
           <a href="app-ecommerce-referral.html" class="menu-link">
             <div data-i18n="Referrals">Referrals</div>
           </a>
         </li>
         <li class="menu-item">
-          <a href="javascript:void(0);" class="menu-link menu-toggle">
-            <div data-i18n="Settings">Settings</div>
+          <a href="app-ecommerce-referral.html" class="menu-link">
+            <div data-i18n="Reviews">Reviews</div>
           </a>
-          <ul class="menu-sub">
-            <li class="menu-item">
-              <a href="app-ecommerce-settings-detail.html" class="menu-link">
-                <div data-i18n="Store Details">Store Details</div>
-              </a>
-            </li>
-            <li class="menu-item">
-              <a href="app-ecommerce-settings-payments.html" class="menu-link">
-                <div data-i18n="Payments">Payments</div>
-              </a>
-            </li>
-            <li class="menu-item">
-              <a href="app-ecommerce-settings-checkout.html" class="menu-link">
-                <div data-i18n="Checkout">Checkout</div>
-              </a>
-            </li>
-            <li class="menu-item">
-              <a href="app-ecommerce-settings-shipping.html" class="menu-link">
-                <div data-i18n="Shipping & Delivery">Shipping & Delivery</div>
-              </a>
-            </li>
-            <li class="menu-item">
-              <a href="app-ecommerce-settings-locations.html" class="menu-link">
-                <div data-i18n="Locations">Locations</div>
-              </a>
-            </li>
-            <li class="menu-item">
-              <a href="app-ecommerce-settings-notifications.html" class="menu-link">
-                <div data-i18n="Notifications">Notifications</div>
-              </a>
-            </li>
-          </ul>
         </li>
       </ul>
     </li>
 
-
-     
     <li class="menu-item">
       <a href="javascript:void(0);" class="menu-link menu-toggle">
         <i class="menu-icon tf-icons ri-user-line"></i>
-        <div data-i18n="User Management">Users Management</div>
+        <div data-i18n="User Management">User Management</div>
       </a>
       <ul class="menu-sub">
         <li class="menu-item">
@@ -278,141 +251,35 @@
             <div data-i18n="All Users">All Users</div>
           </a>
         </li>
-
         <li class="menu-item">
-          <a href="javascript:void(0);" class="menu-link menu-toggle">
+          <a href="app-ecommerce-referral.html" class="menu-link">
             <div data-i18n="User Details">User Details</div>
           </a>
-          <ul class="menu-sub">
-            <li class="menu-item">
-              <a href="app-ecommerce-customer-details-overview.html" class="menu-link">
-                <div data-i18n="Overview">Account</div>
-              </a>
-            </li>
-            <li class="menu-item">
-              <a href="app-ecommerce-customer-details-security.html" class="menu-link">
-                <div data-i18n="Security">Security</div>
-              </a>
-            </li>
-            <li class="menu-item">
-              <a href="app-ecommerce-customer-details-billing.html" class="menu-link">
-                <div data-i18n="Address & Billing">Address & Billing</div>
-              </a>
-            </li>
-          </ul>
         </li>
       </ul>
     </li>
-    
+
     <li class="menu-item">
       <a href="javascript:void(0);" class="menu-link menu-toggle">
-        <i class="menu-icon tf-icons ri-layout-left-line"></i>
-        <div data-i18n="Pages">Pages</div>
+        <i class="menu-icon tf-icons ri-coupon-line"></i>
+        <div data-i18n="Coupons/Offers">Coupons/Offers</div>
       </a>
       <ul class="menu-sub">
         <li class="menu-item">
-          <a href="javascript:void(0);" class="menu-link menu-toggle">
-            <div data-i18n="User Profile">User Profile</div>
-          </a>
-          <ul class="menu-sub">
-            <li class="menu-item">
-              <a href="pages-profile-user.html" class="menu-link">
-                <div data-i18n="Profile">Profile</div>
-              </a>
-            </li>
-            <li class="menu-item">
-              <a href="pages-profile-teams.html" class="menu-link">
-                <div data-i18n="Teams">Teams</div>
-              </a>
-            </li>
-            <li class="menu-item">
-              <a href="pages-profile-projects.html" class="menu-link">
-                <div data-i18n="Projects">Projects</div>
-              </a>
-            </li>
-            <li class="menu-item">
-              <a href="pages-profile-connections.html" class="menu-link">
-                <div data-i18n="Connections">Connections</div>
-              </a>
-            </li>
-          </ul>
-        </li>
-        <li class="menu-item">
-          <a href="javascript:void(0);" class="menu-link menu-toggle">
-            <div data-i18n="Account Settings">Account Settings</div>
-          </a>
-          <ul class="menu-sub">
-            <li class="menu-item">
-              <a href="pages-account-settings-account.html" class="menu-link">
-                <div data-i18n="Account">Account</div>
-              </a>
-            </li>
-            <li class="menu-item">
-              <a href="pages-account-settings-security.html" class="menu-link">
-                <div data-i18n="Security">Security</div>
-              </a>
-            </li>
-            <li class="menu-item">
-              <a href="pages-account-settings-billing.html" class="menu-link">
-                <div data-i18n="Billing & Plans">Billing & Plans</div>
-              </a>
-            </li>
-            <li class="menu-item">
-              <a href="pages-account-settings-notifications.html" class="menu-link">
-                <div data-i18n="Notifications">Notifications</div>
-              </a>
-            </li>
-            <li class="menu-item">
-              <a href="pages-account-settings-connections.html" class="menu-link">
-                <div data-i18n="Connections">Connections</div>
-              </a>
-            </li>
-          </ul>
-        </li>
-        <li class="menu-item">
-          <a href="pages-faq.html" class="menu-link">
-            <div data-i18n="FAQ">FAQ</div>
+          <a href="{% url 'coupons' %}" class="menu-link">
+            <div data-i18n="Manage Coupons">Manage Coupons</div>
           </a>
         </li>
         <li class="menu-item">
-          <a href="pages-pricing.html" class="menu-link">
-            <div data-i18n="Pricing">Pricing</div>
+          <a href="{% url 'offers' %}" class="menu-link">
+            <div data-i18n="Manage Offers">Manage Offers</div>
           </a>
-        </li>
-        <li class="menu-item">
-          <a href="javascript:void(0);" class="menu-link menu-toggle">
-            <div data-i18n="Misc">Misc</div>
-          </a>
-          <ul class="menu-sub">
-            <li class="menu-item">
-              <a href="pages-misc-error.html" class="menu-link" target="_blank">
-                <div data-i18n="Error">Error</div>
-              </a>
-            </li>
-            <li class="menu-item">
-              <a href="pages-misc-under-maintenance.html" class="menu-link" target="_blank">
-                <div data-i18n="Under Maintenance">Under Maintenance</div>
-              </a>
-            </li>
-            <li class="menu-item">
-              <a href="pages-misc-comingsoon.html" class="menu-link" target="_blank">
-                <div data-i18n="Coming Soon">Coming Soon</div>
-              </a>
-            </li>
-            <li class="menu-item">
-              <a href="pages-misc-not-authorized.html" class="menu-link" target="_blank">
-                <div data-i18n="Not Authorized">Not Authorized</div>
-              </a>
-            </li>
-            <li class="menu-item">
-              <a href="pages-misc-server-error.html" class="menu-link" target="_blank">
-                <div data-i18n="Server Error">Server Error</div>
-              </a>
-            </li>
-          </ul>
         </li>
       </ul>
     </li>
+
+  </ul>
+  <!--SIDEBAR NAV ACCORDION END-->
     
   
   
@@ -742,10 +609,7 @@
   <!-- / Layout wrapper -->
 
   
-  {% comment %} <div class="buy-now">
-    <a href="https://themeselection.com/item/materio-bootstrap-html-admin-template/" target="_blank" class="btn btn-danger btn-buy-now">Buy Now</a>
-  </div>
-   {% endcomment %}
+
 
   
 

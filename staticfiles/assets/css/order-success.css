@@ -1,0 +1,48 @@
+.order-success-area {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+}
+.order-success-area h2 {
+    color: #2c3e50;
+    border-bottom: 2px solid #3498db;
+    padding-bottom: 10px;
+}
+.order-success-area h3 {
+    color: #2c3e50;
+    margin-top: 30px;
+}
+.order-success-area table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+}
+.order-success-area th, 
+.order-success-area td {
+    border: 1px solid #ddd;
+    padding: 12px;
+    text-align: left;
+}
+.order-success-area th {
+    background-color: #f2f2f2;
+    font-weight: bold;
+}
+.order-success-area .button {
+    display: inline-block;
+    background-color: #3498db;
+    color: white;
+    padding: 10px 20px;
+    text-decoration: none;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+.order-success-area .button:hover {
+    background-color: #2980b9;
+}
+.order-success-message {
+    background-color: #e8f4fd;
+    border: 1px solid #3498db;
+    border-radius: 5px;
+    padding: 20px;
+    margin-top: 30px;
+}

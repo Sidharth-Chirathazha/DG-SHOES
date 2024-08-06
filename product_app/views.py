@@ -9,6 +9,8 @@ from django.core.paginator import Paginator
 from django.contrib.auth.decorators import user_passes_test
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
+from offer_app.models import Offer
+from django.urls import reverse
 
 
 
@@ -19,6 +21,7 @@ def productList(request):
 
     products_info = Product.objects.distinct('product_name').prefetch_related('productcolorimage_set')
     query = request.GET.get('q','')
+    offers = Offer.objects.filter(is_active = True, offer_type = 'product')
 
     if query:
 
@@ -39,6 +42,7 @@ def productList(request):
         # 'products_info' : products_info,
         'page_obj' : page_obj,
         'query' : query,
+        'offers' : offers
     }
 
     return render(request,'product_list.html',context)
@@ -68,6 +72,8 @@ def addProduct(request):
         if not subcategory.is_listed:
             
             is_listed = False
+        else :
+            is_listed = True
 
         product = Product(
             product_name = product_name,
@@ -80,7 +86,7 @@ def addProduct(request):
         )
         product.save()
 
-        product.slug = slugify(f'{product.category_id.category_name}-{product.subcategory_id.subcategory_name}-{product.product_name}-{color_name}')
+        product.slug = slugify(f'{product.category_id.category_name}-{product.subcategory_id.subcategory_name}-{product.product_name}')
         product.save()
 
         product_color_data = ProductColorImage(
@@ -306,3 +312,25 @@ def toggle_featured(request,product_id):
     return redirect('product_list')
 
 
+@user_passes_test(lambda u: u.is_superuser, login_url="/admin_login/")
+def apply_or_disable_offer_product(request,product_id):
+    product = get_object_or_404(Product, id=product_id)
+    offer_id = request.POST.get('offer_id')
+    disable_offer = request.POST.get('disable')
+
+    if offer_id:
+        offer = get_object_or_404(Offer,id=offer_id)
+        if offer.offer_type == 'product':
+            if product.is_offer_applied == False:
+                product.is_offer_applied = True
+                product.discount_percentage = offer.discount_percentage
+                product.save()
+            else:
+                product.save()
+
+    elif disable_offer:   
+        product.is_offer_applied = False
+        product.discount_percentage = 0
+        product.save()
+
+    return redirect(reverse('product_list'))

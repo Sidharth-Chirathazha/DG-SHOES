@@ -12,3 +12,17 @@ def status_badge_class(status):
         'Cancelled': 'bg-label-danger',
     }
     return badge_classes.get(status, 'bg-label-secondary')
+
+
+
+@register.filter
+def total_order_amount(orders):
+    return sum(order.order_amount for order in orders)
+
+@register.filter
+def total_discount_amount(orders):
+    return sum(order.discount for order in orders)
+
+@register.filter
+def total_coupons_deduction(orders):
+    return sum(order.coupon_deduction for order in orders)

@@ -12,6 +12,8 @@ from django.views.decorators.http import require_POST
 from product_app.models import ProductSize
 from django.utils import timezone
 from django.contrib import messages
+from wallet_app.models import Wallet,WalletTransaction
+from django.core.paginator import Paginator
 
 # Create your views here.
 
@@ -22,13 +24,32 @@ def user_account_view(request):
     categories = Category.objects.all().prefetch_related('subcategories')
     user = request.user
     user_addresses = Address.objects.filter(user=user,is_listed=True)
-    user_orders = Order.objects.filter(ordered_user = user).prefetch_related('order_items__product_size__product_data__product_id', 'order_items__product_size__product_data')
+    user_orders = Order.objects.filter(ordered_user = user).prefetch_related('order_items__product_size__product_data__product_id', 'order_items__product_size__product_data').order_by('-order_date')
+
+
+    # Pagination
+    paginator = Paginator(user_orders, 5)  # Show 5 orders per page
+    page_number = request.GET.get('page')
+    user_orders = paginator.get_page(page_number)
+
+    try:
+        user_wallet = user.wallet
+
+        all_wallet_transactions = user_wallet.transactions.all().order_by('-timestamp')
+        wallet_paginator = Paginator(all_wallet_transactions, 5)  # Show 5 transactions per page
+        wallet_page_number = request.GET.get('wallet_page')
+        wallet_transactions = wallet_paginator.get_page(wallet_page_number)
+    except Wallet.DoesNotExist:
+        user_wallet = Wallet.objects.create(user=user)
+        wallet_transactions = []
 
     context = {
         'categories' : categories,
         'user' : user,
         'user_addresses' : user_addresses,
-        'user_orders' : user_orders, 
+        'user_orders' : user_orders,
+        'user_wallet': user_wallet,
+        'wallet_transactions': wallet_transactions, 
     }
 
     return render(request,'user_account.html',context)
@@ -201,6 +222,7 @@ def change_password(request):
 def cancel_order_item(request,item_id):
 
     item = get_object_or_404(OrderItem, id=item_id, order__ordered_user = request.user)
+    wallet = get_object_or_404(Wallet,user=request.user)
 
     if item.status not in ['Cancelled','Delivered']:
         item.status = 'Cancelled'
@@ -209,6 +231,16 @@ def cancel_order_item(request,item_id):
         product_size = item.product_size
         product_size.quantity += item.quantity
         product_size.save()
+
+        if item.order.payment_method == 'Wallet' or item.order.payment_method == 'RazorPay':
+           wallet_transaction = WalletTransaction(
+               
+               wallet = wallet,
+               transaction_type = 'credit',
+               amount = item.get_total_item_price(),
+               description = 'cancellation'
+           )
+           wallet_transaction.save()
     
     return redirect('user_account')
 

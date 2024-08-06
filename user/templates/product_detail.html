@@ -407,10 +407,16 @@
 								<a href="#"><i class="fa fa-angle-right"></i></a>
 							</div>
 							<h1 class="product_title">{{ product.product_name }}</h1>
+							{% if product.is_offer_applied %}
+							<div class="price-box">
+								<span class="new-price">Rs. {{ product.discounted_price }}</span>
+								<span class="old-price">Rs. {{ product.price }}</span>
+							</div>
+							{% else %}
 							<div class="price-box">
 								<span class="new-price">Rs. {{ product.price }}</span>
-								<span class="old-price">Rs. 1900</span>
 							</div>
+							{% endif %}
 							<div class="pro-rating">
 								<a href="#"><i class="fa fa-star"></i></a>
 								<a href="#"><i class="fa fa-star"></i></a>

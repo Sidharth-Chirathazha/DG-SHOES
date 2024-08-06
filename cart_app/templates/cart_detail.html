@@ -40,6 +40,9 @@
 		<!-- responsive css -->
         <link rel="stylesheet" href="{% static 'assets/css/responsive.css' %}">
 		<!-- modernizr css -->
+
+		<link rel="stylesheet" href="{% static 'assets/css/cart.css' %}">
+
         <script src="{% static 'assets/js/vendor/modernizr-2.8.3.min.js' %}"></script>
 
 		<style>
@@ -79,52 +82,6 @@
 			background-image: url("{% static 'assets/img/home-1/hot-deals.jpg' %}");
 			background-position: center center;
 			background-size: cover;
-			}
-
-			.empty-cart-message {
-				display: flex;
-				justify-content: center;
-				align-items: center;
-				height: 300px; /* Adjust height as needed */
-			}
-			
-			.empty-cart-message h3 {
-				border: 2px solid #ccc; /* Adjust border color as needed */
-				padding: 20px;
-				background-color: #f9f9f9; /* Light background color for contrast */
-				color: #333; /* Dark font color for readability */
-				border-radius: 50px; /* Oval border */
-				text-align: center;
-			}
-
-
-	
-			.quantity-container {
-				display: flex;
-				flex-direction: column;
-				align-items: center;
-			}
-		
-			.quantity-input {
-				width: 60px;
-				padding: 5px;
-				border: 1px solid #ccc;
-				border-radius: 4px;
-				text-align: center;
-				background-color: #f0f0f0;
-				transition: background-color 0.3s;
-			}
-		
-			.quantity-input:hover, .quantity-input:focus {
-				background-color: #e0e0e0;
-			}
-		
-			.stock-info {
-				margin-top: 5px;
-				font-size: 0.8em;
-				text-align: center;
-				display: block;
-				width: 100%;
 			}
 
 
@@ -408,12 +365,18 @@
 											<p><a href="#">Edit</a></p>
 										</td>
 										<td class="product-unit-price">
-											<p>Rs. {{ cart_item.item.product.price}} </p>
+											{% if cart_item.item.product.is_offer_applied %}
+											<del style = "color:red; font-size:12px;">Rs. {{ cart_item.item.product.price }}</del>
+											<p>Rs. {{ cart_item.item.product.discounted_price }}</p>
+											{% else %}
+											<p>Rs. {{ cart_item.item.product.price }} </p>
+											{% endif %}
 										</td>
 										<td class="product-quantity product-cart-details">
 											<div class="quantity-container">
 												<input type="number" value="{{ cart_item.item.quantity }}" min="1" max="{{ cart_item.max_quantity }}"
-													   class="quantity-input" data-item-id="{{ cart_item.item.id }}" data-item-price="{{ cart_item.item.product.price }}"
+													   class="quantity-input" data-item-id="{{ cart_item.item.id }}" 
+													   data-item-price="{%if cart_item.item.product.is_offer_applied%}{{ cart_item.item.product.discounted_price }}{%else%}{{ cart_item.item.product.price }}{%endif%}"
 													   data-available-quantity="{{ cart_item.item.product_size.quantity }}">
 												<span class="stock-info"></span>
 											</div>
@@ -445,28 +408,19 @@
 			</div>
 		</section>
 		<!-- SHOPING CART AREA END -->
-		<!-- DISCOUNT SUBTOTAL AREA STRAT -->
-		 {% if cart_items_with_max_quantity %}
+		<!-- DISCOUNT SUBTOTAL AREA START -->
+		{% if cart_items_with_max_quantity %}
 		<section class="discount-area">
 			<div class="container">
 				<div class="row">
 					<div class="col-md-6 res-mr-btm xs-res-mrbtm">
-						<div class="discount-main-area">
-							<div class="discount-top">
-								<h3>DISCOUNT CODE</h3>
-								<p>Enter your coupon code if have one</p>
-							</div>
-							<div class="discount-middle">
-								<input type="text" placeholder=""/>
-								<a href="#" class="">APPLY COUPON</a>
-							</div>
-						</div>
+						
 					</div>
 					<div class="col-md-6">
 						<div class="subtotal-main-area" data-initial-cart-total="{{ cart_total }}">
-							<div class="subtotal-area">
+							{% comment %} <div class="subtotal-area">
 								<h2>SUBTOTAL<span id="cart-subtotal">Rs. {{ cart_total }}</span></h2>
-							</div>
+							</div> {% endcomment %}
 							<div class="subtotal-area">
 								<h2>GRAND TOTAL<span id="cart-grand-total">Rs. {{ cart_total }}</span></h2>
 							</div>
@@ -478,7 +432,8 @@
 			</div>
 		</section>
 		{% endif %}
-		<!-- DISCOUNT SUBTOTAL AREA END -->
+
+
 		<!-- OUR BRAND AREA START -->
 		<section class="our-brand-area">
 			<div class="container">
@@ -634,33 +589,27 @@
 		<script>
 			document.addEventListener('DOMContentLoaded', function() {
 				const quantityInputs = document.querySelectorAll('.quantity-input');
-				const subtotalElement = document.querySelector('#cart-subtotal');
 				const grandTotalElement = document.querySelector('#cart-grand-total');
-				
+		
 				let cartTotal = 0;
-				const initialCartTotalElement = document.querySelector('[data-initial-cart-total]');
-				
-				if (initialCartTotalElement) {
-					cartTotal = parseFloat(initialCartTotalElement.dataset.initialCartTotal);
-				} else {
-					quantityInputs.forEach(input => {
-						const quantity = parseInt(input.value);
-						const price = parseFloat(input.dataset.itemPrice);
-						cartTotal += quantity * price;
-					});
-				}
-			
+		
+				// Calculate initial cart total
+				quantityInputs.forEach(input => {
+					const quantity = parseInt(input.value);
+					const price = parseFloat(input.dataset.itemPrice);
+					cartTotal += quantity * price;
+				});
+		
 				function updateCartTotal() {
-					subtotalElement.textContent = `Rs. ${cartTotal.toFixed(2)}`;
 					grandTotalElement.textContent = `Rs. ${cartTotal.toFixed(2)}`;
 				}
-			
+		
 				updateCartTotal(); // Initial update
-			
+		
 				quantityInputs.forEach(input => {
 					const availableQuantity = parseInt(input.dataset.availableQuantity);
 					const stockInfoElement = input.parentElement.querySelector('.stock-info');
-			
+		
 					function updateStockInfo() {
 						if (availableQuantity === 0) {
 							input.value = 0;
@@ -674,31 +623,31 @@
 							stockInfoElement.textContent = '';
 						}
 					}
-			
+		
 					updateStockInfo();
-			
+		
 					input.addEventListener('change', function() {
 						const itemId = this.dataset.itemId;
 						const oldQuantity = parseInt(this.defaultValue);
 						let newQuantity = parseInt(this.value);
 						const price = parseFloat(this.dataset.itemPrice);
-			
+		
 						if (newQuantity > availableQuantity) {
 							newQuantity = availableQuantity;
 							this.value = newQuantity;
 						}
-			
+		
 						const totalChange = (newQuantity - oldQuantity) * price;
 						cartTotal += totalChange;
-			
+		
 						const newItemTotal = newQuantity * price;
 						const itemTotalElement = this.closest('tr').querySelector('.product-quantity p');
 						itemTotalElement.textContent = `Rs. ${newItemTotal.toFixed(2)}`;
-			
+		
 						updateCartTotal();
 						this.defaultValue = newQuantity;
 						updateStockInfo();
-			
+		
 						fetch("{% url 'update_cart_item_quantity' %}", {
 							method: 'POST',
 							headers: {
@@ -720,6 +669,7 @@
 				});
 			});
 		</script>
+		
     </body>
 
 <!-- Mirrored from demo.hasthemes.com/fowler-preview/fowler/shoping-cart.html by HTTrack Website Copier/3.x [XR&CO'2014], Thu, 20 Jun 2024 10:16:17 GMT -->

@@ -128,6 +128,37 @@
 		.out-of-stock {
 			color: red;
 		}
+
+
+
+		.product-name {
+			font-size: 16px;
+			font-weight: bold;
+			margin-bottom: 8px;
+			color: #333;
+			text-overflow: ellipsis;
+			overflow: hidden;
+			white-space: nowrap;
+		}
+		.rating {
+			font-size: 14px;
+			color: #555;
+			margin-bottom: 6px;
+		}
+		.rating .fa-star {
+			font-size: 12px;
+		}
+		.price {
+			font-size: 16px;
+			font-weight: bold;
+			color: #FF7575;
+		}
+		.original-price {
+			text-decoration: line-through;
+			color: #999;
+			font-size: 14px;
+			margin-right: 5px;
+		}
 			
 		</style>
     </head>
@@ -549,9 +580,11 @@
 														<img class="secondary-img" src="{{ color_image.image_2.url }}" alt="{{ product.product_name }}" />
 													</a>
 												</div>
+												{% if product.is_offer_applied %}
 												<span class="onsale">
-													<span class="sale-text">Sale</span>
+													<span class="sale-text fs-5">{{product.discount_percentage}}%</span>
 												</span>
+												{% endif %}
 												<div class="product-action">
 													<h4 class="product-name"><a href="{% url 'product_detail' product.id %}?variant={{ color_image.id }}">{{ product.product_name }}</a></h4>
 													<div class="rating-price-wrapper">
@@ -565,14 +598,21 @@
 														{% if color_image.total_quantity == 0 %}
 														<span class="price out-of-stock">Out of stock</span>
 														{% else %}
-														<span class="price">Rs. {{product.price }}</span>
+															{% if product.is_offer_applied %}
+															<span class="price">
+																<span class="original-price">Rs. {{ product.price }}</span>
+																Rs. {{ product.discounted_price }}
+															</span>
+															{% else %}
+															<span class="price">Rs. {{product.price }}</span>
+															{% endif %}
 														{% endif %}
 													</div>
 												</div>
 												<div class="pro-action">
 													<ul>
 														<li>
-															<a class="test all_src_icon" href="#" title="" data-toggle="tooltip" data-placement="top"  data-original-title="Shop Cart">
+															<a class="test all_src_icon" href="#" title="" data-toggle="tooltip" data-placement="top"  data-original-title="Compare">
 															<i class="fa fa-retweet" aria-hidden="true"></i>
 															</a>
 														</li>
@@ -582,7 +622,7 @@
 															</a>
 														</li>
 														<li>
-															<a class="test all_src_icon" href="#" title="" data-toggle="tooltip" data-placement="top" data-original-title="Compare">
+															<a class="test all_src_icon" href="#" title="" data-toggle="tooltip" data-placement="top" data-original-title="Shop Cart">
 															<i class="fa fa-shopping-cart" aria-hidden="true"></i>
 															</a>
 														</li>
