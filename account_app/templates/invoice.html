@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Success</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        h2 {
+            color: #2c3e50;
+        }
+        .order-success-area {
+            background-color: #f9f9f9;
+            border-radius: 5px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+        .order-summary, .order-items {
+            margin-bottom: 30px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        .button {
+            display: inline-block;
+            padding: 10px 20px;
+            margin: 10px 10px 10px 0;
+            background-color: #4CAF50;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+        .button:hover {
+            background-color: #45a049;
+        }
+        .download-invoice {
+            background-color: #008CBA;
+        }
+        .download-invoice:hover {
+            background-color: #007B9A;
+        }
+    </style>
+</head>
+<body>
+    <!-- ORDER SUCCESS AREA -->
+    <section class="order-success-area">
+        <h2>Thank you for your order!</h2>
+        <p>Your order has been successfully placed. Below are your order details:</p>
+
+        <div class="order-summary">
+            <h3>Order Summary</h3>
+            <table>
+                <tr>
+                    <th>Order Unique ID:</th>
+                    <td>{{ order.order_unique_id }}</td>
+                </tr>
+                <tr>
+                    <th>Order Date:</th>
+                    <td>{{ order.order_date|date:"d M Y, H:i" }}</td>
+                </tr>
+                <tr>
+                    <th>Selling Amount:</th>
+                    <td>₹ {{ order.get_subtotal }}</td>
+                </tr>
+                {% if order.discount_amount %}
+                <tr>
+                    <th>Discount Amount:</th>
+                    <td>₹ {{ order.discount_amount }} (Coupon: {{ order.coupon.code }})</td>
+                </tr>
+                {% endif %}
+                <tr>
+                    <th>Total Amount:</th>
+                    <td>₹ {{ order.total_amount }}</td>
+                </tr>
+                <tr>
+                    <th>Payment Method:</th>
+                    <td>{{ order.payment_method }}</td>
+                </tr>
+                <tr>
+                    <th>Payment Status:</th>
+                    <td>{{ order.payment_status }}</td>
+                </tr>
+                {% if order.invoice_number %}
+                <tr>
+                    <th>Invoice Number:</th>
+                    <td>{{ order.invoice_number }}</td>
+                </tr>
+                {% endif %}
+                <tr>
+                    <th>Delivery Address:</th>
+                    <td>
+                        {{ order.delivery_name }}<br>
+                        {{ order.delivery_address_line }}<br>
+                        {{ order.delivery_city }}, {{ order.delivery_post_office }}<br>
+                        {{ order.delivery_state }} - {{ order.delivery_pin }}<br>
+                        Phone: {{ order.delivery_phone_number }}
+                    </td>
+                </tr>
+            </table>
+        </div>
+
+        <div class="order-items">
+            <h3>Order Items</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Product Name</th>
+                        <th>Color</th>
+                        <th>Size</th>
+                        <th>Quantity</th>
+                        <th>Price</th>
+                        <th>Total</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in order_items %}
+                        <tr>
+                            <td>{{ item.product_size.product_data.product_id.product_name }}</td>
+                            <td>{{ item.product_size.product_data.color_name }}</td>
+                            <td>{{ item.product_size.size }}</td>
+                            <td>{{ item.quantity }}</td>
+                            <td>₹ {{ item.price }}</td>
+                            <td>₹ {{ item.get_total_item_price }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <div class="order-success-message">
+            <p>If you have any questions or need assistance, please contact our customer support.</p>
+        </div>
+    </section>
+    <!-- ORDER SUCCESS AREA END -->
+</body>
+</html>

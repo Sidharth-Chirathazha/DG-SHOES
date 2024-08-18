@@ -26,6 +26,8 @@ SECRET_KEY = 'django-insecure-qxe23t!vd=d6la2xmc@bfls8k_h#lgy4+_%ui=s+xgry5x*ua)
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
+# handler404 = 'user.views.custom_404_view'
+
 ALLOWED_HOSTS = []
 
 
@@ -195,8 +197,8 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_USE_TLS = True
 EMAIL_PORT = 587
-EMAIL_HOST_USER = 'sidharthchirathazha@gmail.com'
-EMAIL_HOST_PASSWORD = 'sepi ucif adua xcnl'
+EMAIL_HOST_USER = 'dgshoes930@gmail.com'
+EMAIL_HOST_PASSWORD = 'ciut qgba ertt mneu'
 EMAIL_USE_SSL = False
 
 AUTHENTICATION_BACKENDS = (
@@ -233,3 +235,8 @@ SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 RAZORPAY_KEY_ID = 'rzp_test_XopjzyWU25YUXO'
 
 RAZORPAY_KEY_SECRET = 'UMKDynjkDYljAcaBu10vocMB'
+
+
+DJANGO_ALLOW_ASYNC_UNSAFE = True
+
+REFERRAL_BONUS_AMOUNT = 50.00 

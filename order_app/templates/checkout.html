@@ -359,18 +359,13 @@
 				<div class="row">
 					<div class="col-md-2 col-sm-2">
 						<div class="logo-area">
-							<a href="index.html"><img src="{% static 'assets/img/home-1/logo_dg_footer.png' %}" width="110" height="50" alt="" /></a>
+							<a href="{% url 'home' %}"><img src="{% static 'assets/img/home-1/logo_dg_footer.png' %}" width="110" height="50" alt="" /></a>
 						</div>
 					</div>
 					<div class="col-md-8 col-sm-8">
 						<div class="main-menu">
 							<ul class="list-inline">
-							  <li class="expand active"><a href="{% url 'index' %}">HOME</a>
-								<ul class="single sub-menu">
-									<li class="sub-menu-title"><a href="index.html">Home Pages</a></li>
-									<li><a href="index.html">Home Version One</a></li>
-									<li><a href="index-2.html">Home Version Two</a></li>
-								</ul>
+							  <li class="expand active"><a href="{% url 'home' %}">HOME</a>
 							  </li>
 							  <li><a href="#">CATEGORIES</a>
 								<!-- Mega Menu Four Column -->
@@ -395,21 +390,8 @@
 							  
 							  <li><a href="about-us.html">ABOUT</a></li>
 							  <li class="expand"><a href="{% url 'user_account' %}">ACCOUNT</a>
-								<ul class="single sub-menu">
-									<li><a href="about-us.html">About</a></li>
-									<li><a href="shop.html">Shop</a></li>
-									<li><a href="shoping-cart.html">Shop Cart</a></li>
-									<li><a href="shop-list.html">Shop List</a></li>
-									<li><a href="single-product.html">Single Product</a></li>
-									<li><a href="wishlist.html">Wishlist</a></li>
-									<li><a href="checkout.html">Checkout</a></li>
-									<li><a href="account.html">Account</a></li>
-									<li><a href="login.html">Log In</a></li>
-									<li><a href="contact-us.html">Contact Us</a></li>
-									<li><a href="404.html">404 Error</a></li>
-								</ul>
 							  </li>
-							  <li><a href="contact-us.html">CONTACT</a></li>
+							  <li><a href="{% url 'contact_us' %}">CONTACT</a></li>
 							</ul>
 						</div>
 					</div>
@@ -422,32 +404,31 @@
 									<div class="mobile-menu">
 										<nav id="mobile-nav">
 											<ul>
-												<li><a href="index.html">Home </a>
-													<ul>
-														<li><a href="index.html">Home version one</a></li>
-														<li><a href="index-2.html">Home Version two</a></li>
-													</ul>
+												<li><a href="{% url 'home' %}">Home </a></li>
+												<li><a href="#">CATEGORIES</a>
+												<!-- Mega Menu Four Column -->
+												<div class="mega-menu">
+													{% for category in categories%}
+													<span>
+														<a href="{% url 'shop_list' %}?category={{category.category_name}}" class="mega-title">{{ category.category_name }}</a>
+														<a href="#"><img alt="{{category.category_name}}" src="{{category.image.url}}"/></a>
+														{% for subcategory in category.subcategories.all %}
+														{% if subcategory.is_listed %}
+														<a href="{% url 'shop_list' %}?category={{category.category_name}}&subcategory={{subcategory.subcategory_name}}">{{ subcategory.subcategory_name}}</a>
+														{% endif %}
+														{% endfor %}
+													</span>
+													{% endfor %}
+													<span class="mega-menu-img">
+														<a href="{% url 'shop_list' %}" class="mega-title">ALL PRODUCTS</a>
+														<a href="#"><img alt="" src="{% static 'assets/img/other-pg/img_menu.jpg' %}"/></a>
+													</span>
+												</div>
 												</li>
-												<li><a href="shop.html"> Shop </a></li>
 												<li><a href="about-us.html"> About Us </a></li>
-												<li><a href="{% url 'user_account'%}"> Pages </a>
-													<ul>
-														<li><a href="about-us.html">About Us</a></li>
-														<li><a href="shop.html">Shop</a></li>
-														<li><a href="shop-list.html">Shop List</a></li>
-														<li><a href="shoping-cart.html">Shop Cart</a></li>
-														<li><a href="single-product.html">Single Product</a></li>
-														<li><a href="checkout.html">Checkout</a></li>
-														<li><a href="account.html">My Account</a></li>
-														<li><a href="login.html">Login</a></li>
-														<li><a href="wishlist.html">Wishlist</a></li>
-														<li><a href="contact-us.html">Contact</a></li>
-														<li><a href="404.html">404 Error</a></li>
-													</ul>
+												<li><a href="{% url 'user_account'%}"> Account </a>
 												</li>
-												<li><a href="#"> Returns </a></li>
-												<li><a href="#"> Orders </a></li>
-												<li><a href="contact-us.html"> Contact Us </a></li>
+												<li><a href="{% url 'contact_us' %}"> Contact Us </a></li>
 											</ul>
 										</nav>
 									</div>	
@@ -479,45 +460,6 @@
 										<span>{{ cart_item_count }}</span>
 										{% endif %}
 									</a>
-									{% comment %} <div class="top-cart-content">
-										<div class="media header-middle-checkout">
-											<div class="media-left check-img">
-												<a href="#">
-													<img alt="" src="{% static 'assets/img/other-pg/cart-1.jpg' %}">
-												</a>
-											</div>
-											<div class="media-body checkout-content">
-												<h4 class="media-heading">
-													<a href="#">Men Pumping Show</a>
-													<span title="Remove This Item" class="btn-remove checkout-remove">
-														<i class="fa fa-trash"></i>
-													</span>
-												</h4>
-												<p>1 x $111.00</p>
-											</div>
-										</div>
-										<div class="media header-middle-checkout last-child"><!-- Cart Middle Check Out -->
-											<div class="media-left check-img">
-												<a href="#">
-													<img alt="" src="{% static 'assets/img/other-pg/cart-2.jpg' %}">
-												</a>
-											</div>
-											<div class="media-body checkout-content">
-												<h4 class="media-heading">
-													<a href="#">Women Pump Show</a>
-													<span title="Remove This Item" class="btn-remove checkout-remove">
-														<i class="fa fa-trash"></i>
-													</span>
-												</h4>
-												<p>1 x $111.00</p>
-											</div>
-										</div>
-										<div class="actions">
-											<button type="button" title="Checkout-botton" class="Checkout-botton">
-												<span>Checkout</span>
-											</button>
-										</div>
-									</div> {% endcomment %}
 								</li>
 							</ul>
 						</div>
@@ -632,8 +574,8 @@
 											</div>
 											<div id="coupon-message"></div>
 											<div id="discount-info" style="display:none;">
-												<p>Discount: <span class="currency">Rs.</span><span id="discount-amount">0</span></p>
-												<p>Total after discount: <span class="currency">Rs.</span><span id="discounted-total">0</span></p>
+												<p>Discount: <span class="currency">₹</span><span id="discount-amount">0</span></p>
+												<p>Total after discount: <span class="currency">₹</span><span id="discounted-total">0</span></p>
 											</div>
 											<div class="buttons-set">
 												<button type="button" class="button continue-btn" data-next="collapse4"><span>Continue</span></button>
@@ -664,7 +606,7 @@
 															{{ label }}
 															{% if value == 'Wallet' %}
 																{% if user_wallet.balance > 0 %}
-																<span style="font-size: 0.85em; color: #4CAF50;">(Balance: Rs. {{ user_wallet.balance }})</span>
+																<span style="font-size: 0.85em; color: #4CAF50;">(Balance: ₹ {{ user_wallet.balance }})</span>
 																{% else %}
 																<span style="font-size: 0.85em; color: #f44336;">(Insufficient Balance)</span>
 																{% endif %}
@@ -717,7 +659,7 @@
 																</td>
 																<td class="price-column">
 																	<div class="price-wrapper">
-																		<span class="currency">Rs.</span>
+																		<span class="currency">₹</span>
 																		<span class="price">
 																			{% if item.product.is_offer_applied %}
 																			{{item.product.discounted_price}}
@@ -730,7 +672,7 @@
 																<td class="qty-column">{{item.quantity}}</td>
 																<td class="subtotal-column">
 																	<div class="price-wrapper">
-																		<span class="currency">Rs.</span>
+																		<span class="currency">₹</span>
 																		<span class="price">{{item.get_total_price}}</span>
 																	</div>
 																</td>
@@ -742,7 +684,7 @@
 																<td colspan="3">Subtotal</td>
 																<td>
 																	<div class="price-wrapper">
-																		<span class="currency">Rs.</span>
+																		<span class="currency">₹</span>
 																		<span class="price" id="cart-subtotal">{{ cart_total }}</span>
 																	</div>
 																</td>
@@ -751,7 +693,7 @@
 																<td colspan="3">Coupon Discount</td>
 																<td>
 																	<div class="price-wrapper">
-																		<span class="currency">Rs.</span>
+																		<span class="currency">₹</span>
 																		<span class="price" id="coupon-discount">{{ discount|default:"0" }}</span>
 																	</div>
 																</td>
@@ -760,7 +702,7 @@
 																<td colspan="3"><strong>Grand Total</strong></td>
 																<td>
 																	<div class="price-wrapper">
-																		<span class="currency">Rs.</span>
+																		<span class="currency">₹</span>
 																		<span class="price"><strong id="cart-grand-total">{{ cart_total|sub:discount }}</strong></span>
 																	</div>
 																</td>
@@ -804,15 +746,15 @@
 							<h5 class="checkout-title">Total Amount</h5>
 							<div class="checkout-row">
 								<span class="checkout-label">Subtotal:</span>
-								<span class="checkout-value"><span class="currency">Rs.</span><span id="cart-subtotal">{{cart_total}}</span></span>
+								<span class="checkout-value"><span class="currency">₹</span><span id="cart-subtotal">{{cart_total}}</span></span>
 							</div>
 							<div class="checkout-row">
 								<span class="checkout-label">Discount:</span>
-								<span class="checkout-value"><span class="currency">Rs.</span><span id="coupon-discount">{{ discount|default:"0" }}</span></span>
+								<span class="checkout-value"><span class="currency">₹</span><span id="coupon-discount">{{ discount|default:"0" }}</span></span>
 							</div>
 							<div class="checkout-row grand-total">
 								<span class="checkout-label">Grand Total:</span>
-								<span class="checkout-value"><span class="currency">Rs.</span><span id="cart-grand-total">{{ cart_total|sub:discount }}</span></span>
+								<span class="checkout-value"><span class="currency">₹</span><span id="cart-grand-total">{{ cart_total|sub:discount }}</span></span>
 							</div>
 						</div>
 					</div>
@@ -919,7 +861,7 @@
 					</div>
 					<div class="col-md-3 col-sm-4 col-xs-12">
 						<div class="address-area">
-							<a href="index.html"><img src="{% static 'assets/img/home-1/logo_dg_footer.png' %}" width="280" height="200" alt="" /></a>
+							<a href="{% url 'home' %}"><img src="{% static 'assets/img/home-1/logo_dg_footer.png' %}" width="280" height="200" alt="" /></a>
 							<p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard.</p>
 							<div class="contact-details">
 								<ul>
@@ -973,6 +915,7 @@
         <script src="{% static 'assets/js/main.js' %}"></script>
 
 		<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+		<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 		
 		
@@ -1039,9 +982,65 @@
 					placeOrderBtn.addEventListener('click', function(e) {
 						e.preventDefault();
 						if (validateAllSections()) {
-							checkoutForm.submit();
+							submitOrderAjax();
 						}
 					});
+
+
+
+					function submitOrderAjax() {
+						const form = document.getElementById('checkout-form');
+						const formData = new FormData(form);
+			
+						fetch('{% url "checkout" %}', {
+							method: 'POST',
+							body: formData,
+							headers: {
+								'X-CSRFToken': '{{ csrf_token }}'
+							}
+						})
+						.then(response => response.json())
+						.then(data => {
+							if (data.success) {
+								// Order successful
+								Swal.fire({
+									title: 'Success!',
+									text: data.message,
+									icon: 'success',
+									confirmButtonText: 'OK'
+								}).then((result) => {
+									if (result.isConfirmed) {
+										window.location.href = data.redirect;
+									}
+								});
+							} else {
+								// Order failed
+								Swal.fire({
+									title: 'Error!',
+									text: data.message,
+									icon: 'error',
+									confirmButtonText: 'OK'
+								}).then((result) => {
+									if (result.isConfirmed) {
+										window.location.href = data.redirect || '/home/';
+									}
+								});
+							}
+						})
+						.catch(error => {
+							console.error('Error:', error);
+							Swal.fire({
+								title: 'Error!',
+								text: 'An unexpected error occurred. Please try again.',
+								icon: 'error',
+								confirmButtonText: 'OK'
+							}).then((result) => {
+								if (result.isConfirmed) {
+									window.location.href = '/home/';  // Redirect to home page on unexpected error
+								}
+							});
+						});
+					}
 				
 					function validateSection(panel) {
 						const panelId = panel.id;
@@ -1312,7 +1311,12 @@
 						// Get the selected address
 						const selectedAddress = document.querySelector('input[name="selected_address"]:checked');
 						if (!selectedAddress) {
-							alert('Please select a delivery address.');
+							Swal.fire({
+								title: 'Error!',
+								text: 'Please select a delivery address.',
+								icon: 'error',
+								confirmButtonText: 'OK'
+							});
 							return;
 						}
 				
@@ -1331,7 +1335,12 @@
 						.then(response => response.json())
 						.then(data => {
 							if (data.error) {
-								alert(data.error);
+								Swal.fire({
+									title: 'Error!',
+									text: data.error,
+									icon: 'error',
+									confirmButtonText: 'OK'
+								});
 								return;
 							}
 				
@@ -1357,11 +1366,21 @@
 							};
 				
 							var rzp1 = new Razorpay(options);
+							rzp1.on('payment.failed', function (response){
+								alert('Payment failed. Redirecting to order details.');
+								window.location.href = '{% url "order_details" order_id=0 %}'.replace('0', data.order_id);
+							});
 							rzp1.open();
+			
 						})
 						.catch(error => {
 							console.error('Error:', error);
-							alert('An error occurred. Please try again.');
+							Swal.fire({
+								title: 'Error!',
+								text: 'An error occurred. Please try again.',
+								icon: 'error',
+								confirmButtonText: 'OK'
+							});
 						});
 					});
 				
@@ -1384,12 +1403,30 @@
 							if (data.success) {
 								window.location.href = data.redirect_url;
 							} else {
-								alert('Payment verification failed. Please contact support.');
+								Swal.fire({
+									title: 'Error!',
+									text: 'Payment verification failed. Please contact support.',
+									icon: 'error',
+									confirmButtonText: 'OK'
+								}).then((result) => {
+									if (result.isConfirmed) {
+										window.location.href = '{% url "order_details" order_id=0 %}'.replace('0', orderId);
+									}
+								});
 							}
 						})
 						.catch(error => {
 							console.error('Error:', error);
-							alert('An error occurred during payment verification. Please contact support.');
+							Swal.fire({
+								title: 'Error!',
+								text: 'An error occurred during payment verification. Please contact support.',
+								icon: 'error',
+								confirmButtonText: 'OK'
+							}).then((result) => {
+								if (result.isConfirmed) {
+									window.location.href = '{% url "order_details" order_id=0 %}'.replace('0', orderId);
+								}
+							});
 						});
 					}
 				});

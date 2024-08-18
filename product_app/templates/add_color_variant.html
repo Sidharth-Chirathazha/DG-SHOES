@@ -86,9 +86,69 @@
     <script src="{% static 'assets_admin/vendor/js/helpers.js' %}"></script>
     <!--! Template customizer & Theme config files MUST be included after core stylesheets and helpers.js in the <head> section -->
     <!--? Template customizer: To hide customizer set displayCustomizer value false in config.js.  -->
-    <script src="{% static 'assets_admin/vendor/js/template-customizer.js' %}"></script>
+    {% comment %} <script src="{% static 'assets_admin/vendor/js/template-customizer.js' %}"></script> {% endcomment %}
     <!--? Config:  Mandatory theme config file contain global vars & default theme options, Set your preferred theme option in this file.  -->
     <script src="{% static 'assets_admin/js/config.js' %}"></script>
+
+
+    <style>
+
+      .btn-featured {
+        padding: 0.25rem 0.5rem;
+        font-size: 0.875rem;
+      }
+      
+      /* General styles for the messages list */
+      ul.messages {
+          list-style-type: none;
+          padding: 0;
+          margin: 0;
+      }
+
+      ul.messages li.message {
+          border-radius: 5px;
+          padding: 10px 15px;
+          margin: 5px 0;
+          font-size: 16px;
+          display: flex;
+          align-items: center;
+      }
+
+      ul.messages li.message.error {
+          background-color: #f8d7da;
+          color: #721c24;
+          border: 1px solid #f5c6cb;
+      }
+
+      ul.messages li.message.success {
+          background-color: #d4edda;
+          color: #155724;
+          border: 1px solid #c3e6cb;
+      }
+
+      ul.messages li.message.warning {
+          background-color: #fff3cd;
+          color: #856404;
+          border: 1px solid #ffeeba;
+      }
+
+      ul.messages li .icon {
+          margin-right: 10px;
+          font-size: 20px;
+      }
+
+      ul.messages li .error-icon {
+          color: #721c24;
+      }
+
+      ul.messages li .success-icon {
+          color: #155724;
+      }
+
+      ul.messages li .warning-icon {
+          color: #856404;
+      }
+    </style>
     
 </head>
 
@@ -300,22 +360,6 @@
 
       <div class="navbar-nav-right d-flex align-items-center" id="navbar-collapse">
 
-        
-        <!-- Search -->
-        <div class="navbar-nav align-items-center">
-          <div class="nav-item navbar-search-wrapper mb-0">
-            <a class="nav-item nav-link search-toggler fw-normal px-0" href="javascript:void(0);">
-              <i class="ri-search-line ri-22px scaleX-n1-rtl me-1_5"></i>
-              <span class="d-none d-md-inline-block text-muted ms-1_5">Search (Ctrl+/)</span>
-            </a>
-          </div>
-        </div>
-        <!-- /Search -->
-        
-        
-
-        
-
         <ul class="navbar-nav flex-row align-items-center ms-auto">
 
           
@@ -347,45 +391,6 @@
                 </a>
               </li>
               <li>
-                <div class="dropdown-divider"></div>
-              </li>
-              <li>
-                <a class="dropdown-item" href="pages-profile-user.html">
-                  <i class="ri-user-3-line ri-22px me-2"></i>
-                  <span class="align-middle">My Profile</span>
-                </a>
-              </li>
-              <li>
-                <a class="dropdown-item" href="pages-account-settings-account.html">
-                  <i class="ri-settings-4-line ri-22px me-2"></i>
-                  <span class="align-middle">Settings</span>
-                </a>
-              </li>
-              <li>
-                <a class="dropdown-item" href="pages-account-settings-billing.html">
-                  <span class="d-flex align-items-center align-middle">
-                    <i class="flex-shrink-0 ri-file-text-line ri-22px me-2"></i>
-                    <span class="flex-grow-1 align-middle">Billing</span>
-                    <span class="flex-shrink-0 badge badge-center rounded-pill bg-danger h-px-20 d-flex align-items-center justify-content-center">4</span>
-                  </span>
-                </a>
-              </li>
-              <li>
-                <div class="dropdown-divider"></div>
-              </li>
-              <li>
-                <a class="dropdown-item" href="pages-pricing.html">
-                  <i class="ri-money-dollar-circle-line ri-22px me-2"></i>
-                  <span class="align-middle">Pricing</span>
-                </a>
-              </li>
-              <li>
-                <a class="dropdown-item" href="pages-faq.html">
-                  <i class="ri-question-line ri-22px me-2"></i>
-                  <span class="align-middle">FAQ</span>
-                </a>
-              </li>
-              <li>
                 <div class="d-grid px-4 pt-2 pb-1">
                   <a class="btn btn-danger d-flex" href="auth-login-cover.html" target="_blank">
                     <small class="align-middle">Logout</small>
@@ -402,14 +407,6 @@
         </ul>
       </div>
 
-      
-      <!-- Search Small Screens -->
-      <div class="navbar-search-wrapper search-input-wrapper  d-none">
-        <input type="text" class="form-control search-input container-xxl border-0" placeholder="Search..." aria-label="Search...">
-        <i class="ri-close-fill search-toggler cursor-pointer"></i>
-      </div>
-      
-      
   
 </nav>
 
@@ -476,7 +473,22 @@
 
 </div>
  
-
+{% if messages %}
+    <ul class="messages">
+        {% for message in messages %}
+            <li class="message {{ message.tags }}">
+                {% if message.tags == 'error' %}
+                    <span class="icon error-icon">⚠️</span>
+                {% elif message.tags == 'success' %}
+                    <span class="icon success-icon">✅</span>
+                {% elif message.tags == 'warning' %}
+                    <span class="icon warning-icon">⚠️</span>
+                {% endif %}
+                {{ message|safe }}
+            </li>
+        {% endfor %}
+    </ul>
+{% endif %}
   
 </div>
 <!-- / Content -->

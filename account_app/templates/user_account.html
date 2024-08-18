@@ -53,7 +53,7 @@
 
 			.bannerhead-area {
 
-				background: rgba(0, 0, 0, 0) url('{% static 'assets/img/header-banner.jpg' %}') no-repeat scroll center center;
+				background: rgba(0, 0, 0, 0) url('{% static 'assets/img/banner-new.jpg' %}') no-repeat scroll center center;
 				position: relative;
 
 			  }
@@ -220,18 +220,13 @@
 				<div class="row">
 					<div class="col-md-2 col-sm-2">
 						<div class="logo-area">
-							<a href="index.html"><img src="{% static 'assets/img/home-1/logo_dg_footer.png' %}" width="110" height="50" alt="" /></a>
+							<a href="{% url 'home' %}"><img src="{% static 'assets/img/home-1/logo_dg_footer.png' %}" width="110" height="50" alt="" /></a>
 						</div>
 					</div>
 					<div class="col-md-8 col-sm-8">
 						<div class="main-menu">
 							<ul class="list-inline">
-							  <li class="expand active"><a href="{% url 'index' %}">HOME</a>
-								<ul class="single sub-menu">
-									<li class="sub-menu-title"><a href="index.html">Home Pages</a></li>
-									<li><a href="index.html">Home Version One</a></li>
-									<li><a href="index-2.html">Home Version Two</a></li>
-								</ul>
+							  <li class="expand active"><a href="{% url 'home' %}">HOME</a>
 							  </li>
 							  <li><a href="#">CATEGORIES</a>
 								<!-- Mega Menu Four Column -->
@@ -256,21 +251,8 @@
 							  
 							  <li><a href="about-us.html">ABOUT</a></li>
 							  <li class="expand"><a href="{% url 'user_account' %}">ACCOUNT</a>
-								<ul class="single sub-menu">
-									<li><a href="about-us.html">About</a></li>
-									<li><a href="shop.html">Shop</a></li>
-									<li><a href="shoping-cart.html">Shop Cart</a></li>
-									<li><a href="shop-list.html">Shop List</a></li>
-									<li><a href="single-product.html">Single Product</a></li>
-									<li><a href="wishlist.html">Wishlist</a></li>
-									<li><a href="checkout.html">Checkout</a></li>
-									<li><a href="account.html">Account</a></li>
-									<li><a href="login.html">Log In</a></li>
-									<li><a href="contact-us.html">Contact Us</a></li>
-									<li><a href="404.html">404 Error</a></li>
-								</ul>
 							  </li>
-							  <li><a href="contact-us.html">CONTACT</a></li>
+							  <li><a href="{% url 'contact_us' %}">CONTACT</a></li>
 							</ul>
 						</div>
 					</div>
@@ -283,32 +265,31 @@
 									<div class="mobile-menu">
 										<nav id="mobile-nav">
 											<ul>
-												<li><a href="index.html">Home </a>
-													<ul>
-														<li><a href="index.html">Home version one</a></li>
-														<li><a href="index-2.html">Home Version two</a></li>
-													</ul>
+												<li><a href="{% url 'home' %}">Home </a></li>
+												<li><a href="#">CATEGORIES</a>
+												<!-- Mega Menu Four Column -->
+												<div class="mega-menu">
+													{% for category in categories%}
+													<span>
+														<a href="{% url 'shop_list' %}?category={{category.category_name}}" class="mega-title">{{ category.category_name }}</a>
+														<a href="#"><img alt="{{category.category_name}}" src="{{category.image.url}}"/></a>
+														{% for subcategory in category.subcategories.all %}
+														{% if subcategory.is_listed %}
+														<a href="{% url 'shop_list' %}?category={{category.category_name}}&subcategory={{subcategory.subcategory_name}}">{{ subcategory.subcategory_name}}</a>
+														{% endif %}
+														{% endfor %}
+													</span>
+													{% endfor %}
+													<span class="mega-menu-img">
+														<a href="{% url 'shop_list' %}" class="mega-title">ALL PRODUCTS</a>
+														<a href="#"><img alt="" src="{% static 'assets/img/other-pg/img_menu.jpg' %}"/></a>
+													</span>
+												</div>
 												</li>
-												<li><a href="shop.html"> Shop </a></li>
 												<li><a href="about-us.html"> About Us </a></li>
-												<li><a href="{% url 'user_account'%}"> Pages </a>
-													<ul>
-														<li><a href="about-us.html">About Us</a></li>
-														<li><a href="shop.html">Shop</a></li>
-														<li><a href="shop-list.html">Shop List</a></li>
-														<li><a href="shoping-cart.html">Shop Cart</a></li>
-														<li><a href="single-product.html">Single Product</a></li>
-														<li><a href="checkout.html">Checkout</a></li>
-														<li><a href="account.html">My Account</a></li>
-														<li><a href="login.html">Login</a></li>
-														<li><a href="wishlist.html">Wishlist</a></li>
-														<li><a href="contact-us.html">Contact</a></li>
-														<li><a href="404.html">404 Error</a></li>
-													</ul>
+												<li><a href="{% url 'user_account'%}"> Account </a>
 												</li>
-												<li><a href="#"> Returns </a></li>
-												<li><a href="#"> Orders </a></li>
-												<li><a href="contact-us.html"> Contact Us </a></li>
+												<li><a href="{% url 'contact_us' %}"> Contact Us </a></li>
 											</ul>
 										</nav>
 									</div>	
@@ -340,45 +321,6 @@
 										<span>{{ cart_item_count }}</span>
 										{% endif %}
 									</a>
-									{% comment %} <div class="top-cart-content">
-										<div class="media header-middle-checkout">
-											<div class="media-left check-img">
-												<a href="#">
-													<img alt="" src="{% static 'assets/img/other-pg/cart-1.jpg' %}">
-												</a>
-											</div>
-											<div class="media-body checkout-content">
-												<h4 class="media-heading">
-													<a href="#">Men Pumping Show</a>
-													<span title="Remove This Item" class="btn-remove checkout-remove">
-														<i class="fa fa-trash"></i>
-													</span>
-												</h4>
-												<p>1 x $111.00</p>
-											</div>
-										</div>
-										<div class="media header-middle-checkout last-child"><!-- Cart Middle Check Out -->
-											<div class="media-left check-img">
-												<a href="#">
-													<img alt="" src="{% static 'assets/img/other-pg/cart-2.jpg' %}">
-												</a>
-											</div>
-											<div class="media-body checkout-content">
-												<h4 class="media-heading">
-													<a href="#">Women Pump Show</a>
-													<span title="Remove This Item" class="btn-remove checkout-remove">
-														<i class="fa fa-trash"></i>
-													</span>
-												</h4>
-												<p>1 x $111.00</p>
-											</div>
-										</div>
-										<div class="actions">
-											<button type="button" title="Checkout-botton" class="Checkout-botton">
-												<span>Checkout</span>
-											</button>
-										</div>
-									</div> {% endcomment %}
 								</li>
 							</ul>
 						</div>
@@ -393,7 +335,7 @@
 				<div class="row">
 					<div class="col-md-12">
 						<div class="banner-heading">
-							<h2>My Account</h2>
+							<h2 style="color:black;">My Account</h2>
 						</div>
 					</div>
 				</div>
@@ -448,6 +390,8 @@
 									<p><strong>Date-of-birth:</strong> <span id="user-dob">{{ user.date_of_birth }}</span></p>
 									<p><strong>E-mail address:</strong> <span id="user-email">{{ user.email }}</span></p>
 									<p><strong>Phone:</strong> <span id="user-phone">{{ user.phone_number }}</span></p>
+									<p><strong>Refferal Code:</strong> <span >{{user.referral_code}}</span></p>
+									
 								</div>
 
 								<!-- Edit Mode -->
@@ -502,12 +446,12 @@
 									{% csrf_token %}
 									<p class="form-row">
 										<label>Address Title<span class="required">*</span></label>
-										<input type="text" id="address-title" name="address_title" value="{{ address_title }}">
+										<input type="text" id="address_title" name="address_title" value="{{ address_title }}">
 										<span class="error">{{ errors.address_title }}</span>
 									</p>
 									<p class="form-row">
 										<label>Your Full Name<span class="required">*</span></label>
-										<input type="text" id="full-name" name="full_name" value="{{ full_name }}">
+										<input type="text" id="full_name" name="full_name" value="{{ full_name }}">
 										<span class="error">{{ errors.full_name }}</span>
 									</p>
 									<p class="form-row">
@@ -517,7 +461,7 @@
 									</p>
 									<p class="form-row">
 										<label>Post Office<span class="required">*</span></label>
-										<input type="text" id="post-office" name="post_office" value="{{ post_office }}">
+										<input type="text" id="post_office" name="post_office" value="{{ post_office }}">
 										<span class="error">{{ errors.post_office }}</span>
 									</p>
 									<p class="form-row">
@@ -588,39 +532,48 @@
 										<input type="hidden" name="address_id" id="address_id">
 										<p class="form-row">
 											<label><span class="required">*</span>Name</label>
-											<input type="text" name="name" required>
+											<input type="text" id="full_name" name="full_name" required>
+											<span class="error"></span>
 										</p>
 										<p class="form-row">
 											<label><span class="required">*</span>Address Title</label>
-											<input type="text" name="address_title" required>
+											<input type="text" name="address_title" id="address_title" required>
+											<span class="error"></span>
 										</p>
 										<p class="form-row">
 											<label><span class="required">*</span>State</label>
-											<input type="text" name="state" required>
+											<input type="text" name="state" id="state" required>
+											<span class="error"></span>
 										</p>
 										<p class="form-row">
 											<label><span class="required">*</span>City</label>
-											<input type="text" name="city" required>
+											<input type="text" name="city" id="city" required>
+											<span class="error"></span>
 										</p>
 										<p class="form-row">
 											<label><span class="required">*</span>PIN</label>
-											<input type="text" name="pin" required pattern="\d{6}" title="PIN must be exactly 6 digits">
+											<input type="text" id="pincode" name="pincode" required pattern="\d{6}" title="PIN must be exactly 6 digits">
+											<span class="error"></span>
 										</p>
 										<p class="form-row">
 											<label><span class="required">*</span>Post Office</label>
-											<input type="text" name="post_office" required>
+											<input type="text" id="post_office" name="post_office" required>
+											<span class="error"></span>
 										</p>
 										<p class="form-row">
 											<label><span class="required">*</span>Phone Number</label>
-											<input type="tel" name="phone_number" required>
+											<input type="tel" id="phone" name="phone" required>
+											<span class="error"></span>
 										</p>
 										<p class="form-row">
 											<label><span class="required">*</span>Address Line</label>
 											<textarea name="address_line" required></textarea>
+											<span class="error"></span>
 										</p>
 										<p class="form-row">
 											<label>Landmark</label>
-											<input type="text" name="landmark">
+											<input type="text" name="landmark" id="landmark">
+											<span class="error"></span>
 										</p>
 										<div style="display: flex; justify-content: flex-end;">
 											<button type="button" id="cancel-edit-btn" class="btn btn-secondary mr-2">Cancel</button>
@@ -662,22 +615,28 @@
 															<td><img src="{{ item.product_size.product_data.image_1.url }}" alt="{{ item.product_size.product_data.product_id.product_name }}" width="50" height="50"></td>
 															<td>{{ item.product_size.product_data.color_name }}/{{ item.product_size.size }}</td>
 															<td>{{ item.quantity }}</td>
-															<td>Rs. {{ item.get_total_item_price }}</td>
+															<td>₹ {{ item.get_total_item_price }}</td>
 															<td>{{ item.status }}</td>
+															{% if order|is_paid_or_pending_cod %}
 															<td>
 																{% if item.status|not_in_list:"Delivered,Cancelled,Returned,Return Confirmed,Return Processing,Waiting For Pickup,Return Completed" %}
-																	<form method="post" action="{% url 'cancel_order_item' item.id %}">
+																	<form method="post" id="cancel-form-{{ item.id }}" action="{% url 'cancel_order_item' item.id %}">
 																		{% csrf_token %}
-																		<button type="submit" class="btn btn-danger btn-sm" {% if item.status == 'Cancelled' %}disabled{% endif %}>Cancel</button>
+																		<button type="button" class="btn btn-danger btn-sm"  onclick="confirmCancel({{ item.id }})" {% if item.status == 'Cancelled' %}disabled{% endif %}>Cancel</button>
 																	</form>
 																{% endif %}
 																{% if item.status == 'Delivered' %}
-																	<form method="post" action="{% url 'return_order_item' item.id %}">
+																	<form method="post" id="return-form-{{ item.id }}" action="{% url 'return_order_item' item.id %}">
 																		{% csrf_token %}
-																		<button type="submit" class="btn btn-warning btn-sm" {% if item.status == 'Returned' %}disabled{% endif %}>Return</button>
+																		<button type="button" class="btn btn-warning btn-sm" onclick="confirmReturn({{ item.id }})" {% if item.status == 'Returned' %}disabled{% endif %}>Return</button>
 																	</form>
 																{% endif %}
 															</td>
+															{% else %}
+															<td>
+																Payment Failed
+															</td>
+															{% endif %}
 														</tr>
 													{% endfor %}
 												{% endfor %}
@@ -714,7 +673,7 @@
 								<h4>My Wallet</h4>
 								<div class="wallet-balance">
 									<h5>Current Balance</h5>
-									<p class="balance">Rs. {{ user_wallet.balance }}</p>
+									<p class="balance">₹ {{ user_wallet.balance }}</p>
 								</div>
 								<div class="wallet-transactions">
 									<h5>Transaction History</h5>
@@ -732,7 +691,7 @@
 											<tr>
 												<td>{{ transaction.timestamp|date:"Y-m-d H:i" }}</td>
 												<td>{{ transaction.get_transaction_type_display }}</td>
-												<td>Rs. {{ transaction.amount }}</td>
+												<td>₹ {{ transaction.amount }}</td>
 												<td>{{ transaction.get_description_display }}</td>
 											</tr>
 											{% empty %}
@@ -896,7 +855,7 @@
 					</div>
 					<div class="col-md-3 col-sm-4 col-xs-12">
 						<div class="address-area">
-							<a href="index.html"><img src="{% static 'assets/img/home-1/footer-logo.png' %}" alt="" /></a>
+							<a href="{% url 'home' %}"><img src="{% static 'assets/img/home-1/footer-logo.png' %}" alt="" /></a>
 							<p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard.</p>
 							<div class="contact-details">
 								<ul>
@@ -1021,7 +980,7 @@
 			</script>
 			<!--END-->
 
-			<!--Script for Add Address Validation-->
+			{% comment %} <!--Script for Add Address Validation-->
 			<script>
 
 				document.addEventListener('DOMContentLoaded', function () {
@@ -1076,7 +1035,7 @@
 					}
 				});
 			</script>
-			<!--END-->
+			<!--END--> {% endcomment %}
 
 			<!--Script for Edit address-->
 			<script>
@@ -1195,6 +1154,168 @@
 						});
 					});
 					</script>
+
+
+			<!--Sweet Alert Script-->
+		<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+		<script>
+			function confirmCancel(orderId) {
+				Swal.fire({
+					title: 'Are you sure?',
+					text: "You won't be able to revert this!",
+					icon: 'warning',
+					showCancelButton: true,
+					confirmButtonColor: '#3085d6',
+					cancelButtonColor: '#d33',
+					confirmButtonText: 'Yes, cancel it!'
+				}).then((result) => {
+					if (result.isConfirmed) {
+						document.getElementById('cancel-form-' + orderId).submit();
+					}
+				})
+			}
+		
+			function confirmReturn(orderId) {
+				Swal.fire({
+					title: 'Are you sure?',
+					text: "You can return this item!",
+					icon: 'warning',
+					showCancelButton: true,
+					confirmButtonColor: '#3085d6',
+					cancelButtonColor: '#d33',
+					confirmButtonText: 'Yes, return it!'
+				}).then((result) => {
+					if (result.isConfirmed) {
+						document.getElementById('return-form-' + orderId).submit();
+					}
+				})
+			}
+		</script>
+
+
+	 <!--Address validation Script-->
+	 <script>
+	 document.addEventListener('DOMContentLoaded', function() {
+		// Function to validate the form
+		function validateForm(form) {
+			let isValid = true;
+			const nameRegex = /^[a-zA-Z]+(?: [a-zA-Z]+)*$/;
+			const addressTitleRegex = /^[a-zA-Z0-9]+(?: [a-zA-Z0-9]+)*$/;
+			const alphabetRegex = /^[a-zA-Z]+(?: [a-zA-Z]+)*$/;
+			const pincodeRegex = /^\d{6}$/;
+			const phoneRegex = /^[789]\d{9}$/;
+	
+			// Validate Full Name
+			const fullName = form.querySelector('#full_name');
+			if (!nameRegex.test(fullName.value.trim())) {
+				showError(fullName, 'Name should contain only alphabets and not start with space');
+				isValid = false;
+			} else {
+				clearError(fullName);
+			}
+	
+			// Validate Address Title
+			const addressTitle = form.querySelector('#address_title');
+			if (!addressTitleRegex.test(addressTitle.value.trim())) {
+				showError(addressTitle, 'Address title should contain only alphabets and numbers, and not start with space');
+				isValid = false;
+			} else {
+				clearError(addressTitle);
+			}
+	
+			// Validate State
+			const state = form.querySelector('#state');
+			if (!alphabetRegex.test(state.value.trim())) {
+				showError(state, 'State should contain only alphabets and not start with space');
+				isValid = false;
+			} else {
+				clearError(state);
+			}
+	
+			// Validate City
+			const city = form.querySelector('#city');
+			if (!alphabetRegex.test(city.value.trim())) {
+				showError(city, 'City should contain only alphabets and not start with space');
+				isValid = false;
+			} else {
+				clearError(city);
+			}
+	
+			// Validate Post Office
+			const postOffice = form.querySelector('#post_office');
+			if (!alphabetRegex.test(postOffice.value.trim())) {
+				showError(postOffice, 'Post office should contain only alphabets and not start with space');
+				isValid = false;
+			} else {
+				clearError(postOffice);
+			}
+	
+			// Validate Pincode
+			const pincode = form.querySelector('#pincode');
+			if (!pincodeRegex.test(pincode.value.trim())) {
+				showError(pincode, 'Pincode must be exactly 6 digits');
+				isValid = false;
+			} else {
+				clearError(pincode);
+			}
+	
+			// Validate Phone
+			const phone = form.querySelector('#phone');
+			if (!phoneRegex.test(phone.value.trim())) {
+				showError(phone, 'Phone number must be 10 digits and start with 7, 8, or 9');
+				isValid = false;
+			} else {
+				clearError(phone);
+			}
+	
+			// Validate Address
+			const address = form.querySelector('#address') || form.querySelector('textarea[name="address_line"]');
+			if (address.value.trim().startsWith(' ')) {
+				showError(address, 'Address should not start with space');
+				isValid = false;
+			} else {
+				clearError(address);
+			}
+	
+			return isValid;
+		}
+	
+		// Function to show error message
+		function showError(input, message) {
+			const error = input.nextElementSibling;
+			error.textContent = message;
+			error.style.color = 'red';
+		}
+	
+		// Function to clear error message
+		function clearError(input) {
+			const error = input.nextElementSibling;
+			error.textContent = '';
+		}
+	
+		// Add event listener for add address form
+		const addAddressForm = document.getElementById('address-form');
+		if (addAddressForm) {
+			addAddressForm.addEventListener('submit', function(e) {
+				if (!validateForm(this)) {
+					e.preventDefault();
+				}
+			});
+		}
+	
+		// Add event listener for edit address form
+		const editAddressForm = document.getElementById('address-edit-form');
+		if (editAddressForm) {
+			editAddressForm.addEventListener('submit', function(e) {
+				if (!validateForm(this)) {
+					e.preventDefault();
+				}
+			});
+		}
+	});
+</script>
+			
+			
 
 
 	</body>

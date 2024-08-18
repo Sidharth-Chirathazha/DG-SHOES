@@ -56,4 +56,4 @@ class Wishlist(models.Model):
         unique_together = ('user', 'product_variant')
 
     def __str__(self):
-        return f"{self.user.username} - {self.product_variant.product_id.product_name} ({self.product_variant.color_name}, Size: {self.size_variant.size})"
+        return f"{self.user.username} - {self.product_variant.product_id.product_name} ({self.product_variant.color_name}"

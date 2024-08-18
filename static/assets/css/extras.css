@@ -7,17 +7,17 @@
     margin-right: 30px; /* Increase margin-right for more space */
 }
 
-.product-images {
+.product-images-variant {
     display: flex;
 }
 
-.product-image {
+.product-image-variant {
     margin-right: 20px; /* Adjust spacing between images */
     position: relative;
     overflow: hidden;
 }
 
-.product-image img {
+.product-image-variant img {
     max-width: 60px; /* Adjust image width */
     height: auto;
     display: block;
@@ -25,7 +25,7 @@
     cursor: pointer; /* Change cursor to hand pointer */
 }
 
-.product-image img:hover {
+.product-image-variant img:hover {
     transform: scale(1.2); /* Zoom effect on hover */
 }
 

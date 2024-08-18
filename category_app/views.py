@@ -89,12 +89,12 @@ def addSubCategory(request):
 
             if subcategory_exists:
 
-                print("Category already exists")
+                messages.error(request,f"Subcategory {subcategory_name} already exists.")
             else:
 
                 subcategory = SubCategory(subcategory_name = subcategory_name,category = parent_category,image=subcategory_image)
                 subcategory.save()
-                print("category created")
+                messages.success(request,f"{subcategory_name} added successfully.")
 
         
             context = {
@@ -169,12 +169,14 @@ def apply_or_disable_offer(request,subcategory_id):
         if offer.offer_type == 'subcategory':
             subcategory.discount_percentage = offer.discount_percentage
             subcategory.is_offer_applied = True
+            subcategory.applied_offer = offer
             subcategory.save()
             products = Product.objects.filter(subcategory_id = subcategory)
             for product in products:
                 if product.is_offer_applied == False:
                     product.discount_percentage = offer.discount_percentage
                     product.is_offer_applied = True
+                    product.applied_offer = offer
                     product.save()
                 else:
                     product.save()
@@ -182,11 +184,13 @@ def apply_or_disable_offer(request,subcategory_id):
     elif disable_offer:
         subcategory.is_offer_applied = False
         subcategory.discount_percentage = 0
+        subcategory.applied_offer = None
         subcategory.save()
         products = Product.objects.filter(subcategory_id=subcategory)
         for product in products:
             product.discount_percentage = 0
             product.is_offer_applied = False
+            product.applied_offer = None
             product.save()
         
     return redirect(reverse('subcategory_list'))

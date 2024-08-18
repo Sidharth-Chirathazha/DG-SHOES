@@ -78,7 +78,7 @@
     <script src="{% static 'assets_admin/vendor/js/helpers.js' %}"></script>
     <!--! Template customizer & Theme config files MUST be included after core stylesheets and helpers.js in the <head> section -->
     <!--? Template customizer: To hide customizer set displayCustomizer value false in config.js.  -->
-    <script src="{% static 'assets_admin/vendor/js/template-customizer.js' %}"></script>
+    {% comment %} <script src="{% static 'assets_admin/vendor/js/template-customizer.js' %}"></script> {% endcomment %}
     <!--? Config:  Mandatory theme config file contain global vars & default theme options, Set your preferred theme option in this file.  -->
     <script src="{% static 'assets_admin/js/config.js' %}"></script>
 
@@ -92,7 +92,7 @@
 
 
 
-      .messages {
+      {% comment %} .messages {
         margin-top: 20px;
         font-family: Arial, sans-serif;
         }
@@ -121,7 +121,7 @@
             color: #a94442;
             background-color: #f2dede;
             border-color: #ebccd1;
-        }
+        } {% endcomment %}
     </style>
     
 </head>
@@ -334,21 +334,6 @@
 
       <div class="navbar-nav-right d-flex align-items-center" id="navbar-collapse">
 
-        
-        <!-- Search -->
-        <div class="navbar-nav align-items-center">
-          <div class="nav-item navbar-search-wrapper mb-0">
-            <a class="nav-item nav-link search-toggler fw-normal px-0" href="javascript:void(0);">
-              <i class="ri-search-line ri-22px scaleX-n1-rtl me-1_5"></i>
-              <span class="d-none d-md-inline-block text-muted ms-1_5">Search (Ctrl+/)</span>
-            </a>
-          </div>
-        </div>
-        <!-- /Search -->
-        
-        
-
-        
 
         <ul class="navbar-nav flex-row align-items-center ms-auto">
 
@@ -381,45 +366,6 @@
                 </a>
               </li>
               <li>
-                <div class="dropdown-divider"></div>
-              </li>
-              <li>
-                <a class="dropdown-item" href="pages-profile-user.html">
-                  <i class="ri-user-3-line ri-22px me-2"></i>
-                  <span class="align-middle">My Profile</span>
-                </a>
-              </li>
-              <li>
-                <a class="dropdown-item" href="pages-account-settings-account.html">
-                  <i class="ri-settings-4-line ri-22px me-2"></i>
-                  <span class="align-middle">Settings</span>
-                </a>
-              </li>
-              <li>
-                <a class="dropdown-item" href="pages-account-settings-billing.html">
-                  <span class="d-flex align-items-center align-middle">
-                    <i class="flex-shrink-0 ri-file-text-line ri-22px me-2"></i>
-                    <span class="flex-grow-1 align-middle">Billing</span>
-                    <span class="flex-shrink-0 badge badge-center rounded-pill bg-danger h-px-20 d-flex align-items-center justify-content-center">4</span>
-                  </span>
-                </a>
-              </li>
-              <li>
-                <div class="dropdown-divider"></div>
-              </li>
-              <li>
-                <a class="dropdown-item" href="pages-pricing.html">
-                  <i class="ri-money-dollar-circle-line ri-22px me-2"></i>
-                  <span class="align-middle">Pricing</span>
-                </a>
-              </li>
-              <li>
-                <a class="dropdown-item" href="pages-faq.html">
-                  <i class="ri-question-line ri-22px me-2"></i>
-                  <span class="align-middle">FAQ</span>
-                </a>
-              </li>
-              <li>
                 <div class="d-grid px-4 pt-2 pb-1">
                   <a class="btn btn-danger d-flex" href="auth-login-cover.html" target="_blank">
                     <small class="align-middle">Logout</small>
@@ -436,14 +382,6 @@
         </ul>
       </div>
 
-      
-      <!-- Search Small Screens -->
-      <div class="navbar-search-wrapper search-input-wrapper  d-none">
-        <input type="text" class="form-control search-input container-xxl border-0" placeholder="Search..." aria-label="Search...">
-        <i class="ri-close-fill search-toggler cursor-pointer"></i>
-      </div>
-      
-      
   
 </nav>
 
@@ -502,22 +440,13 @@
                 {% if offer.is_active %}
                 <span class="badge rounded-pill bg-label-success me-1">Active</span>
                 {% else %}
-                <span class="badge rounded-pill bg-label-warning me-1">Inactive</span>
+                <span class="badge rounded-pill bg-label-warning me-1">Expired</span>
                 {% endif %}
               </td>
               <td>
                 <div class="dropdown">
                   <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown"><i class="ri-more-2-line"></i></button>
                   <div class="dropdown-menu">
-                    <form action="{% url 'offers' %}" method="post">
-                      <input type="hidden" name="offer_id" value="{{ offer.id }}">
-                      {% csrf_token %}
-                      {% if offer.is_active %}
-                      <button class="dropdown-item" type="submit" name="action" value="disable"><span class="badge rounded-pill bg-label-danger me-1"> Disable</button>
-                      {% else %}
-                      <button class="dropdown-item" type="submit" name="action" value="enable"><span class="badge rounded-pill bg-label-success me-1"> Enable</button>
-                      {% endif %}
-                    </form>
                     <a class="dropdown-item" href="javascript:void(0);" 
                       onclick="openEditOfferModal({{ offer.id }})">
                       <span class="badge rounded-pill bg-label-primary me-1">Edit</span>
@@ -574,13 +503,6 @@
                 <input type="date" class="form-control" id="endDate" name="end_date" required>
               </div>
               <div class="mb-3">
-                <label for="isActive" class="form-label">Active</label>
-                <select class="form-control" id="isActive" name="is_active">
-                  <option value="False">Inactive</option>
-                  <option value="True">Active</option>
-                </select>
-              </div>
-              <div class="mb-3">
                 <label for="offerType" class="form-label">Offer Type</label>
                 <select class="form-control" id="offerType" name="offer_type">
                   <option value="product">Product</option>
@@ -625,13 +547,6 @@
               <div class="mb-3">
                 <label for="editEndDate" class="form-label">End Date</label>
                 <input type="date" class="form-control" id="editEndDate" name="end_date" required>
-              </div>
-              <div class="mb-3">
-                <label for="editIsActive" class="form-label">Active</label>
-                <select class="form-control" id="editIsActive" name="is_active">
-                  <option value="False">Inactive</option>
-                  <option value="True">Active</option>
-                </select>
               </div>
               <div class="mb-3">
                 <label for="editOfferType" class="form-label">Offer Type</label>
@@ -742,34 +657,13 @@
 
   <!-- Page JS -->
   <script src="{% static 'assets_admin/js/app-user-list.js' %}"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  
 
 
-
+  <!--Script for add modal -->
   <script>
-    function openEditCouponModal(id, title, description, valid_from, expiry, discount_amount, discount_percentage, min_limit, is_active) {
-      console.log('Date values:', valid_from, expiry); // Debugging
-    
-      document.getElementById('editCouponForm').action = `/coupons/edit_coupon/${id}/`;
-      document.getElementById('editCouponTitle').value = title;
-      document.getElementById('editCouponDescription').value = description;
-      
-      // Format dates to YYYY-MM-DD for date input fields
-      document.getElementById('editValidFrom').value = valid_from;
-      document.getElementById('editExpiryDate').value = expiry;
-      
-      document.getElementById('editDiscountAmount').value = discount_amount;
-      document.getElementById('editDiscountPercentage').value = discount_percentage;
-      document.getElementById('editMinLimit').value = min_limit;
-      document.getElementById('editIsActive').value = is_active === 'True' ? 'True' : 'False';
-      
-      $('#editCouponModal').modal('show');
-    }
-  </script>
-
-
-<!--Script for add modal -->
-<script>
-  document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('DOMContentLoaded', function() {
       document.getElementById('addOfferForm').addEventListener('submit', function(e) {
           e.preventDefault();
           var form = this;
@@ -785,75 +679,163 @@
           })
           .then(response => response.json())
           .then(data => {
+
+              // Close the modal first
+              $('#addOfferModal').modal('hide');
+
               if (data.status === 'success') {
-                  alert(data.message);
-                  $('#addOfferModal').modal('hide');
-                  location.reload();  // Refresh the page to show the new offer
-              } else {
-                  alert('Error: ' + data.message);
+                  Swal.fire({
+                      title: 'Success!',
+                      text: data.message,
+                      icon: 'success',
+                      confirmButtonText: 'OK'
+                  }).then(() => {
+                      $('#addOfferModal').modal('hide');
+                      location.reload();  // Refresh the page to show the new offer
+                  });
+              } else if (data.status === 'error') {
+                  Swal.fire({
+                      title: 'Error!',
+                      html: data.message.join('<br>'),
+                      icon: 'error',
+                      confirmButtonText: 'OK'
+                  });
               }
           })
           .catch(error => {
               console.error('Error:', error);
-              alert('An error occurred while adding the offer.');
+              Swal.fire({
+                  title: 'Error!',
+                  text: 'An error occurred while adding the offer.',
+                  icon: 'error',
+                  confirmButtonText: 'OK'
+              });
           });
       });
   });
+  
   </script>
-
+  
   <!--Script for edit modal -->
   <script>
+  
+    document.addEventListener('DOMContentLoaded', function() {
+      document.getElementById('editOfferForm').addEventListener('submit', function(e) {
+          e.preventDefault();
+          var form = this;
+          var formData = new FormData(form);
+  
+          fetch(form.action, {
+              method: 'POST',
+              body: formData,
+              headers: {
+                  'X-Requested-With': 'XMLHttpRequest',
+                  'X-CSRFToken': formData.get('csrfmiddlewaretoken'),
+              },
+          })
+          .then(response => response.json())
+          .then(data => {
 
-    function openEditOfferModal(offerId) {
+              // Close the modal first
+              $('#editOfferModal').modal('hide');
+              
+              if (data.status === 'success') {
+                  Swal.fire({
+                      title: 'Success!',
+                      text: data.message,
+                      icon: 'success',
+                      confirmButtonText: 'OK'
+                  }).then(() => {
+                      $('#editOfferModal').modal('hide');
+                      location.reload();  // Refresh the page to show the updated offer
+                  });
+              } else if (data.status === 'error') {
+                  Swal.fire({
+                      title: 'Error!',
+                      html: data.message.join('<br>'),
+                      icon: 'error',
+                      confirmButtonText: 'OK'
+                  });
+              }
+          })
+          .catch(error => {
+              console.error('Error:', error);
+              Swal.fire({
+                  title: 'Error!',
+                  text: 'An error occurred while updating the offer.',
+                  icon: 'error',
+                  confirmButtonText: 'OK'
+              });
+          });
+      });
+  });
+  
+  function openEditOfferModal(offerId) {
       // Fetch offer data from the server
       fetch(`/api/offer/${offerId}/`)
-        .then(response => response.json())
-        .then(offer => {
-          // Populate the form
-          document.getElementById('editOfferId').value = offer.id;
-          document.getElementById('editOfferName').value = offer.name;
-          document.getElementById('editDiscountPercentage').value = offer.discount_percentage;
-          document.getElementById('editStartDate').value = offer.start_date;
-          document.getElementById('editEndDate').value = offer.end_date;
-          document.getElementById('editIsActive').value = offer.is_active.toString();
-          document.getElementById('editOfferType').value = offer.offer_type;
-    
-          // Show the modal
-          var myModal = new bootstrap.Modal(document.getElementById('editOfferModal'));
-          myModal.show();
-        });
-    }
-
-  </script>
-  <!--Script for edit End -->
-
-  <!--Script for delete offer-->
-  <script>
-
-    function deleteOffer(offerId) {
-      if (confirm('Are you sure you want to delete this offer?')) {
-        fetch(`{% url 'delete_offer' %}`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'X-CSRFToken': '{{ csrf_token }}'
-          },
-          body: JSON.stringify({ 'offer_id': offerId })
-        })
-        .then(response => response.json())
-        .then(data => {
-          if (data.success) {
-            location.reload(); // Reload the page to reflect changes
-          } else {
-            alert('Error deleting offer');
-          }
-        })
-        .catch(error => console.error('Error:', error));
-      }
-    }
-  </script> 
+          .then(response => response.json())
+          .then(offer => {
+              // Populate the form
+              document.getElementById('editOfferId').value = offer.id;
+              document.getElementById('editOfferName').value = offer.name;
+              document.getElementById('editDiscountPercentage').value = offer.discount_percentage;
+              document.getElementById('editStartDate').value = offer.start_date;
+              document.getElementById('editEndDate').value = offer.end_date;
+              document.getElementById('editOfferType').value = offer.offer_type;
+  
+              // Show the modal
+              var myModal = new bootstrap.Modal(document.getElementById('editOfferModal'));
+              myModal.show();
+          })
+          .catch(error => {
+              console.error('Error:', error);
+              Swal.fire({
+                  title: 'Error!',
+                  text: 'An error occurred while fetching the offer details.',
+                  icon: 'error',
+                  confirmButtonText: 'OK'
+              });
+          });
+  }
+  
+    </script>
    <!--Script for delete offer End-->   
   
+
+   {% if messages %}
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+        {% for message in messages %}
+          Swal.fire({
+            title: '{{ message.tags|title }}',
+            text: "{{ message }}",
+            icon: '{{ message.tags }}',
+            toast: true,
+            position: 'bottom',
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+              toast.addEventListener('mouseenter', Swal.stopTimer)
+              toast.addEventListener('mouseleave', Swal.resumeTimer)
+            },
+            customClass: {
+              container: 'my-swal-container',
+              popup: 'my-swal-popup'
+            }
+          });
+        {% endfor %}
+      });
+    </script>
+    <style>
+      .my-swal-container {
+        z-index: 9999;
+      }
+      .my-swal-popup {
+        margin-bottom: 60px !important;
+      }
+    </style>
+    {% endif %}
   
   
   

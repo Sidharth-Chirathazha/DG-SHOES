@@ -54,7 +54,7 @@
 
 			.bannerhead-area {
 
-				background: rgba(0, 0, 0, 0) url('{% static 'assets/img/header-banner.jpg' %}') no-repeat scroll center center;
+				background: rgba(0, 0, 0, 0) url('{% static 'assets/img/banner-new.jpg' %}') no-repeat scroll center center;
 				position: relative;
 
 			  }
@@ -155,18 +155,13 @@
 				<div class="row">
 					<div class="col-md-2 col-sm-2">
 						<div class="logo-area">
-							<a href="index.html"><img src="{% static 'assets/img/home-1/logo_dg_footer.png' %}" width="110" height="50" alt="" /></a>
+							<a href="{% url 'home' %}"><img src="{% static 'assets/img/home-1/logo_dg_footer.png' %}" width="110" height="50" alt="" /></a>
 						</div>
 					</div>
 					<div class="col-md-8 col-sm-8">
 						<div class="main-menu">
 							<ul class="list-inline">
-							  <li class="expand active"><a href="{% url 'index' %}">HOME</a>
-								<ul class="single sub-menu">
-									<li class="sub-menu-title"><a href="index.html">Home Pages</a></li>
-									<li><a href="index.html">Home Version One</a></li>
-									<li><a href="index-2.html">Home Version Two</a></li>
-								</ul>
+							  <li class="expand active"><a href="{% url 'home' %}">HOME</a>
 							  </li>
 							  <li><a href="#">CATEGORIES</a>
 								<!-- Mega Menu Four Column -->
@@ -191,21 +186,8 @@
 							  
 							  <li><a href="about-us.html">ABOUT</a></li>
 							  <li class="expand"><a href="{% url 'user_account' %}">ACCOUNT</a>
-								<ul class="single sub-menu">
-									<li><a href="about-us.html">About</a></li>
-									<li><a href="shop.html">Shop</a></li>
-									<li><a href="shoping-cart.html">Shop Cart</a></li>
-									<li><a href="shop-list.html">Shop List</a></li>
-									<li><a href="single-product.html">Single Product</a></li>
-									<li><a href="wishlist.html">Wishlist</a></li>
-									<li><a href="checkout.html">Checkout</a></li>
-									<li><a href="account.html">Account</a></li>
-									<li><a href="login.html">Log In</a></li>
-									<li><a href="contact-us.html">Contact Us</a></li>
-									<li><a href="404.html">404 Error</a></li>
-								</ul>
 							  </li>
-							  <li><a href="contact-us.html">CONTACT</a></li>
+							  <li><a href="{% url 'contact_us' %}">CONTACT</a></li>
 							</ul>
 						</div>
 					</div>
@@ -218,32 +200,31 @@
 									<div class="mobile-menu">
 										<nav id="mobile-nav">
 											<ul>
-												<li><a href="index.html">Home </a>
-													<ul>
-														<li><a href="index.html">Home version one</a></li>
-														<li><a href="index-2.html">Home Version two</a></li>
-													</ul>
+												<li><a href="{% url 'home' %}">Home </a></li>
+												<li><a href="#">CATEGORIES</a>
+												<!-- Mega Menu Four Column -->
+												<div class="mega-menu">
+													{% for category in categories%}
+													<span>
+														<a href="{% url 'shop_list' %}?category={{category.category_name}}" class="mega-title">{{ category.category_name }}</a>
+														<a href="#"><img alt="{{category.category_name}}" src="{{category.image.url}}"/></a>
+														{% for subcategory in category.subcategories.all %}
+														{% if subcategory.is_listed %}
+														<a href="{% url 'shop_list' %}?category={{category.category_name}}&subcategory={{subcategory.subcategory_name}}">{{ subcategory.subcategory_name}}</a>
+														{% endif %}
+														{% endfor %}
+													</span>
+													{% endfor %}
+													<span class="mega-menu-img">
+														<a href="{% url 'shop_list' %}" class="mega-title">ALL PRODUCTS</a>
+														<a href="#"><img alt="" src="{% static 'assets/img/other-pg/img_menu.jpg' %}"/></a>
+													</span>
+												</div>
 												</li>
-												<li><a href="shop.html"> Shop </a></li>
 												<li><a href="about-us.html"> About Us </a></li>
-												<li><a href="{% url 'user_account'%}"> Pages </a>
-													<ul>
-														<li><a href="about-us.html">About Us</a></li>
-														<li><a href="shop.html">Shop</a></li>
-														<li><a href="shop-list.html">Shop List</a></li>
-														<li><a href="shoping-cart.html">Shop Cart</a></li>
-														<li><a href="single-product.html">Single Product</a></li>
-														<li><a href="checkout.html">Checkout</a></li>
-														<li><a href="account.html">My Account</a></li>
-														<li><a href="login.html">Login</a></li>
-														<li><a href="wishlist.html">Wishlist</a></li>
-														<li><a href="contact-us.html">Contact</a></li>
-														<li><a href="404.html">404 Error</a></li>
-													</ul>
+												<li><a href="{% url 'user_account'%}"> Account </a>
 												</li>
-												<li><a href="#"> Returns </a></li>
-												<li><a href="#"> Orders </a></li>
-												<li><a href="contact-us.html"> Contact Us </a></li>
+												<li><a href="{% url 'contact_us' %}"> Contact Us </a></li>
 											</ul>
 										</nav>
 									</div>	
@@ -275,45 +256,6 @@
 										<span>{{ cart_item_count }}</span>
 										{% endif %}
 									</a>
-									{% comment %} <div class="top-cart-content">
-										<div class="media header-middle-checkout">
-											<div class="media-left check-img">
-												<a href="#">
-													<img alt="" src="{% static 'assets/img/other-pg/cart-1.jpg' %}">
-												</a>
-											</div>
-											<div class="media-body checkout-content">
-												<h4 class="media-heading">
-													<a href="#">Men Pumping Show</a>
-													<span title="Remove This Item" class="btn-remove checkout-remove">
-														<i class="fa fa-trash"></i>
-													</span>
-												</h4>
-												<p>1 x $111.00</p>
-											</div>
-										</div>
-										<div class="media header-middle-checkout last-child"><!-- Cart Middle Check Out -->
-											<div class="media-left check-img">
-												<a href="#">
-													<img alt="" src="{% static 'assets/img/other-pg/cart-2.jpg' %}">
-												</a>
-											</div>
-											<div class="media-body checkout-content">
-												<h4 class="media-heading">
-													<a href="#">Women Pump Show</a>
-													<span title="Remove This Item" class="btn-remove checkout-remove">
-														<i class="fa fa-trash"></i>
-													</span>
-												</h4>
-												<p>1 x $111.00</p>
-											</div>
-										</div>
-										<div class="actions">
-											<button type="button" title="Checkout-botton" class="Checkout-botton">
-												<span>Checkout</span>
-											</button>
-										</div>
-									</div> {% endcomment %}
 								</li>
 							</ul>
 						</div>
@@ -321,22 +263,6 @@
 				</div>
 			</div>
 		</div>
-		<!-- MENU AREA END -->
-		{% comment %} <!-- BANNER AREA STRAT -->
-		<section class="bannerhead-area">
-			<div class="container">
-				<div class="row">
-					<div class="col-md-12">
-						<div class="banner-heading">
-							<h2>My Account</h2>
-						</div>
-					</div>
-				</div>
-			</div>
-		</section>
-		<!-- BANNER AREA END --> {% endcomment %}
-
-
 		<!-- ORDER DETAILS START -->
 		<div class="order-details-container">
 			<h2 class="section-heading">Order Details</h2>
@@ -348,14 +274,14 @@
 							<h4 style="margin: 0;">Order Summary</h4>
 						</div>
 						<div class="card-body">
-							<p><strong>Order ID:</strong> {{ order.order_unique_id }}</p>
+							<p><strong>Order ID:</strong> {{ order.order_unique_id }} ({{order.payment_status}})</p>
 							<p><strong>Order Date:</strong> {{ order.order_date }}</p>
-							<p><strong>Selling Amount:</strong> Rs. {{ order.get_subtotal }}</p>
+							<p><strong>Selling Amount:</strong> ₹ {{ order.get_subtotal }}</p>
 							{% if order.discount_amount %}
-							<p><strong>Discount Amount:</strong> Rs. {{ order.discount_amount }} (Coupon: {{ order.coupon.code }})</p>
+							<p><strong>Discount Amount:</strong> ₹ {{ order.discount_amount }} (Coupon: {{ order.coupon.code }})</p>
 							{% endif %}
-							<p><strong>Total Amount:</strong> Rs. {{ order.total_amount }}</p>
-							<p><strong>Payment Method:</strong> {{ order.get_payment_method_display }}</p>
+							<p><strong>Total Amount:</strong> ₹ {{ order.total_amount }}</p>
+							<p><strong>Payment Method:</strong> {{ order.get_payment_method_display }} ({{order.payment_status}})</p>
 						</div>
 					</div>
 				</div>
@@ -377,7 +303,7 @@
 					</div>
 				</div>
 			</div>
-		
+			{% if order|is_paid_or_pending_cod %}
 			<div class="ordered-items">
 				<h4 class="section-heading">Ordered Items</h4>
 				<table class="table">
@@ -402,20 +328,20 @@
 								</td>
 								<td>{{ item.product_size.product_data.color_name }}/{{ item.product_size.size }}</td>
 								<td>{{ item.quantity }}</td>
-								<td>Rs. {{ item.price }}</td>
-								<td>Rs. {{ item.get_total_item_price }}</td>
+								<td>₹ {{ item.price }}</td>
+								<td>₹ {{ item.get_total_item_price }}</td>
 								<td><span style="padding: 5px 10px; border-radius: 20px; font-size: 0.8em; background-color: {% if item.status == 'Delivered' %}#28a745{% elif item.status == 'Cancelled' %}#dc3545{% else %}#ffc107{% endif %}; color: white;">{{ item.status }}</span></td>
 								<td>
 									{% if item.status|not_in_list:"Delivered,Cancelled,Returned,Return Confirmed,Return Processing,Waiting For Pickup,Return Completed" %}
-										<form method="post" action="{% url 'cancel_order_item' item.id %}" style="display: inline;">
+										<form method="post" id="cancel-form-{{ item.id }}" action="{% url 'cancel_order_item' item.id %}" style="display: inline;">
 											{% csrf_token %}
-											<button type="submit" class="btn-action btn-cancel" {% if item.status == 'Cancelled' %}disabled{% endif %}>Cancel</button>
+											<button type="button" class="btn-action btn-cancel" onclick="confirmCancel({{ item.id }})" {% if item.status == 'Cancelled' %}disabled{% endif %}>Cancel</button>
 										</form>
 									{% endif %}
 									{% if item.status == 'Delivered' %}
-										<form method="post" action="{% url 'return_order_item' item.id %}" style="display: inline;">
+										<form method="post" id="return-form-{{ item.id }}" action="{% url 'return_order_item' item.id %}" style="display: inline;">
 											{% csrf_token %}
-											<button type="submit" class="btn-action btn-return" {% if item.status == 'Returned' %}disabled{% endif %}>Return</button>
+											<button type="button" class="btn-action btn-return" onclick="confirmReturn({{ item.id }})" {% if item.status == 'Returned' %}disabled{% endif %}>Return</button>
 										</form>
 									{% endif %}
 								</td>
@@ -424,7 +350,14 @@
 					</tbody>
 				</table>
 			</div>
-		
+			{% else %}
+			<div>
+				<button type="button" class="btn-action btn-return" id="retry-payment-btn" data-order-id="{{ order.id }}">Retry Payment</button>
+			</div>
+			{% endif %}
+			{% if order.payment_status == 'Paid' %}
+                <a href="{% url 'download_invoice' order.id %}" class="button download-invoice">Download Invoice</a>
+            {% endif %}
 			<div style="text-align: right;">
 				<a href="{% url 'user_account' %}" class="btn-primary">Back to Orders</a>
 			</div>
@@ -531,7 +464,7 @@
 					</div>
 					<div class="col-md-3 col-sm-4 col-xs-12">
 						<div class="address-area">
-							<a href="index.html"><img src="{% static 'assets/img/home-1/footer-logo.png' %}" alt="" /></a>
+							<a href="{% url 'home' %}"><img src="{% static 'assets/img/home-1/footer-logo.png' %}" alt="" /></a>
 							<p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard.</p>
 							<div class="contact-details">
 								<ul>
@@ -593,12 +526,127 @@
 		{% comment %} <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script> {% endcomment %}
 		{% comment %} <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/4.6.0/js/bootstrap.bundle.min.js"></script> {% endcomment %}
+
+		<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+
+		<!--Sweet Alert Script-->
+		<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+		<script>
+			function confirmCancel(orderId) {
+				Swal.fire({
+					title: 'Are you sure?',
+					text: "You won't be able to revert this!",
+					icon: 'warning',
+					showCancelButton: true,
+					confirmButtonColor: '#3085d6',
+					cancelButtonColor: '#d33',
+					confirmButtonText: 'Yes, cancel it!'
+				}).then((result) => {
+					if (result.isConfirmed) {
+						document.getElementById('cancel-form-' + orderId).submit();
+					}
+				})
+			}
 		
+			function confirmReturn(orderId) {
+				Swal.fire({
+					title: 'Are you sure?',
+					text: "You can return this item!",
+					icon: 'warning',
+					showCancelButton: true,
+					confirmButtonColor: '#3085d6',
+					cancelButtonColor: '#d33',
+					confirmButtonText: 'Yes, return it!'
+				}).then((result) => {
+					if (result.isConfirmed) {
+						document.getElementById('return-form-' + orderId).submit();
+					}
+				})
+			}
+		</script>
+
+
+		<!--Retry Razorpay Payment-->
+		<script>
+		document.getElementById('retry-payment-btn').addEventListener('click', function() {
+			var orderId = this.getAttribute('data-order-id');
+			fetch('/retry-payment/' + orderId + '/')
+				.then(response => response.json())
+				.then(data => {
+					if (data.error) {
+						alert(data.error);
+					} else {
+						var options = {
+							"key": data.key,
+							"amount": data.amount,
+							"currency": data.currency,
+							"name": "Your Company Name",
+							"description": "Order Payment",
+							"order_id": data.id,
+							"handler": function (response) {
+								verifyPayment(response, data.order_id);
+							},
+							"prefill": {
+								"name": "{{ request.user.get_full_name }}",
+								"email": "{{ request.user.email }}",
+							},
+							"theme": {
+								"color": "#F37254"
+							}
+						};
+						var rzp = new Razorpay(options);
+						rzp.open();
+					}
+				})
+				.catch(error => {
+					console.error('Error:', error);
+					alert('An error occurred. Please try again.');
+				});
+		});
 		
-				<script>
-			
-				</script>
-				<!--END-->
+		function verifyPayment(response, orderId) {
+			fetch('/verify-payment/', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json',
+					'X-CSRFToken': getCookie('csrftoken')
+				},
+				body: JSON.stringify({
+					razorpay_payment_id: response.razorpay_payment_id,
+					razorpay_order_id: response.razorpay_order_id,
+					razorpay_signature: response.razorpay_signature,
+					order_id: orderId
+				})
+			})
+			.then(response => response.json())
+			.then(data => {
+				if (data.success) {
+					window.location.href = data.redirect_url;
+				} else {
+					alert('Payment verification failed. Please try again.');
+				}
+			})
+			.catch(error => {
+				console.error('Error:', error);
+				alert('An error occurred during payment verification. Please contact support.');
+			});
+		}
+		
+		function getCookie(name) {
+			let cookieValue = null;
+			if (document.cookie && document.cookie !== '') {
+				const cookies = document.cookie.split(';');
+				for (let i = 0; i < cookies.length; i++) {
+					const cookie = cookies[i].trim();
+					if (cookie.substring(0, name.length + 1) === (name + '=')) {
+						cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+						break;
+					}
+				}
+			}
+			return cookieValue;
+		}
+		</script>
 
 
 	</body>

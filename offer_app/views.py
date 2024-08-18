@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.views.decorators.http import require_POST
-from .models import Offer, Product, SubCategory
+from .models import Offer
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 import json
@@ -27,23 +27,11 @@ def offers_view(request):
         offers = offers
     
 
-    if request.method == 'POST':
-
-        offer_id = request.POST.get('offer_id')
-        action = request.POST.get('action')
-        offer = get_object_or_404(Offer, id=offer_id)
-
-        if action == 'enable' and not offer.is_valid():
-            offer.is_active = True
-        elif action == 'disable':
-            offer.is_active = False
-        offer.save()
-        return redirect('offers')
-
     context = {
 
         'offers': offers,
         'query': query,
+        'username' : request.user.username,
     }
     return render(request, 'offers.html', context)
 
@@ -55,10 +43,12 @@ def add_offer(request):
         start_date = request.POST.get('start_date')
         end_date = request.POST.get('end_date')
         discount_percentage = request.POST.get('discount_percentage')
-        is_active = request.POST.get('is_active') == 'True'
         offer_type = request.POST.get('offer_type')
 
-        validate_offer_data(name,start_date,end_date,discount_percentage)
+        errors = validate_offer_data(name,start_date,end_date,discount_percentage)
+
+        if errors:
+            return JsonResponse({'status': 'error', 'message': errors})
         
          # Create the offer
         offer = Offer(
@@ -66,8 +56,8 @@ def add_offer(request):
             start_date=start_date,
             end_date=end_date,
             discount_percentage=discount_percentage,
-            is_active=is_active,
-            offer_type=offer_type
+            offer_type=offer_type,
+            is_active = True
         )
         offer.save()
     
@@ -83,20 +73,31 @@ def edit_offer(request):
     if request.method == 'POST':
         offer_id = request.POST.get('offer_id')
         offer = get_object_or_404(Offer, id=offer_id)
+
+        name = request.POST.get('name')
+        start_date = request.POST.get('start_date')
+        end_date = request.POST.get('end_date')
+        discount_percentage = request.POST.get('discount_percentage')
+        offer_type = request.POST.get('offer_type')
+
+        errors = validate_offer_data(name,start_date,end_date,discount_percentage)
+
+        if errors:
+            return JsonResponse({'status': 'error', 'message': errors})
         
-        offer.name = request.POST.get('name')
-        offer.start_date = request.POST.get('start_date')
-        offer.end_date = request.POST.get('end_date')
-        offer.discount_percentage = request.POST.get('discount_percentage')
-        offer.is_active = request.POST.get('is_active') == 'True'
-        offer.offer_type = request.POST.get('offer_type')
+        offer.name = name
+        offer.start_date = start_date
+        offer.end_date = end_date
+        offer.discount_percentage =discount_percentage
+        offer.offer_type = offer_type
+        offer.is_active = True
         
         offer.save()
         
         messages.success(request, 'Offer has been updated successfully.')
-        return redirect('offers')
+        return JsonResponse({'status': 'success', 'message': 'Offer updated successfully'})
     
-    return redirect('offers')
+    return JsonResponse({'status': 'error', 'message': 'Invalid request method'})
 
 
 @user_passes_test(lambda u: u.is_superuser, login_url="/admin_login/")
@@ -120,7 +121,6 @@ def get_offer(request, offer_id):
         'start_date': offer.start_date.strftime('%Y-%m-%d'),
         'end_date': offer.end_date.strftime('%Y-%m-%d'),
         'discount_percentage': offer.discount_percentage,
-        'is_active': offer.is_active,
         'offer_type': offer.offer_type
     }
     return JsonResponse(data)

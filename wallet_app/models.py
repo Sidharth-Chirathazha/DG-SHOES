@@ -35,6 +35,7 @@ class WalletTransaction(models.Model):
         ('purchase', 'Purchase using wallet'),
         ('return', 'Refund for returned product'),
         ('cancellation', 'Refund for cancelled order via Razor Pay/Wallet'),
+        ('referral', 'Bonus amount for referral')
     )
 
     wallet = models.ForeignKey(Wallet, on_delete=models.CASCADE, related_name='transactions')

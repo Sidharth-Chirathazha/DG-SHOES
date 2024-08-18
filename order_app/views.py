@@ -98,10 +98,23 @@ def checkout_view(request):
                         amount = (cart_total-discount),
                         description = 'purchase'
                     )
-                    order = create_order(user, selected_address, payment_method, coupon, cart_total, discount,refund_percent, razorpay_order_id,offer_total)
+                    order,should_redirect = create_order(user, selected_address, payment_method, coupon, cart_total, discount,refund_percent, razorpay_order_id,offer_total)
                     if order:
                         return redirect('order_success', order_id=order.id)
-
+                    if should_redirect:
+                        return JsonResponse({
+                            'success' : False,
+                            'message' : "Some items in your cart are out of stock. Please review your cart.",
+                            'redirect' : reverse('home')
+                        })
+                        # messages.error(request, "Some items in your cart are out of stock. Please review your cart.")
+                        # return redirect('shop_list')
+                    if not order:
+                        return JsonResponse({
+                            'success': False,
+                            'message': "An error occurred while creating your order. Please try again.",
+                            'redirect': reverse('home')  # Replace 'home' with your home page URL name
+                        })
                 else:
                     messages.error(request, 'Insufficient wallet balance.')
                     return redirect('checkout')
@@ -121,7 +134,7 @@ def checkout_view(request):
 
                     # Create a pending order in your database
                     razorpay_order_id = razorpay_order['id']
-                    order = create_order(user, selected_address, payment_method, coupon, cart_total, discount, refund_percent, razorpay_order_id, offer_total)
+                    order,should_redirect = create_order(user, selected_address, payment_method, coupon, cart_total, discount, refund_percent, razorpay_order_id, offer_total)
 
                     # Return the Razorpay order details to the frontend
                     if order:
@@ -132,15 +145,43 @@ def checkout_view(request):
                             'key': settings.RAZORPAY_KEY_ID,
                             'order_id': order.id,
                         })
+                    if should_redirect:
+                        return JsonResponse({
+                            'success' : False,
+                            'message' : "Some items in your cart are out of stock. Please review your cart.",
+                            'redirect' : reverse('home')
+                        })
+                        # messages.error(request, "Some items in your cart are out of stock. Please review your cart.")
+                        # return redirect('shop_list')
+                    if not order:
+                        return JsonResponse({
+                            'success': False,
+                            'message': "An error occurred while creating your order. Please try again.",
+                            'redirect': reverse('home')  # Replace 'home' with your home page URL name
+                        })
                 except Exception as e:
                     print(f"Error creating Razorpay order: {str(e)}")
                     return JsonResponse({'error': 'Failed to create Razorpay order'}, status=500)
             
             else:
                 # Handle other payment methods as before
-                order = create_order(user, selected_address, payment_method, coupon, cart_total, discount, refund_percent, razorpay_order_id, offer_total)
+                order,should_redirect = create_order(user, selected_address, payment_method, coupon, cart_total, discount, refund_percent, razorpay_order_id, offer_total)
                 if order:
                     return redirect('order_success', order_id=order.id)
+                if should_redirect:
+                        return JsonResponse({
+                            'success' : False,
+                            'message' : "Some items in your cart are out of stock. Please review your cart.",
+                            'redirect' : reverse('home')
+                        })
+                        # messages.error(request, "Some items in your cart are out of stock. Please review your cart.")
+                        # return redirect('shop_list')
+                if not order:
+                    return JsonResponse({
+                        'success': False,
+                        'message': "An error occurred while creating your order. Please try again.",
+                        'redirect': reverse('home')  # Replace 'home' with your home page URL name
+                    })
 
 
     context = {
@@ -164,6 +205,18 @@ def create_order(user,address,payment_method,coupon,cart_total,discount,refund_p
 
     print(f"{offer_total},Offer total reached create order function")
 
+    # Create OrderItems and update product quantities
+    cart = Cart.objects.get(user=user)
+    cart_items = CartItem.objects.filter(cart=cart)
+    for cart_item in cart_items:
+        if cart_item.product_size.quantity < cart_item.quantity:
+            messages.error(user.request, f"{cart_item.product.product_name} is out of stock.")
+            return None, True  # Return None for order and True for redirect flag
+
+
+    payment_status = 'Pending'
+    if payment_method == 'Wallet':
+        payment_status = 'Paid'
     order = Order.objects.create(
 
         ordered_user = user,
@@ -174,14 +227,11 @@ def create_order(user,address,payment_method,coupon,cart_total,discount,refund_p
         order_date = timezone.now(),
         razorpay_order_id=razorpay_order_id,
         offer_discount_total = offer_total,
+        payment_status = payment_status
 
     )
     order.set_delivery_address(address)
     order.save()
-
-    # Create OrderItems and update product quantities
-    cart = Cart.objects.get(user=user)
-    cart_items = CartItem.objects.filter(cart=cart)
     for cart_item in cart_items:
         if cart_item.product.is_offer_applied:
            refund_amount =  (cart_item.product.discounted_price * ( Decimal(refund_percent)/ Decimal(100))).quantize(Decimal('0.01'))
@@ -208,11 +258,12 @@ def create_order(user,address,payment_method,coupon,cart_total,discount,refund_p
     cart.applied_coupon = None
     cart.save()
 
-    return order
+    return order,False
 
-
+@login_required
 @csrf_exempt
 def verify_payment(request):
+    print("Inside verify payment")
     if request.method == 'POST':
         data = json.loads(request.body)
         try:
@@ -226,7 +277,7 @@ def verify_payment(request):
             
             # Update the order status
             order = Order.objects.get(id=data['order_id'])
-            order.payment_status = 'Confirmed'
+            order.payment_status = 'Paid'
             order.save()
 
 
@@ -241,10 +292,17 @@ def verify_payment(request):
             })
         except Exception as e:
             print(f"Payment verification failed: {str(e)}")
-            return JsonResponse({'success': False, 'error': 'Payment verification failed'}, status=400)
+            order = Order.objects.get(id=data['order_id'])
+            order.payment_status = 'Pending'
+            order.save()
+            return JsonResponse({
+                'success': False, 
+                'error': 'Payment verification failed',
+                'redirect_url': reverse('order_details', args=[order.id])
+            }, status=400)
     return JsonResponse({'error': 'Invalid request'}, status=400)
 
-        
+
 
 
 @login_required

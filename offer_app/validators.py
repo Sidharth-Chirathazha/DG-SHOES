@@ -50,5 +50,4 @@ def validate_offer_data(name,start_date,end_date,discount_percentage):
         except ValueError:
             errors.append("Discount percentage must be a valid number.")
 
-    if errors:
-        raise ValidationError(errors)
+    return errors

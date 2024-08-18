@@ -2,6 +2,7 @@ from django.db import models
 from django.utils.text import slugify
 from PIL import Image
 from django.core.validators import MinValueValidator, MaxValueValidator
+from offer_app.models import Offer
 
 # Create your models here.
 
@@ -28,6 +29,7 @@ class SubCategory(models.Model):
     updated_at = models.DateTimeField(auto_now=True,auto_now_add=False)
     is_listed = models.BooleanField(default=True)
     is_offer_applied = models.BooleanField(default=False)
+    applied_offer = models.ForeignKey(Offer, null=True, blank=True, on_delete=models.SET_NULL, related_name='subcategories_applied')
     discount_percentage = models.IntegerField(null=True, blank=True, validators=[MinValueValidator(1), MaxValueValidator(99)])
 
     class Meta:

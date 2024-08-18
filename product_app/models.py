@@ -3,6 +3,8 @@ from category_app.models import Category,SubCategory
 from django.utils.text import slugify
 from PIL import Image
 from django.core.validators import MinValueValidator, MaxValueValidator
+from decimal import Decimal
+from offer_app.models import Offer
 
 # Create your models here.
 
@@ -20,6 +22,7 @@ class Product(models.Model):
     is_listed = models.BooleanField(default=True)
     featured = models.BooleanField(default=False)
     is_offer_applied = models.BooleanField(default=False)
+    applied_offer = models.ForeignKey(Offer, null=True, blank=True, on_delete=models.SET_NULL, related_name='products_applied')
     discount_percentage = models.IntegerField(null=True, blank=True, validators=[MinValueValidator(1), MaxValueValidator(99)])
     discounted_price = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True, editable=False) 
     
@@ -43,7 +46,7 @@ class Product(models.Model):
     def get_discounted_price(self):
         discount_percentage = self.get_highest_discount_percentage()
         if discount_percentage:
-            return self.price * (1 - discount_percentage / 100)
+            return self.price * (1 - Decimal(discount_percentage) / 100)
         return self.price
     
     def save(self, *args, **kwargs):

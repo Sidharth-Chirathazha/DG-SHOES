@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Sales Report</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        #sales-report {
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            padding: 20px;
+        }
+        h2 {
+            color: #2c3e50;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 10px;
+        }
+        .summary-section {
+            background-color: #ecf0f1;
+            border-radius: 4px;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+        .summary-section p {
+            margin: 10px 0;
+            font-size: 16px;
+        }
+        .summary-section p:first-child {
+            font-weight: bold;
+            color: #2980b9;
+        }
+        .table-container {
+            overflow-x: auto;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            font-size: 14px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #3498db;
+            color: white;
+            font-weight: bold;
+        }
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+        tr:hover {
+            background-color: #e0e0e0;
+        }
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+            table {
+                font-size: 12px;
+            }
+            th, td {
+                padding: 6px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <section id="sales-report">
+        <h2>Sales Report</h2>
+        
+        <div class="summary-section">
+            <p>Sales Count: {{ overall_sales_count }}</p>
+            <p>Order Amount: ₹ {{ overall_order_amount }}</p>
+            <p>Discount: ₹ {{ total_discount_amount }}</p>
+            <p>Refunded Total: ₹ {{ overall_refund_amount }}</p>
+            <p>Final Amount: ₹ {{ final_total_amount }}</p>
+        </div>
+        
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Order ID</th>
+                        <th>Payment Method</th>
+                        <th>Customer</th>
+                        <th>Original</th>
+                        <th>Coupon</th>
+                        <th>Offer</th>
+                        <th>Final</th>
+                        <th>Refunded</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for order in detailed_orders %}
+                    <tr>
+                        <td>{{ order.date }}</td>
+                        <td>{{ order.order_id }}</td>
+                        <td>Nil</td>
+                        <td>{{ order.customer_name }}</td>
+                        <td>₹ {{ order.original_amount }}</td>
+                        <td>₹ {{ order.coupon_discount }}</td>
+                        <td>₹ {{ order.offer_discount }}</td>
+                        <td>₹ {{ order.final_amount }}</td>
+                        <td>{% if order.refund_amount %}₹ {{ order.refund_amount }}{% else %}-{% endif %}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </section>
+</body>
+</html>

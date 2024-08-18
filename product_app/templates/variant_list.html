@@ -78,9 +78,69 @@
     <script src="{% static 'assets_admin/vendor/js/helpers.js' %}"></script>
     <!--! Template customizer & Theme config files MUST be included after core stylesheets and helpers.js in the <head> section -->
     <!--? Template customizer: To hide customizer set displayCustomizer value false in config.js.  -->
-    <script src="{% static 'assets_admin/vendor/js/template-customizer.js' %}"></script>
+    {% comment %} <script src="{% static 'assets_admin/vendor/js/template-customizer.js' %}"></script> {% endcomment %}
     <!--? Config:  Mandatory theme config file contain global vars & default theme options, Set your preferred theme option in this file.  -->
     <script src="{% static 'assets_admin/js/config.js' %}"></script>
+
+
+    <style>
+
+      .btn-featured {
+        padding: 0.25rem 0.5rem;
+        font-size: 0.875rem;
+      }
+      
+      /* General styles for the messages list */
+      ul.messages {
+          list-style-type: none;
+          padding: 0;
+          margin: 0;
+      }
+
+      ul.messages li.message {
+          border-radius: 5px;
+          padding: 10px 15px;
+          margin: 5px 0;
+          font-size: 16px;
+          display: flex;
+          align-items: center;
+      }
+
+      ul.messages li.message.error {
+          background-color: #f8d7da;
+          color: #721c24;
+          border: 1px solid #f5c6cb;
+      }
+
+      ul.messages li.message.success {
+          background-color: #d4edda;
+          color: #155724;
+          border: 1px solid #c3e6cb;
+      }
+
+      ul.messages li.message.warning {
+          background-color: #fff3cd;
+          color: #856404;
+          border: 1px solid #ffeeba;
+      }
+
+      ul.messages li .icon {
+          margin-right: 10px;
+          font-size: 20px;
+      }
+
+      ul.messages li .error-icon {
+          color: #721c24;
+      }
+
+      ul.messages li .success-icon {
+          color: #155724;
+      }
+
+      ul.messages li .warning-icon {
+          color: #856404;
+      }
+    </style>
     
 </head>
 
@@ -292,21 +352,6 @@
 
       <div class="navbar-nav-right d-flex align-items-center" id="navbar-collapse">
 
-        
-        <!-- Search -->
-        <div class="navbar-nav align-items-center">
-          <div class="nav-item navbar-search-wrapper mb-0">
-            <a class="nav-item nav-link search-toggler fw-normal px-0" href="javascript:void(0);">
-              <i class="ri-search-line ri-22px scaleX-n1-rtl me-1_5"></i>
-              <span class="d-none d-md-inline-block text-muted ms-1_5">Search (Ctrl+/)</span>
-            </a>
-          </div>
-        </div>
-        <!-- /Search -->
-        
-        
-
-        
 
         <ul class="navbar-nav flex-row align-items-center ms-auto">
 
@@ -394,15 +439,6 @@
         </ul>
       </div>
 
-      
-      <!-- Search Small Screens -->
-      <div class="navbar-search-wrapper search-input-wrapper  d-none">
-        <input type="text" class="form-control search-input container-xxl border-0" placeholder="Search..." aria-label="Search...">
-        <i class="ri-close-fill search-toggler cursor-pointer"></i>
-      </div>
-      
-      
-  
 </nav>
 
 <!-- / Navbar -->
@@ -420,94 +456,7 @@
           <div class="container-xxl flex-grow-1 container-p-y">
   
             
-{% comment %} 
-<div class="row g-6 mb-6">
-  <div class="col-sm-6 col-xl-3">
-    <div class="card">
-      <div class="card-body">
-        <div class="d-flex justify-content-between">
-          <div class="me-1">
-            <p class="text-heading mb-1">Session</p>
-            <div class="d-flex align-items-center">
-              <h4 class="mb-1 me-2">21,459</h4>
-              <p class="text-success mb-1">(+29%)</p>
-            </div>
-            <small class="mb-0">Total Users</small>
-          </div>
-          <div class="avatar">
-            <div class="avatar-initial bg-label-primary rounded">
-              <div class="ri-group-line ri-26px"></div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-  <div class="col-sm-6 col-xl-3">
-    <div class="card">
-      <div class="card-body">
-        <div class="d-flex justify-content-between">
-          <div class="me-1">
-            <p class="text-heading mb-1">Paid Users</p>
-            <div class="d-flex align-items-center">
-              <h4 class="mb-1 me-2">4,567</h4>
-              <p class="text-success mb-1">(+18%)</p>
-            </div>
-            <small class="mb-0">Last week analytics</small>
-          </div>
-          <div class="avatar">
-            <div class="avatar-initial bg-label-danger rounded">
-              <div class="ri-user-add-line ri-26px scaleX-n1"></div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-  <div class="col-sm-6 col-xl-3">
-    <div class="card">
-      <div class="card-body">
-        <div class="d-flex justify-content-between">
-          <div class="me-1">
-            <p class="text-heading mb-1">Active Users</p>
-            <div class="d-flex align-items-center">
-              <h4 class="mb-1 me-2">19,860</h4>
-              <p class="text-danger mb-1">(-14%)</p>
-            </div>
-            <small class="mb-0">Last week analytics</small>
-          </div>
-          <div class="avatar">
-            <div class="avatar-initial bg-label-success rounded">
-              <div class="ri-user-follow-line ri-26px"></div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-  <div class="col-sm-6 col-xl-3">
-    <div class="card">
-      <div class="card-body">
-        <div class="d-flex justify-content-between">
-          <div class="me-1">
-            <p class="text-heading mb-1">Pending Users</p>
-            <div class="d-flex align-items-center">
-              <h4 class="mb-1 me-2">237</h4>
-              <p class="text-success mb-1">(+42%)</p>
-            </div>
-            <small class="mb-0">Last week analytics</small>
-          </div>
-          <div class="avatar">
-            <div class="avatar-initial bg-label-warning rounded">
-              <div class="ri-user-search-line ri-26px"></div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
 
-</div> {% endcomment %}
 <!-- Users List Table -->
 <!-- Hoverable Table rows -->
 <div class="card">
@@ -635,6 +584,24 @@
   </nav>
 </div>
 </div>
+
+
+{% if messages %}
+    <ul class="messages">
+        {% for message in messages %}
+            <li class="message {{ message.tags }}">
+                {% if message.tags == 'error' %}
+                    <span class="icon error-icon">⚠️</span>
+                {% elif message.tags == 'success' %}
+                    <span class="icon success-icon">✅</span>
+                {% elif message.tags == 'warning' %}
+                    <span class="icon warning-icon">⚠️</span>
+                {% endif %}
+                {{ message|safe }}
+            </li>
+        {% endfor %}
+    </ul>
+{% endif %}
   
   
 </div>

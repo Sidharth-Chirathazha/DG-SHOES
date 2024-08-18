@@ -22,10 +22,12 @@ def cart_view(request):
 
     categories = Category.objects.filter(is_listed = True).prefetch_related('subcategories').filter(subcategories__is_listed =True).distinct()
     cart_total = sum(item.get_total_price() for item in cart_items)
-
+    zero_quantity_detected = False
     cart_items_with_max_quantity = []
     for item in cart_items:
         max_quantity = min(item.product_size.quantity, 5)
+        if item.product_size.quantity == 0:
+            zero_quantity_detected = True
         cart_items_with_max_quantity.append({
             'item': item,
             'max_quantity': max_quantity,
@@ -37,6 +39,7 @@ def cart_view(request):
         'cart_items_with_max_quantity': cart_items_with_max_quantity,
         'cart_total' : cart_total,
         'categories' : categories,
+        'zero_quantity_detected' : zero_quantity_detected
     }
 
     return render(request,'cart_detail.html',context)

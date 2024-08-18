@@ -49,7 +49,7 @@
 
 			.bannerhead-area {
 
-				background: rgba(0, 0, 0, 0) url('{% static 'assets/img/header-banner.jpg' %}') no-repeat scroll center center;
+				background: rgba(0, 0, 0, 0) url('{% static 'assets/img/banner-cart-2.jpg' %}') no-repeat scroll center center;
 				position: relative;
 
 			  }
@@ -146,57 +146,39 @@
 				<div class="row">
 					<div class="col-md-2 col-sm-2">
 						<div class="logo-area">
-							<a href="index.html"><img src="{% static 'assets/img/home-1/logo_dg_footer.png' %}" width="110" height="50" alt="" /></a>
+							<a href="{% url 'home' %}"><img src="{% static 'assets/img/home-1/logo_dg_footer.png' %}" width="110" height="50" alt="" /></a>
 						</div>
 					</div>
 					<div class="col-md-8 col-sm-8">
 						<div class="main-menu">
 							<ul class="list-inline">
-							  <li class="expand active"><a href="{% if user.is_authenticated %}{% url 'home' %}{% else %}{% url 'index' %}{% endif %}">HOME</a>
-								<ul class="single sub-menu">
-									<li class="sub-menu-title"><a href="index.html">Home Pages</a></li>
-									<li><a href="index.html">Home Version One</a></li>
-									<li><a href="index-2.html">Home Version Two</a></li>
-								</ul>
+							  <li class="expand active"><a href="{% url 'home' %}">HOME</a>
 							  </li>
 							  <li><a href="#">CATEGORIES</a>
 								<!-- Mega Menu Four Column -->
 								<div class="mega-menu">
 									{% for category in categories%}
 									<span>
-										<a href="#" class="mega-title">{{ category.category_name }}</a>
+										<a href="{% url 'shop_list' %}?category={{category.category_name}}" class="mega-title">{{ category.category_name }}</a>
 										<a href="#"><img alt="{{category.category_name}}" src="{{category.image.url}}"/></a>
 										{% for subcategory in category.subcategories.all %}
 										{% if subcategory.is_listed %}
-										<a href="shop.html">{{ subcategory.subcategory_name}}</a>
+										<a href="{% url 'shop_list' %}?category={{category.category_name}}&subcategory={{subcategory.subcategory_name}}">{{ subcategory.subcategory_name}}</a>
 										{% endif %}
 										{% endfor %}
 									</span>
 									{% endfor %}
 									<span class="mega-menu-img">
 										<a href="{% url 'shop_list' %}" class="mega-title">ALL PRODUCTS</a>
-										<a href="#"><img alt="" src="{% static 'assets/img/other-pg/img_menu.jpg' %}"></a>
+										<a href="#"><img alt="" src="{% static 'assets/img/other-pg/img_menu.jpg' %}"/></a>
 									</span>
 								</div>
-							  </li>  
+							  </li>
 							  
 							  <li><a href="about-us.html">ABOUT</a></li>
 							  <li class="expand"><a href="{% url 'user_account' %}">ACCOUNT</a>
-								<ul class="single sub-menu">
-									<li><a href="about-us.html">About</a></li>
-									<li><a href="shop.html">Shop</a></li>
-									<li><a href="shoping-cart.html">Shop Cart</a></li>
-									<li><a href="shop-list.html">Shop List</a></li>
-									<li><a href="single-product.html">Single Product</a></li>
-									<li><a href="wishlist.html">Wishlist</a></li>
-									<li><a href="checkout.html">Checkout</a></li>
-									<li><a href="account.html">Account</a></li>
-									<li><a href="login.html">Log In</a></li>
-									<li><a href="contact-us.html">Contact Us</a></li>
-									<li><a href="404.html">404 Error</a></li>
-								</ul>
 							  </li>
-							  <li><a href="contact-us.html">CONTACT</a></li>
+							  <li><a href="{% url 'contact_us' %}">CONTACT</a></li>
 							</ul>
 						</div>
 					</div>
@@ -209,32 +191,31 @@
 									<div class="mobile-menu">
 										<nav id="mobile-nav">
 											<ul>
-												<li><a href="index.html">Home </a>
-													<ul>
-														<li><a href="index.html">Home version one</a></li>
-														<li><a href="index-2.html">Home Version two</a></li>
-													</ul>
+												<li><a href="{% url 'home' %}">Home </a></li>
+												<li><a href="#">CATEGORIES</a>
+												<!-- Mega Menu Four Column -->
+												<div class="mega-menu">
+													{% for category in categories%}
+													<span>
+														<a href="{% url 'shop_list' %}?category={{category.category_name}}" class="mega-title">{{ category.category_name }}</a>
+														<a href="#"><img alt="{{category.category_name}}" src="{{category.image.url}}"/></a>
+														{% for subcategory in category.subcategories.all %}
+														{% if subcategory.is_listed %}
+														<a href="{% url 'shop_list' %}?category={{category.category_name}}&subcategory={{subcategory.subcategory_name}}">{{ subcategory.subcategory_name}}</a>
+														{% endif %}
+														{% endfor %}
+													</span>
+													{% endfor %}
+													<span class="mega-menu-img">
+														<a href="{% url 'shop_list' %}" class="mega-title">ALL PRODUCTS</a>
+														<a href="#"><img alt="" src="{% static 'assets/img/other-pg/img_menu.jpg' %}"/></a>
+													</span>
+												</div>
 												</li>
-												<li><a href="shop.html"> Shop </a></li>
 												<li><a href="about-us.html"> About Us </a></li>
-												<li><a href="#"> Pages </a>
-													<ul>
-														<li><a href="about-us.html">About Us</a></li>
-														<li><a href="shop.html">Shop</a></li>
-														<li><a href="shop-list.html">Shop List</a></li>
-														<li><a href="shoping-cart.html">Shop Cart</a></li>
-														<li><a href="single-product.html">Single Product</a></li>
-														<li><a href="checkout.html">Checkout</a></li>
-														<li><a href="account.html">My Account</a></li>
-														<li><a href="login.html">Login</a></li>
-														<li><a href="wishlist.html">Wishlist</a></li>
-														<li><a href="contact-us.html">Contact</a></li>
-														<li><a href="404.html">404 Error</a></li>
-													</ul>
+												<li><a href="{% url 'user_account'%}"> Account </a>
 												</li>
-												<li><a href="#"> Returns </a></li>
-												<li><a href="#"> Orders </a></li>
-												<li><a href="contact-us.html"> Contact Us </a></li>
+												<li><a href="{% url 'contact_us' %}"> Contact Us </a></li>
 											</ul>
 										</nav>
 									</div>	
@@ -266,45 +247,6 @@
 										<span>{{ cart_item_count }}</span>
 										{% endif %}
 									</a>
-									{% comment %} <div class="top-cart-content">
-										<div class="media header-middle-checkout">
-											<div class="media-left check-img">
-												<a href="#">
-													<img alt="" src="{% static 'assets/img/other-pg/cart-1.jpg' %}">
-												</a>
-											</div>
-											<div class="media-body checkout-content">
-												<h4 class="media-heading">
-													<a href="#">Men Pumping Show</a>
-													<span title="Remove This Item" class="btn-remove checkout-remove">
-														<i class="fa fa-trash"></i>
-													</span>
-												</h4>
-												<p>1 x $111.00</p>
-											</div>
-										</div>
-										<div class="media header-middle-checkout last-child"><!-- Cart Middle Check Out -->
-											<div class="media-left check-img">
-												<a href="#">
-													<img alt="" src="{% static 'assets/img/other-pg/cart-2.jpg' %}">
-												</a>
-											</div>
-											<div class="media-body checkout-content">
-												<h4 class="media-heading">
-													<a href="#">Women Pump Show</a>
-													<span title="Remove This Item" class="btn-remove checkout-remove">
-														<i class="fa fa-trash"></i>
-													</span>
-												</h4>
-												<p>1 x $111.00</p>
-											</div>
-										</div>
-										<div class="actions">
-											<button type="button" title="Checkout-botton" class="Checkout-botton">
-												<span>Checkout</span>
-											</button>
-										</div>
-									</div> {% endcomment %}
 								</li>
 							</ul>
 						</div>
@@ -319,7 +261,7 @@
 				<div class="row">
 					<div class="col-md-12">
 						<div class="banner-heading">
-							<h1>SHOPPING CART</h1>
+							<h1 style="color:black;">SHOPPING CART</h1>
 						</div>
 					</div>
 				</div>
@@ -342,7 +284,6 @@
 										<th class="product-remove">Remove</th>
 										<th class="product-image">Image</th>
 										<th class="product-name">Product Name</th>
-										<th class="product-edit">Edit</th>
 										<th class="product-unit-price">Unit Price</th>
 										<th class="product-quantity">Quantity</th>
 										<th class="product-subtotal">Subtotal</th>
@@ -361,15 +302,12 @@
 											<h3><a href="#">{{ cart_item.item.product.product_name}}</a></h3>
 											<p>Color: {{ cart_item.item.product_color.color_name }}, Size: {{ cart_item.item.product_size.size }}</p>
 										</td>
-										<td class="product-edit">
-											<p><a href="#">Edit</a></p>
-										</td>
 										<td class="product-unit-price">
 											{% if cart_item.item.product.is_offer_applied %}
-											<del style = "color:red; font-size:12px;">Rs. {{ cart_item.item.product.price }}</del>
-											<p>Rs. {{ cart_item.item.product.discounted_price }}</p>
+											<del style = "color:red; font-size:12px;">₹ {{ cart_item.item.product.price }}</del>
+											<p>₹ {{ cart_item.item.product.discounted_price }}</p>
 											{% else %}
-											<p>Rs. {{ cart_item.item.product.price }} </p>
+											<p>₹ {{ cart_item.item.product.price }} </p>
 											{% endif %}
 										</td>
 										<td class="product-quantity product-cart-details">
@@ -382,7 +320,7 @@
 											</div>
 										</td>
 										<td class="product-quantity">
-											<p>Rs. {{ cart_item.item.get_total_price }}</p>
+											<p>₹ {{ cart_item.item.get_total_price }}</p>
 										</td>
 									</tr>
 									{% endfor %}
@@ -419,13 +357,18 @@
 					<div class="col-md-6">
 						<div class="subtotal-main-area" data-initial-cart-total="{{ cart_total }}">
 							{% comment %} <div class="subtotal-area">
-								<h2>SUBTOTAL<span id="cart-subtotal">Rs. {{ cart_total }}</span></h2>
+								<h2>SUBTOTAL<span id="cart-subtotal">₹ {{ cart_total }}</span></h2>
 							</div> {% endcomment %}
 							<div class="subtotal-area">
-								<h2>GRAND TOTAL<span id="cart-grand-total">Rs. {{ cart_total }}</span></h2>
+								<h2>GRAND TOTAL<span id="cart-grand-total">₹ {{ cart_total }}</span></h2>
 							</div>
-							<a href="{% url 'checkout' %}">CHECKOUT</a>
-							<p>Checkout With Multiple Addresses</p>
+							{% if not zero_quantity_detected %}
+                            <a href="{% url 'checkout' %}">CHECKOUT</a>
+                            <p>Checkout With Multiple Addresses</p>
+                        	{% else %}
+                            {% comment %} <a href="#" class="disabled">CHECKOUT</a> {% endcomment %}
+                            <p style="color:red;">Please check items are available in stock</p>
+                        	{% endif %}
 						</div>
 					</div>
 				</div>
@@ -533,7 +476,7 @@
 					</div>
 					<div class="col-md-3 col-sm-4 col-xs-12">
 						<div class="address-area">
-							<a href="index.html"><img src="{% static 'assets/img/home-1/footer-logo.png' %}" alt="" /></a>
+							<a href="{% url 'home' %}"><img src="{% static 'assets/img/home-1/footer-logo.png' %}" alt="" /></a>
 							<p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard.</p>
 							<div class="contact-details">
 								<ul>
@@ -601,7 +544,7 @@
 				});
 		
 				function updateCartTotal() {
-					grandTotalElement.textContent = `Rs. ${cartTotal.toFixed(2)}`;
+					grandTotalElement.textContent = `₹ ${cartTotal.toFixed(2)}`;
 				}
 		
 				updateCartTotal(); // Initial update
@@ -642,7 +585,7 @@
 		
 						const newItemTotal = newQuantity * price;
 						const itemTotalElement = this.closest('tr').querySelector('.product-quantity p');
-						itemTotalElement.textContent = `Rs. ${newItemTotal.toFixed(2)}`;
+						itemTotalElement.textContent = `₹ ${newItemTotal.toFixed(2)}`;
 		
 						updateCartTotal();
 						this.defaultValue = newQuantity;

@@ -88,6 +88,60 @@
   <!-- Include Bootstrap CSS and JS for modal support -->
   
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/assets/css/bootstrap.min.css" >
+
+
+  <style>
+    /* General styles for the messages list */
+    ul.messages {
+        list-style-type: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    ul.messages li.message {
+        border-radius: 5px;
+        padding: 10px 15px;
+        margin: 5px 0;
+        font-size: 16px;
+        display: flex;
+        align-items: center;
+    }
+
+    ul.messages li.message.error {
+        background-color: #f8d7da;
+        color: #721c24;
+        border: 1px solid #f5c6cb;
+    }
+
+    ul.messages li.message.success {
+        background-color: #d4edda;
+        color: #155724;
+        border: 1px solid #c3e6cb;
+    }
+
+    ul.messages li.message.warning {
+        background-color: #fff3cd;
+        color: #856404;
+        border: 1px solid #ffeeba;
+    }
+
+    ul.messages li .icon {
+        margin-right: 10px;
+        font-size: 20px;
+    }
+
+    ul.messages li .error-icon {
+        color: #721c24;
+    }
+
+    ul.messages li .success-icon {
+        color: #155724;
+    }
+
+    ul.messages li .warning-icon {
+        color: #856404;
+    }
+  </style>
   
     
 </head>
@@ -481,6 +535,23 @@
             
 
 </div>
+
+{% if messages %}
+    <ul class="messages">
+        {% for message in messages %}
+            <li class="message {{ message.tags }}">
+                {% if message.tags == 'error' %}
+                    <span class="icon error-icon">⚠️</span>
+                {% elif message.tags == 'success' %}
+                    <span class="icon success-icon">✅</span>
+                {% elif message.tags == 'warning' %}
+                    <span class="icon warning-icon">⚠️</span>
+                {% endif %}
+                {{ message|safe }}
+            </li>
+        {% endfor %}
+    </ul>
+{% endif %}
  
 
   

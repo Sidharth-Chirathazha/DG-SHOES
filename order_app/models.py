@@ -7,6 +7,7 @@ from django.utils import timezone
 from datetime import timedelta
 from django.utils.crypto import get_random_string
 from decimal import Decimal
+import uuid
 
 # Create your models here.
 
@@ -18,6 +19,11 @@ class Order(models.Model):
         ('RazorPay', 'RazorPay'),
         # Add more payment methods as needed
     ]
+    PAYMENT_STATUS_CHOICES = [     
+        ('Pending','Pending'),
+        ('Paid','Paid'),
+    ]
+
     ordered_user = models.ForeignKey(CustomUser,on_delete=models.CASCADE,related_name='orders')
     delivery_address = models.ForeignKey(Address,on_delete=models.SET_NULL,null=True,blank=True,related_name='order_address')
     delivery_name = models.CharField(max_length=255,blank=False, null=False)
@@ -38,7 +44,8 @@ class Order(models.Model):
     offer_discount_total = models.DecimalField(null=True,blank=True,max_digits=10, decimal_places=2, default=0)
     razorpay_order_id = models.CharField(max_length=100, null=True, blank=True)
     razorpay_payment_id = models.CharField(max_length=100, null=True, blank=True)
-    payment_status = models.CharField(max_length=20, default='Pending')
+    payment_status = models.CharField(max_length=20, choices=PAYMENT_STATUS_CHOICES, default='Pending')
+    invoice_number = models.CharField(max_length=50, unique=True, null=True, blank=True)
 
     def __str__(self):
         return f"Order {self.id} by {self.ordered_user.username}"
@@ -69,6 +76,13 @@ class Order(models.Model):
         self.delivery_phone_number = address.phone_number
         self.delivery_address_line = address.address_line
         self.delivery_landmark = address.landmark
+
+    def generate_invoice_number(self):
+        # Generate a unique invoice number if it doesn't exist
+        if not self.invoice_number:
+            self.invoice_number = f"INV-{uuid.uuid4().hex[:8].upper()}"
+            self.save()
+        return self.invoice_number
     
 
     

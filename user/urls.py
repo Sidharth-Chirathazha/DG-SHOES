@@ -15,5 +15,6 @@ urlpatterns = [
     path('verify_password/',views.verifyPassword,name='verify_password'),
     path('shop_list/',views.shopList,name='shop_list'),
     path('product_detail/<int:pk>/',views.product_detail_view,name='product_detail'),
+    path('contact_us/',views.contactUs,name='contact_us'),
 
 ]

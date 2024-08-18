@@ -37,22 +37,23 @@ def coupons_view(request):
     else:
         coupons = all_coupons
 
-    # if request.method == 'POST':
-    #     coupon_id = request.POST.get('coupon_id')
-    #     action = request.POST.get('action')
-    #     coupon = get_object_or_404(Coupons,id=coupon_id)
+    if request.method == 'POST':
+        coupon_id = request.POST.get('coupon_id')
+        action = request.POST.get('action')
+        coupon = get_object_or_404(Coupons,id=coupon_id)
 
-    #     if action == 'enable' and not coupon.is_expired():
-    #         coupon.is_active = True
-    #     elif action == 'disable':
-    #         coupon.is_active = False
-    #     coupon.save()
-    #     return redirect('coupons')
+        if action == 'enable' and not coupon.is_expired():
+            coupon.is_active = True
+        elif action == 'disable':
+            coupon.is_active = False
+        coupon.save()
+        return redirect('coupons')
     
     context = {
 
         'coupons': coupons,
         'query': query,
+        'username' : request.user.username,
     }
 
     return render(request,'coupons.html',context)

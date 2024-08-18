@@ -159,6 +159,55 @@
 			font-size: 14px;
 			margin-right: 5px;
 		}
+
+		.sidebar-widget {
+			margin-bottom: 30px;
+		}
+		
+		.sidebar-widget h4 {
+			font-size: 16px;
+			margin-bottom: 15px;
+			border-bottom: 1px solid #ddd;
+			padding-bottom: 10px;
+		}
+
+
+		.color-options a {
+			display: inline-block;
+			width: 25px;
+			height: 25px;
+			border-radius: 50%;
+			margin-right: 5px;
+		}
+
+
+
+			.product-grid {
+			  display: flex;
+			  flex-wrap: wrap;
+			  margin: 0 -15px; /* Adjust based on your column padding */
+			}
+			
+			.product-grid > div {
+			  flex: 0 0 33.333%; /* For 3 columns */
+			  max-width: 33.333%;
+			  padding: 0 15px;
+			  margin-bottom: 30px; /* Adjust as needed */
+			}
+			
+			@media (max-width: 991px) {
+			  .product-grid > div {
+				flex: 0 0 50%;
+				max-width: 50%;
+			  }
+			}
+			
+			@media (max-width: 575px) {
+			  .product-grid > div {
+				flex: 0 0 100%;
+				max-width: 100%;
+			  }
+			}
 			
 		</style>
     </head>
@@ -223,74 +272,39 @@
 				<div class="row">
 					<div class="col-md-2 col-sm-2">
 						<div class="logo-area">
-							<a href="index.html"><img src="{% static 'assets/img/home-1/logo_dg_footer.png' %}" width="110" height="50" alt="" /></a>
+							<a href="{% if user.is_authenticated %}{% url 'home' %}{% else %}{% url 'index' %}{% endif %}"><img src="{% static 'assets/img/home-1/logo_dg_footer.png' %}" width="110" height="50" alt="" /></a>
 						</div>
 					</div>
 					<div class="col-md-8 col-sm-8">
 						<div class="main-menu">
 							<ul class="list-inline">
 							  <li class="expand active"><a href="{% if user.is_authenticated %}{% url 'home' %}{% else %}{% url 'index' %}{% endif %}">HOME</a>
-								<ul class="single sub-menu">
-									<li class="sub-menu-title"><a href="index.html">Home Pages</a></li>
-									<li><a href="index.html">Home Version One</a></li>
-									<li><a href="index-2.html">Home Version Two</a></li>
-								</ul>
 							  </li>
 							  <li><a href="#">CATEGORIES</a>
 								<!-- Mega Menu Four Column -->
 								<div class="mega-menu">
 									{% for category in categories%}
 									<span>
-										<a href="{% url 'shop_list' %}?category={{category.category_name}}{% if query %}&q={{ query }}{% endif %}" class="mega-title">{{ category.category_name }}</a>
+										<a href="{% url 'shop_list' %}?category={{category.category_name}}" class="mega-title">{{ category.category_name }}</a>
 										<a href="#"><img alt="{{category.category_name}}" src="{{category.image.url}}"/></a>
 										{% for subcategory in category.subcategories.all %}
 										{% if subcategory.is_listed %}
-										<a href="{% url 'shop_list' %}?category={{category.category_name}}&subcategory={{subcategory.subcategory_name}}{% if query %}&q={{ query }}{% endif %}">{{ subcategory.subcategory_name}}</a>
+										<a href="{% url 'shop_list' %}?category={{category.category_name}}&subcategory={{subcategory.subcategory_name}}">{{ subcategory.subcategory_name}}</a>
 										{% endif %}
 										{% endfor %}
 									</span>
 									{% endfor %}
 									<span class="mega-menu-img">
 										<a href="{% url 'shop_list' %}" class="mega-title">ALL PRODUCTS</a>
-										<a href="#"><img alt="" src="{% static 'assets/img/home-2/slider-4.jpg' %}"></a>
+										<a href="#"><img alt="" src="{% static 'assets/img/other-pg/img_menu.jpg' %}"/></a>
 									</span>
 								</div>
 							  </li>
-							  {% comment %} <li><a href="#">MEN</a>
-								<div class="mega-menu two-column">
-									<span>
-										<a href="#" class="mega-title">Categories 01</a>
-										<a href="shop.html">Washing machine 1</a>
-										<a href="shop.html">Washing machine 2</a>
-										<a href="shop.html">Washing machine 3</a>
-										<a href="shop.html">Washing machine 4</a>
-									</span>
-									<span>
-										<a href="#" class="mega-title">Categories 02</a>
-										<a href="shop.html">Washing machine 1</a>
-										<a href="shop.html">Washing machine 2</a>
-										<a href="shop.html">Washing machine 3</a>
-										<a href="shop.html">Washing machine 4</a>
-									</span>
-								</div>
-							  </li> {% endcomment %}
+							  
 							  <li><a href="about-us.html">ABOUT</a></li>
 							  <li class="expand"><a href="{% url 'user_account' %}">ACCOUNT</a>
-								<ul class="single sub-menu">
-									<li><a href="about-us.html">About</a></li>
-									<li><a href="shop.html">Shop</a></li>
-									<li><a href="shoping-cart.html">Shop Cart</a></li>
-									<li><a href="shop-list.html">Shop List</a></li>
-									<li><a href="single-product.html">Single Product</a></li>
-									<li><a href="wishlist.html">Wishlist</a></li>
-									<li><a href="checkout.html">Checkout</a></li>
-									<li><a href="account.html">Account</a></li>
-									<li><a href="login.html">Log In</a></li>
-									<li><a href="contact-us.html">Contact Us</a></li>
-									<li><a href="404.html">404 Error</a></li>
-								</ul>
 							  </li>
-							  <li><a href="contact-us.html">CONTACT</a></li>
+							  <li><a href="{% url 'contact_us' %}">CONTACT</a></li>
 							</ul>
 						</div>
 					</div>
@@ -303,32 +317,31 @@
 									<div class="mobile-menu">
 										<nav id="mobile-nav">
 											<ul>
-												<li><a href="index.html">Home </a>
-													<ul>
-														<li><a href="index.html">Home version one</a></li>
-														<li><a href="index-2.html">Home Version two</a></li>
-													</ul>
+												<li><a href="{% if user.is_authenticated %}{% url 'home' %}{% else %}{% url 'index' %}{% endif %}">Home </a></li>
+												<li><a href="#">CATEGORIES</a>
+												<!-- Mega Menu Four Column -->
+												<div class="mega-menu">
+													{% for category in categories%}
+													<span>
+														<a href="{% url 'shop_list' %}?category={{category.category_name}}" class="mega-title">{{ category.category_name }}</a>
+														<a href="#"><img alt="{{category.category_name}}" src="{{category.image.url}}"/></a>
+														{% for subcategory in category.subcategories.all %}
+														{% if subcategory.is_listed %}
+														<a href="{% url 'shop_list' %}?category={{category.category_name}}&subcategory={{subcategory.subcategory_name}}">{{ subcategory.subcategory_name}}</a>
+														{% endif %}
+														{% endfor %}
+													</span>
+													{% endfor %}
+													<span class="mega-menu-img">
+														<a href="{% url 'shop_list' %}" class="mega-title">ALL PRODUCTS</a>
+														<a href="#"><img alt="" src="{% static 'assets/img/other-pg/img_menu.jpg' %}"/></a>
+													</span>
+												</div>
 												</li>
-												<li><a href="shop.html"> Shop </a></li>
 												<li><a href="about-us.html"> About Us </a></li>
-												<li><a href="{% url 'user_account' %}"> Account </a>
-													<ul>
-														<li><a href="about-us.html">About Us</a></li>
-														<li><a href="shop.html">Shop</a></li>
-														<li><a href="shop-list.html">Shop List</a></li>
-														<li><a href="shoping-cart.html">Shop Cart</a></li>
-														<li><a href="single-product.html">Single Product</a></li>
-														<li><a href="checkout.html">Checkout</a></li>
-														<li><a href="account.html">My Account</a></li>
-														<li><a href="login.html">Login</a></li>
-														<li><a href="wishlist.html">Wishlist</a></li>
-														<li><a href="contact-us.html">Contact</a></li>
-														<li><a href="404.html">404 Error</a></li>
-													</ul>
+												<li><a href="{% url 'user_account'%}"> Account </a>
 												</li>
-												<li><a href="#"> Returns </a></li>
-												<li><a href="#"> Orders </a></li>
-												<li><a href="contact-us.html"> Contact Us </a></li>
+												<li><a href="{% url 'contact_us' %}"> Contact Us </a></li>
 											</ul>
 										</nav>
 									</div>	
@@ -360,45 +373,6 @@
 										<span>{{ cart_item_count }}</span>
 										{% endif %}
 									</a>
-									{% comment %} <div class="top-cart-content">
-										<div class="media header-middle-checkout">
-											<div class="media-left check-img">
-												<a href="#">
-													<img alt="" src="{% static 'assets/img/other-pg/cart-1.jpg' %}">
-												</a>
-											</div>
-											<div class="media-body checkout-content">
-												<h4 class="media-heading">
-													<a href="#">Men Pumping Show</a>
-													<span title="Remove This Item" class="btn-remove checkout-remove">
-														<i class="fa fa-trash"></i>
-													</span>
-												</h4>
-												<p>1 x $111.00</p>
-											</div>
-										</div>
-										<div class="media header-middle-checkout last-child"><!-- Cart Middle Check Out -->
-											<div class="media-left check-img">
-												<a href="#">
-													<img alt="" src="{% static 'assets/img/other-pg/cart-2.jpg' %}">
-												</a>
-											</div>
-											<div class="media-body checkout-content">
-												<h4 class="media-heading">
-													<a href="#">Women Pump Show</a>
-													<span title="Remove This Item" class="btn-remove checkout-remove">
-														<i class="fa fa-trash"></i>
-													</span>
-												</h4>
-												<p>1 x $111.00</p>
-											</div>
-										</div>
-										<div class="actions">
-											<button type="button" title="Checkout-botton" class="Checkout-botton">
-												<span>Checkout</span>
-											</button>
-										</div>
-									</div> {% endcomment %}
 								</li>
 							</ul>
 						</div>
@@ -450,56 +424,27 @@
 									</ul>
 								</div>
 							</div>
-							<!-- Price Slider -->
-							<div class="price-slider">
+							{% comment %} <!-- Price Range -->
+							<div class="sidebar-widget">
 								<h4>PRICE RANGE</h4>
-								<aside class="widget shop-filter">
-									<div class="info_widget">
-										<div class="price_filter">
-											<div id="slider-range"></div>
-											<div class="price_slider_amount">
-												<input type="text" id="amount" name="price" placeholder="Add Your Price" />
-												<input type="submit" value="Filter"/>  
-											</div>
-										</div>
-									</div>							
-								</aside>
-							</div>
+								<select class="form-control" id="price-range">
+									<option value="0-100">₹0 - ₹2000</option>
+									<option value="100-200">₹2000 - ₹5000</option>
+									<option value="300+">₹5000+</option>
+								</select>
+							</div> {% endcomment %}
 		
 							<!-- Color Options (replacing Sizes) -->
-							<div class="color-options">
+							<!-- Colors -->
+							<div class="sidebar-widget">
 								<h4>COLORS</h4>
-								<ul>
-									<li><a href="#" style="background-color: #ff0000;"></a></li>
-									<li><a href="#" style="background-color: #00ff00;"></a></li>
-									<li><a href="#" style="background-color: #0000ff;"></a></li>
-									<li><a href="#" style="background-color: #ffff00;"></a></li>
-									<li><a href="#" style="background-color: #ff00ff;"></a></li>
-								</ul>
-							</div>
-		
-							<!-- Popular Tags -->
-							<div class="popular-tag">
-								<h4>POPULAR TAG</h4>
-								<ul>
-									<li><a href="#">kids</a></li>
-									<li><a href="#">fashion</a></li>
-									<li><a href="#">dresses</a></li>
-									<li><a href="#">shopy</a></li>
-									<li><a href="#">nice</a></li>
-									<li><a href="#">child</a></li>
-								</ul>
-							</div>
-		
-							<!-- Compare Products -->
-							<div class="compare-products">
-								<h4>COMPARE PRODUCTS</h4>
-								<p>You have no item to compare</p>
-								<div class="single-product">
-									<a href="#"><img src="{% static 'assets/img/other-pg/wishlist-1.jpg' %}" alt="" />
-									<span>$ 60</span>
-									<p>SAVE UP TO 25% OFF</p>
-									</a>
+								<div class="color-options">
+									<a href="?color=red{% if selected_category %}&category={{ selected_category }}{% endif %}{% if selected_subcategory %}&subcategory={{ selected_subcategory }}{% endif %}{% if query %}&q={{ query }}{% endif %}" style="background-color: #ff0000;" class="{% if selected_color == 'red' %}selected-color{% endif %}"></a>
+									<a href="?color=grey{% if selected_category %}&category={{ selected_category }}{% endif %}{% if selected_subcategory %}&subcategory={{ selected_subcategory }}{% endif %}{% if query %}&q={{ query }}{% endif %}" style="background-color: #a6a6a6;" class="{% if selected_color == 'grey' %}selected-color{% endif %}"></a>
+									<a href="?color=blue{% if selected_category %}&category={{ selected_category }}{% endif %}{% if selected_subcategory %}&subcategory={{ selected_subcategory }}{% endif %}{% if query %}&q={{ query }}{% endif %}" style="background-color: #0000ff;" class="{% if selected_color == 'blue' %}selected-color{% endif %}"></a>
+									<a href="?color=yellow{% if selected_category %}&category={{ selected_category }}{% endif %}{% if selected_subcategory %}&subcategory={{ selected_subcategory }}{% endif %}{% if query %}&q={{ query }}{% endif %}" style="background-color: #ffff00;" class="{% if selected_color == 'yellow' %}selected-color{% endif %}"></a>
+									<a href="?color=pink{% if selected_category %}&category={{ selected_category }}{% endif %}{% if selected_subcategory %}&subcategory={{ selected_subcategory }}{% endif %}{% if query %}&q={{ query }}{% endif %}" style="background-color: #ff00ff;" class="{% if selected_color == 'pink' %}selected-color{% endif %}"></a>
+									<a href="?color=black{% if selected_category %}&category={{ selected_category }}{% endif %}{% if selected_subcategory %}&subcategory={{ selected_subcategory }}{% endif %}{% if query %}&q={{ query }}{% endif %}" style="background-color: #000000;" class="{% if selected_color == 'black' %}selected-color{% endif %}"></a>
 								</div>
 							</div>
 		
@@ -546,7 +491,7 @@
 					<div class="col-md-9">
 						<div class="shop-right-area">
 							<div class="shop-banner">
-								<img src="img/other-pg/shop-1.jpg" alt="" />
+								<img src="{% static 'assets/img/other-pg/shop-1.jpg' %}" alt="" />
 							</div>
 							<div class="shop-tab-area">
 								<!--NAV PILL-->
@@ -571,66 +516,68 @@
 								<!--SHOPLIST START-->
 								<div class="tab-content">
 									<div class="row tab-pane active" id="grid">
-										{% for product,color_image in page_obj %}
-										<div class="col-md-4 col-sm-4">
-											<div class="single-product">
-												<div class="product-image">
-													<a class="product-img" href="{% url 'product_detail' product.id %}?variant={{ color_image.id }}">
-														<img class="primary-img" src="{{ color_image.image_1.url }}" alt="{{ product.product_name }}" />
-														<img class="secondary-img" src="{{ color_image.image_2.url }}" alt="{{ product.product_name }}" />
-													</a>
-												</div>
-												{% if product.is_offer_applied %}
-												<span class="onsale">
-													<span class="sale-text fs-5">{{product.discount_percentage}}%</span>
-												</span>
-												{% endif %}
-												<div class="product-action">
-													<h4 class="product-name"><a href="{% url 'product_detail' product.id %}?variant={{ color_image.id }}">{{ product.product_name }}</a></h4>
-													<div class="rating-price-wrapper">
-														<ul class="pro-rating">
-															<li class="pro-ratcolor"><i class="fa fa-star" style="font-size: 10px;"></i></li>
-															<li class="pro-ratcolor"><i class="fa fa-star" style="font-size: 10px;"></i></li>
-															<li class="pro-ratcolor"><i class="fa fa-star" style="font-size: 10px;"></i></li>
-															<li><i class="fa fa-star" style="font-size: 10px;"></i></li>
-															<li><i class="fa fa-star" style="font-size: 10px;"></i></li>
-														</ul>
-														{% if color_image.total_quantity == 0 %}
-														<span class="price out-of-stock">Out of stock</span>
-														{% else %}
-															{% if product.is_offer_applied %}
-															<span class="price">
-																<span class="original-price">Rs. {{ product.price }}</span>
-																Rs. {{ product.discounted_price }}
-															</span>
+										<div class="product-grid d-flex flex-wrap">
+											{% for product,color_image in page_obj %}
+											<div class="col-md-4 col-sm-4">
+												<div class="single-product">
+													<div class="product-image">
+														<a class="product-img" href="{% url 'product_detail' product.id %}?variant={{ color_image.id }}">
+															<img class="primary-img" src="{{ color_image.image_1.url }}" alt="{{ product.product_name }}" />
+															<img class="secondary-img" src="{{ color_image.image_2.url }}" alt="{{ product.product_name }}" />
+														</a>
+													</div>
+													{% if product.is_offer_applied %}
+													<span class="onsale">
+														<span class="sale-text fs-5">{{product.discount_percentage}}%</span>
+													</span>
+													{% endif %}
+													<div class="product-action">
+														<h4 class="product-name"><a href="{% url 'product_detail' product.id %}?variant={{ color_image.id }}">{{ product.product_name }}</a></h4>
+														<div class="rating-price-wrapper">
+															<ul class="pro-rating">
+																<li class="pro-ratcolor"><i class="fa fa-star" style="font-size: 10px;"></i></li>
+																<li class="pro-ratcolor"><i class="fa fa-star" style="font-size: 10px;"></i></li>
+																<li class="pro-ratcolor"><i class="fa fa-star" style="font-size: 10px;"></i></li>
+																<li><i class="fa fa-star" style="font-size: 10px;"></i></li>
+																<li><i class="fa fa-star" style="font-size: 10px;"></i></li>
+															</ul>
+															{% if color_image.total_quantity == 0 %}
+															<span class="price out-of-stock">Out of stock</span>
 															{% else %}
-															<span class="price">Rs. {{product.price }}</span>
+																{% if product.is_offer_applied %}
+																<span class="price">
+																	<span class="original-price">₹ {{ product.price }}</span>
+																	₹ {{ product.discounted_price }}
+																</span>
+																{% else %}
+																<span class="price">₹ {{product.price }}</span>
+																{% endif %}
 															{% endif %}
-														{% endif %}
+														</div>
+													</div>
+													<div class="pro-action">
+														<ul>
+															<li>
+																<a class="test all_src_icon" href="#" title="" data-toggle="tooltip" data-placement="top"  data-original-title="Compare">
+																<i class="fa fa-retweet" aria-hidden="true"></i>
+																</a>
+															</li>
+															<li>
+																<a class="test all_src_icon" href="{% url 'add_to_wishlist' color_image.id %}" title="" data-toggle="tooltip" data-placement="top" data-original-title="Add Wishlist">
+																<i class="fa fa-heart" aria-hidden="true"></i>
+																</a>
+															</li>
+															<li>
+																<a class="test all_src_icon" href="#" title="" data-toggle="tooltip" data-placement="top" data-original-title="Shop Cart">
+																<i class="fa fa-shopping-cart" aria-hidden="true"></i>
+																</a>
+															</li>
+														</ul>
 													</div>
 												</div>
-												<div class="pro-action">
-													<ul>
-														<li>
-															<a class="test all_src_icon" href="#" title="" data-toggle="tooltip" data-placement="top"  data-original-title="Compare">
-															<i class="fa fa-retweet" aria-hidden="true"></i>
-															</a>
-														</li>
-														<li>
-															<a class="test all_src_icon" href="{% url 'add_to_wishlist' color_image.id %}" title="" data-toggle="tooltip" data-placement="top" data-original-title="Add Wishlist">
-															<i class="fa fa-heart" aria-hidden="true"></i>
-															</a>
-														</li>
-														<li>
-															<a class="test all_src_icon" href="#" title="" data-toggle="tooltip" data-placement="top" data-original-title="Shop Cart">
-															<i class="fa fa-shopping-cart" aria-hidden="true"></i>
-															</a>
-														</li>
-													</ul>
-												</div>
 											</div>
+											{% endfor %}
 										</div>
-										{% endfor %}
 									</div>
 								</div>
 							</div>
@@ -779,7 +726,7 @@
 					</div>
 					<div class="col-md-3 col-sm-4 col-xs-12">
 						<div class="address-area">
-							<a href="index.html"><img src="{% static 'assets/img/home-1/logo_dg_footer.png' %}" width="280" height="200" alt="" /></a>
+							<a href="{% if user.is_authenticated %}{% url 'home' %}{% else %}{% url 'index' %}{% endif %}"><img src="{% static 'assets/img/home-1/logo_dg_footer.png' %}" width="280" height="200" alt="" /></a>
 							<p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard.</p>
 							<div class="contact-details">
 								<ul>

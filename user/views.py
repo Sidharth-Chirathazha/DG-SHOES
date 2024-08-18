@@ -17,6 +17,10 @@ from product_app.models import Product,ProductColorImage,ProductSize
 from django.core.paginator import Paginator
 from django.db.models import Prefetch,Sum
 from offer_app.models import Offer
+from wallet_app.models import Wallet,WalletTransaction
+from decimal import Decimal
+from order_app.models import OrderItem
+
 # Create your views here.
 
 User = get_user_model()
@@ -71,6 +75,7 @@ def registerPage(request):
         username = request.POST.get('username')
         email = request.POST.get('email')
         phone = request.POST.get('phone')
+        referral_code = request.POST.get('referral_code')
         password = request.POST.get('password')
         password_cnf = request.POST.get('password_cnf')
         
@@ -94,6 +99,14 @@ def registerPage(request):
         else:
             phone_error = phone_validate(phone)
 
+        if referral_code :
+            if not User.objects.filter(referral_code = referral_code).exists():
+                referral_code_error = 'Referral code does not match'
+            else:
+                referral_code_error = None
+        else:
+            referral_code_error = None
+
         if password != password_cnf:
             password_error = "Password doesn't match "
         else:
@@ -107,6 +120,7 @@ def registerPage(request):
             'username' : username,
             'email' : email,
             'phone' : phone,
+            'referral_code' : referral_code if referral_code else None,
             'password':password,
             'password_cnf':password_cnf
         }
@@ -124,6 +138,8 @@ def registerPage(request):
             errors_message['email'] = email_error
         if phone_error:
             errors_message['phone'] = phone_error
+        if referral_code_error:
+            errors_message['referral_code'] = referral_code_error
         if password_error:
             errors_message['password'] = password_error
         if not errors_message:
@@ -138,6 +154,7 @@ def registerPage(request):
             request.session['username'] = username
             request.session['email'] = email
             request.session['phone'] = phone
+            request.session['referral_code'] = referral_code if referral_code else None
             request.session['password'] = password
             request.session['otp_value'] = otp
             otp_expiration = timezone.now() + datetime.timedelta(minutes=3)
@@ -168,6 +185,7 @@ def otpVerification(request):
         username = request.session.get('username')
         email = request.session.get('email')
         phone = request.session.get('phone')
+        referral_code = request.session.get('referral_code')
         password = request.session.get('password')
         otp_stored  = request.session.get('otp_value')
         otp_expiration_str = request.session.get('otp_expiration')
@@ -184,6 +202,31 @@ def otpVerification(request):
                 user.set_password(password)
                 print('user is created')
                 user.save()
+
+                # Create a wallet for the new user
+                wallet = Wallet.objects.create(user=user)
+
+                if referral_code:
+                    try:
+                        referred_by_user = User.objects.get(referral_code=referral_code)
+                        user.referred_by = referred_by_user
+                        referred_by_user_wallet = Wallet.objects.get(user=referred_by_user)
+
+                        referral_bonus = Decimal(settings.REFERRAL_BONUS_AMOUNT)
+                        wallet_transaction = WalletTransaction(
+                            wallet = referred_by_user_wallet,
+                            transaction_type = 'credit',
+                            amount = referral_bonus,
+                            description = 'referral'
+                        )
+                        wallet_transaction.save()
+
+                    except User.DoesNotExist:
+                        pass  # Invalid referral code, do nothing
+
+
+
+
 
                 # del request.session['username']
                 # del request.session['email']
@@ -307,6 +350,8 @@ def verifyPassword(request):
             current_user.set_password(password_check1)
             current_user.save()
             messages.success(request,'Password has been changed successfully')
+            request.session.flush()
+
             return redirect('login')
         
         else:
@@ -385,6 +430,7 @@ def shopList(request):
     subcategory_name = request.GET.get('subcategory')
     query = request.GET.get('q','')
     sort_by = request.GET.get('sort', 'position')  # Default sort by position
+    selected_color = request.GET.get('color')
 
     categories = Category.objects.filter(is_listed = True).prefetch_related('subcategories').filter(subcategories__is_listed =True).distinct()
     products = Product.objects.filter(is_listed = True).prefetch_related('productcolorimage_set__product_size')
@@ -397,6 +443,15 @@ def shopList(request):
     if query:
 
         products = products.filter(product_name__icontains=query,is_listed=True)
+
+    # Filter by color
+    if selected_color:
+        color_images = ProductColorImage.objects.filter(color_name__icontains=selected_color)
+        products = products.filter(productcolorimage__in=color_images).distinct()
+       
+
+
+    
 
     color_images = []
     for product in products:
@@ -420,6 +475,22 @@ def shopList(request):
         color_images.sort(key=lambda x: x[0].created_at, reverse=True) # Default ordering by latest
 
 
+    popular_products = OrderItem.objects.values(
+        'product_size__product_data__product_id'
+    ).annotate(
+        total_orders=Sum('quantity')
+    ).order_by('-total_orders')[:4]
+
+    popular_products_list = []
+    for item in popular_products:
+        product = Product.objects.get(id=item['product_size__product_data__product_id'])
+        product_image = ProductColorImage.objects.filter(product_id=product).first()
+        popular_products_list.append({
+            'product': product,
+            'image': product_image.image_1 if product_image else None
+        })
+
+
 
     paginator = Paginator(color_images,9)
     page_number = request.GET.get('page')
@@ -436,6 +507,8 @@ def shopList(request):
         'selected_subcategory': subcategory_name,
         'page_obj' : page_obj,
         'sort_by' : sort_by,
+        'popular_products' : popular_products_list,
+        'selected_color' : selected_color,
     }
 
     return render(request,'shop_list.html',context)
@@ -452,6 +525,7 @@ def product_detail_view(request,pk):
 
     categories = Category.objects.filter(is_listed = True).prefetch_related('subcategories').filter(subcategories__is_listed =True).distinct()
     product = get_object_or_404(Product, pk=pk, is_listed = True)
+    featured_products = Product.objects.filter(featured=True,is_listed=True).prefetch_related('productcolorimage_set')[:3]
 
     
     color_variants = product.productcolorimage_set.all().prefetch_related('product_size')
@@ -486,6 +560,24 @@ def product_detail_view(request,pk):
         'selected_variant' : selected_variant,
         'selected_size' : selected_size,
         'max_quantity' : max_quantity,
+        'featured_products' : featured_products
      }
 
     return render(request,'product_detail.html',context)
+
+
+def contactUs(request):
+
+    categories = Category.objects.filter(is_listed = True).prefetch_related('subcategories').filter(subcategories__is_listed =True).distinct()
+
+    context = {
+
+        'categories': categories,
+    }
+
+    return render(request,'contact-us.html',context)
+
+
+def custom_404_view(request, exception):
+
+    return render(request, '404.html', status=404)

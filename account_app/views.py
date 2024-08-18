@@ -6,7 +6,7 @@ from django.contrib.auth.decorators import login_required
 from user.models import CustomUser
 from user.validators import validate_password
 from .models import Address
-from .validators import validate_address_data
+from .validators import validate_address_data,validate_email,validate_first_name,validate_last_name,phone_validate
 from order_app.models import Order,OrderItem
 from django.views.decorators.http import require_POST
 from product_app.models import ProductSize
@@ -14,6 +14,14 @@ from django.utils import timezone
 from django.contrib import messages
 from wallet_app.models import Wallet,WalletTransaction
 from django.core.paginator import Paginator
+import razorpay
+from django.conf import settings
+from django.http import HttpResponse, HttpResponseForbidden
+from reportlab.pdfgen import canvas
+from reportlab.lib.pagesizes import letter
+from io import BytesIO
+from django.template.loader import render_to_string
+from xhtml2pdf import pisa
 
 # Create your views here.
 
@@ -61,12 +69,34 @@ def update_user_info(request):
 
     if request.method == 'POST':
         user = get_object_or_404(CustomUser, id = request.user.id)
-        user.gender = request.POST.get('gender')
-        user.first_name = request.POST.get('first_name')
-        user.last_name = request.POST.get('last_name')
-        user.date_of_birth = request.POST.get('dob')
-        user.email = request.POST.get('email')
-        user.phone_number = request.POST.get('phone_number')
+        gender = request.POST.get('gender')
+        first_name = request.POST.get('first_name')
+        last_name = request.POST.get('last_name')
+        date_of_birth = request.POST.get('dob')
+        email = request.POST.get('email')
+        phone_number = request.POST.get('phone_number')
+        
+        first_name_error = validate_first_name(first_name)
+        last_name_error = validate_last_name(last_name)
+        email_error = validate_email(email, user_id=user.id)
+        phone_error = phone_validate(phone_number, user_id=user.id)
+
+        # Check for any validation errors
+        if first_name_error:
+            return JsonResponse({'success': False, 'error': first_name_error}, status=400)
+        if last_name_error:
+            return JsonResponse({'success': False, 'error': last_name_error}, status=400)
+        if email_error:
+            return JsonResponse({'success': False, 'error': email_error}, status=400)
+        if phone_error:
+            return JsonResponse({'success': False, 'error': phone_error}, status=400)
+        
+        user.gender = gender
+        user.first_name = first_name
+        user.last_name = last_name
+        user.date_of_birth = date_of_birth
+        user.email = email
+        user.phone_number = phone_number
         user.save()
         
         return JsonResponse({'success': True})
@@ -142,13 +172,13 @@ def edit_address(request):
             return JsonResponse({'success': False, 'error': 'Address ID is missing'})
         
 
-        address.name = request.POST.get('name')
+        address.name = request.POST.get('full_name')
         address.address_title = request.POST.get('address_title')
         address.state = request.POST.get('state')
         address.city = request.POST.get('city')
-        address.pin = request.POST.get('pin')
+        address.pin = request.POST.get('pincode')
         address.post_office = request.POST.get('post_office')
-        address.phone_number = request.POST.get('phone_number')
+        address.phone_number = request.POST.get('phone')
         address.address_line = request.POST.get('address_line')
         address.landmark = request.POST.get('landmark')
 
@@ -177,13 +207,13 @@ def get_address_details(request):
 
     return JsonResponse({
         'id': address.id,
-        'name': address.name,
+        'full_name': address.name,
         'address_title': address.address_title,
         'state': address.state,
         'city': address.city,
-        'pin': address.pin,
+        'pincode': address.pin,
         'post_office': address.post_office,
-        'phone_number': str(address.phone_number),
+        'phone': str(address.phone_number),
         'address_line': address.address_line,
         'landmark': address.landmark,
     })
@@ -277,3 +307,91 @@ def order_details(request,order_id):
     }
 
     return render(request,'order_details.html',context)
+
+@login_required
+@csrf_exempt
+def retry_payment(request,order_id):
+
+    try:
+        order = Order.objects.get(id=order_id, ordered_user=request.user, payment_status='Pending')
+
+    except Order.DoesNotExist:
+        messages.error(request, 'Invalid order or payment already completed.')
+        return redirect('order_details')  # Redirect to order history or appropriate page
+    
+    amount = int(order.total_amount * 100)
+
+    try:
+        # Create a new Razorpay order
+        client = razorpay.Client(auth=(settings.RAZORPAY_KEY_ID, settings.RAZORPAY_KEY_SECRET))
+        razorpay_order = client.order.create({
+            'amount': amount,
+            'currency': 'INR',
+            'payment_capture': '1'
+        })
+
+        # Update the order with the new Razorpay order ID
+        order.razorpay_order_id = razorpay_order['id']
+        order.save()
+
+        # Return the Razorpay order details to the frontend
+        return JsonResponse({
+            'id': razorpay_order['id'],
+            'amount': amount,
+            'currency': 'INR',
+            'key': settings.RAZORPAY_KEY_ID,
+            'order_id': order.id,
+        })
+    except Exception as e:
+        print(f"Error creating Razorpay order for retry: {str(e)}")
+        return JsonResponse({'error': 'Failed to create Razorpay order for retry'}, status=500)
+    
+
+
+
+def generate_invoice_pdf(order,order_items):
+    # Render the HTML template with the order context
+    html = render_to_string('Invoice.html', {'order': order,'order_items' : order_items})
+    
+    # Create a BytesIO buffer to receive the PDF content
+    pdf_buffer = BytesIO()
+    
+    # Create a PDF using xhtml2pdf
+    pisa_status = pisa.CreatePDF(
+        html, dest=pdf_buffer
+    )
+    
+    if pisa_status.err:
+        return None
+    
+    pdf_buffer.seek(0)
+    return pdf_buffer
+
+
+def download_invoice(request, order_id):
+    order = get_object_or_404(Order, id=order_id)
+    order_items = OrderItem.objects.filter(order=order)
+    
+    # Check if the user has permission to download this invoice
+    if request.user != order.ordered_user:
+        return HttpResponseForbidden("You don't have permission to download this invoice.")
+    
+    # Check if the payment status is 'Paid'
+    if order.payment_status != 'Paid':
+        return HttpResponseForbidden("Invoice is not available. Payment status is not 'Paid'.")
+    
+    # Generate invoice number if it doesn't exist
+    invoice_number = order.generate_invoice_number()
+    
+    # Generate the PDF
+    pdf_buffer = generate_invoice_pdf(order,order_items)
+
+    if pdf_buffer is None:
+        return HttpResponse("There was an error generating the PDF.", status=500)
+    
+    # Create the HTTP response
+    response = HttpResponse(content_type='application/pdf')
+    response['Content-Disposition'] = f'attachment; filename="invoice_{invoice_number}.pdf"'
+    response.write(pdf_buffer.getvalue())
+    
+    return response
