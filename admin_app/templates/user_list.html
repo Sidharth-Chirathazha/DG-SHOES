@@ -189,7 +189,7 @@
           </a>
         </li>
         <li class="menu-item">
-          <a href="app-ecommerce-order-details.html" class="menu-link">
+          <a href="#" class="menu-link">
             <div data-i18n="Order Details">Order Details</div>
           </a>
         </li>
@@ -203,12 +203,12 @@
       </a>
       <ul class="menu-sub">
         <li class="menu-item">
-          <a href="app-ecommerce-referral.html" class="menu-link">
+          <a href="#" class="menu-link">
             <div data-i18n="Referrals">Referrals</div>
           </a>
         </li>
         <li class="menu-item">
-          <a href="app-ecommerce-referral.html" class="menu-link">
+          <a href="#" class="menu-link">
             <div data-i18n="Reviews">Reviews</div>
           </a>
         </li>
@@ -227,7 +227,7 @@
           </a>
         </li>
         <li class="menu-item">
-          <a href="app-ecommerce-referral.html" class="menu-link">
+          <a href="#" class="menu-link">
             <div data-i18n="User Details">User Details</div>
           </a>
         </li>
@@ -307,7 +307,7 @@
             </a>
             <ul class="dropdown-menu dropdown-menu-end mt-3 py-2">
               <li>
-                <a class="dropdown-item" href="pages-account-settings-account.html">
+                <a class="dropdown-item" href="#">
                   <div class="d-flex align-items-center">
                     <div class="flex-shrink-0 me-2">
                       <div class="avatar avatar-online">
@@ -377,6 +377,7 @@
       <thead>
         <tr>
           <th>Username</th>
+          <th>Referred By</th>
           <th>Email</th>
           <th>Phone</th>
           <th>Status</th>
@@ -388,6 +389,7 @@
         {% if not info.is_superuser %}
         <tr>
           <td><i class="ri-user-fill"></i><span> {{info.username}}</span></td>
+          <td>{{info.referred_by}}</td>
           <td>{{info.email}}</td>
           <td>{{info.phone_number}}</td>
           {% if info.is_active%}

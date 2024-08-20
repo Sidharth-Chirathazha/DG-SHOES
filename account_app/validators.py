@@ -45,20 +45,6 @@ def validate_username(username):
         return 'Username should not contain unwanted spaces'    
     return None
 
-def validate_email(email, user_id=None):
-    pattern = r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'
-    if not re.match(pattern, email):
-        return 'Enter a valid Email.'
-    if not email.strip():
-        return 'Email cannot be blank.'
-    if email != email.strip():
-        return 'Email should not contain unwanted spaces.'
-    
-    # Exclude the current user when checking if the email already exists
-    if User.objects.exclude(id=user_id).filter(email=email).exists():
-        return 'Email already exists.'
-    return None
-
 def phone_validate(phone, user_id=None):
     pattern = r'^[9876]\d{9}$'
     if not re.match(pattern, phone):

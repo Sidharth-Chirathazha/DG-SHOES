@@ -12,7 +12,7 @@ from django.views.decorators.cache import never_cache
 import random
 import datetime
 from .validators import validate_username,validate_email,validate_password,phone_validate,validate_first_name,validate_last_name
-from category_app.models import Category
+from category_app.models import Category,SubCategory
 from product_app.models import Product,ProductColorImage,ProductSize
 from django.core.paginator import Paginator
 from django.db.models import Prefetch,Sum
@@ -20,6 +20,7 @@ from offer_app.models import Offer
 from wallet_app.models import Wallet,WalletTransaction
 from decimal import Decimal
 from order_app.models import OrderItem
+from django.db.models import Q
 
 # Create your views here.
 
@@ -210,6 +211,7 @@ def otpVerification(request):
                     try:
                         referred_by_user = User.objects.get(referral_code=referral_code)
                         user.referred_by = referred_by_user
+                        user.save()
                         referred_by_user_wallet = Wallet.objects.get(user=referred_by_user)
 
                         referral_bonus = Decimal(settings.REFERRAL_BONUS_AMOUNT)
@@ -220,20 +222,8 @@ def otpVerification(request):
                             description = 'referral'
                         )
                         wallet_transaction.save()
-
                     except User.DoesNotExist:
                         pass  # Invalid referral code, do nothing
-
-
-
-
-
-                # del request.session['username']
-                # del request.session['email']
-                # del request.session['phone']
-                # del request.session['password']
-                # del request.session['otp_value']
-                # del request.session['otp_expiration']
 
                 request.session.flush()
 
@@ -373,7 +363,6 @@ def homePage(request):
     first_name = request.user.first_name
     latest_products = Product.objects.filter(is_listed = True).order_by('-created_at')[:6]
     featured_products = Product.objects.filter(featured=True,is_listed=True).prefetch_related('productcolorimage_set')
-
     latest_product_colors = {}
 
     for product in latest_products:
@@ -430,7 +419,9 @@ def shopList(request):
     subcategory_name = request.GET.get('subcategory')
     query = request.GET.get('q','')
     sort_by = request.GET.get('sort', 'position')  # Default sort by position
-    selected_color = request.GET.get('color')
+     # Filter by color
+    selected_colors = request.GET.getlist('color')  # Use getlist to get multiple colors
+    selected_price_ranges = request.GET.getlist('price_ranges[]')
 
     categories = Category.objects.filter(is_listed = True).prefetch_related('subcategories').filter(subcategories__is_listed =True).distinct()
     products = Product.objects.filter(is_listed = True).prefetch_related('productcolorimage_set__product_size')
@@ -444,22 +435,48 @@ def shopList(request):
 
         products = products.filter(product_name__icontains=query,is_listed=True)
 
-    # Filter by color
-    if selected_color:
-        color_images = ProductColorImage.objects.filter(color_name__icontains=selected_color)
-        products = products.filter(productcolorimage__in=color_images).distinct()
-       
-
+    
+    # Handle price range filtering
+    if selected_price_ranges:
+        price_filter = Q()
+        for price_range in selected_price_ranges:
+            if '-' in price_range:
+                min_price, max_price = map(int, price_range.split('-'))
+                price_filter |= Q(price__gte=min_price, price__lte=max_price)
+            else:
+                # Handle the "Above ₹6000" case
+                min_price = int(price_range.rstrip('+'))
+                price_filter |= Q(price__gte=min_price)
+        
+        products = products.filter(price_filter).distinct()
 
     
-
     color_images = []
     for product in products:
-        for color_image in product.productcolorimage_set.all():
+        color_images_for_product = product.productcolorimage_set.all()
+        if selected_colors:
+            print("inside selected colors")
+            color_images_for_product = color_images_for_product.filter(color_name__in=[color.capitalize() for color in selected_colors])
+
+            #Debugging
+            print(color_images_for_product)
+            #END 
+
+        for color_image in color_images_for_product:
             color_image.total_quantity = color_image.product_size.aggregate(
                 total_quantity=Sum('quantity')
             )['total_quantity'] or 0
             color_images.append((product, color_image))
+
+    # If no colors are selected and no color images were found, include all products
+    if not selected_colors and not color_images:
+        for product in products:
+            for color_image in product.productcolorimage_set.all():
+                color_image.total_quantity = color_image.product_size.aggregate(
+                    total_quantity=Sum('quantity')
+                )['total_quantity'] or 0
+                color_images.append((product, color_image))
+
 
     if sort_by == 'price_asc':
         color_images.sort(key=lambda x: x[0].price)
@@ -508,7 +525,8 @@ def shopList(request):
         'page_obj' : page_obj,
         'sort_by' : sort_by,
         'popular_products' : popular_products_list,
-        'selected_color' : selected_color,
+        'selected_colors' : selected_colors,
+        'selected_price_ranges': selected_price_ranges,
     }
 
     return render(request,'shop_list.html',context)
@@ -525,10 +543,11 @@ def product_detail_view(request,pk):
 
     categories = Category.objects.filter(is_listed = True).prefetch_related('subcategories').filter(subcategories__is_listed =True).distinct()
     product = get_object_or_404(Product, pk=pk, is_listed = True)
-    featured_products = Product.objects.filter(featured=True,is_listed=True).prefetch_related('productcolorimage_set')[:3]
-
-    
     color_variants = product.productcolorimage_set.all().prefetch_related('product_size')
+
+    related_products = Product.objects.filter(
+        category_id = product.category_id, subcategory_id = product.subcategory_id, is_listed=True
+        ).exclude(id=product.id).distinct()[:3]
 
 
     selected_variant_id = request.GET.get('variant')
@@ -560,7 +579,7 @@ def product_detail_view(request,pk):
         'selected_variant' : selected_variant,
         'selected_size' : selected_size,
         'max_quantity' : max_quantity,
-        'featured_products' : featured_products
+        'related_products' : related_products,
      }
 
     return render(request,'product_detail.html',context)

@@ -6,7 +6,7 @@ from django.contrib.auth.decorators import login_required
 from user.models import CustomUser
 from user.validators import validate_password
 from .models import Address
-from .validators import validate_address_data,validate_email,validate_first_name,validate_last_name,phone_validate
+from .validators import validate_address_data,validate_first_name,validate_last_name,phone_validate
 from order_app.models import Order,OrderItem
 from django.views.decorators.http import require_POST
 from product_app.models import ProductSize
@@ -73,29 +73,28 @@ def update_user_info(request):
         first_name = request.POST.get('first_name')
         last_name = request.POST.get('last_name')
         date_of_birth = request.POST.get('dob')
-        email = request.POST.get('email')
         phone_number = request.POST.get('phone_number')
         
         first_name_error = validate_first_name(first_name)
         last_name_error = validate_last_name(last_name)
-        email_error = validate_email(email, user_id=user.id)
         phone_error = phone_validate(phone_number, user_id=user.id)
 
         # Check for any validation errors
+        errors = {}
         if first_name_error:
-            return JsonResponse({'success': False, 'error': first_name_error}, status=400)
+           errors['first_name'] = first_name_error
         if last_name_error:
-            return JsonResponse({'success': False, 'error': last_name_error}, status=400)
-        if email_error:
-            return JsonResponse({'success': False, 'error': email_error}, status=400)
+            errors['last_name'] = last_name_error
         if phone_error:
-            return JsonResponse({'success': False, 'error': phone_error}, status=400)
+            errors['phone_number'] = phone_error
+
+        if errors:
+            return JsonResponse({'success': False, 'error': errors}, status=400)
         
         user.gender = gender
         user.first_name = first_name
         user.last_name = last_name
         user.date_of_birth = date_of_birth
-        user.email = email
         user.phone_number = phone_number
         user.save()
         

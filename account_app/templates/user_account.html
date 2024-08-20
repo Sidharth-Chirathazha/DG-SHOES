@@ -44,6 +44,9 @@
 		<!-- responsive css -->
         <link rel="stylesheet" href="{% static 'assets/css/responsive.css' %}">
 		<!-- modernizr css -->
+		<link rel="stylesheet" href="{% static 'assets/css/account-section.css' %}">
+
+		<link rel="stylesheet" href="{% static 'assets/css/top-nav.css' %}">
         <script src="{% static 'assets/js/vendor/modernizr-2.8.3.min.js' %}"></script>
 
 		{% comment %} <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/4.6.0/css/bootstrap.min.css">
@@ -92,71 +95,7 @@
 
 
 
-			.my-account-area {
-				padding: 40px 0;
-			}
 			
-			.account-sidebar ul {
-				list-style-type: none;
-				padding: 0;
-			}
-			
-			.account-sidebar ul li {
-				margin-bottom: 10px;
-			}
-			
-			.account-sidebar ul li a {
-				display: block;
-				padding: 10px 15px;
-				background-color: #f8f9fa;
-				color: #333;
-				text-decoration: none;
-				border-radius: 5px;
-			}
-			
-			.account-sidebar ul li a.active,
-			.account-sidebar ul li a:hover {
-				background-color: #FF7575;
-				color: white;
-			}
-			
-			.account-content {
-				background-color: #fff;
-				padding: 20px;
-				border-radius: 5px;
-				box-shadow: 0 0 10px rgba(0,0,0,0.1);
-			}
-			
-			.account-section {
-				display: none;
-			}
-			
-			.account-section.active {
-				display: block;
-			}
-
-
-			.wallet-balance {
-				background-color: #f8f9fa;
-				padding: 20px;
-				border-radius: 5px;
-				margin-bottom: 20px;
-			}
-			
-			.wallet-balance .balance {
-				font-size: 24px;
-				font-weight: bold;
-				color: #28a745;
-			}
-			
-			.wallet-transactions table {
-				width: 100%;
-			}
-			
-			.wallet-transactions th {
-				background-color: #f8f9fa;
-			}
-
 
 
 		</style>
@@ -166,49 +105,18 @@
             <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
         <![endif]-->
 
-        <!-- HEADER TOP AREA START -->
+       <!-- HEADER TOP AREA START -->
 		<section class="header-top-area">
 			<div class="container">
-				<div class="row">
-					<div class="col-md-6">
-						<div class="left-msg pull-left">
-							<h6>FREE SHIPPING ON OVER $100</h6>
-						</div>
-					</div>
-					<div class="col-md-6">
-						<div class="right-login pull-right">
-							<div class="currencies-block-top curency pull-left">
-								<div class="current">
-									<span>USD</span>
-									<i class="fa fa-angle-down"></i>
-								</div>
-								<ul class="first-currencies toggle-content">
-									<li><a href="#">Dollar (USD)</a></li>
-									<li><a href="#">Pound (GBP)</a></li>
-									<li><a href="#">Pound (GBP)</a></li>
-								</ul>
-							</div>
-							<div class="languages-block-top curency pull-left">
-								<div class="current">
-									<span>LANGUAGE</span>
-									<i class="fa fa-angle-down"></i>
-								</div>
-								<ul class="first-languages toggle-content">
-									<li><a href="#">ENGLISH</a></li>
-								</ul>
-							</div>
-							<div class="curency pull-left">
-								<div class="current">
-									{% if user.is_authenticated %}
-										<i class="fa fa-user left"></i>
-										<span><a href="">Welcome, {{ user.first_name }} | </a></span>
-										<span><a href="{% url 'logout' %}"> LOGOUT</a></span>
-									{% else %}
-										<span><a href="{% url 'login' %}">LOG IN</a></span>
-									{% endif %}
-								</div> 
-							</div>
-						</div>
+				<div class="header-content">
+					<div class="user-info">
+						{% if user.is_authenticated %}
+							<i class="fa fa-user"></i>
+							<span class="welcome-text">Welcome, {{ user.first_name }}</span>
+							<a href="{% url 'logout' %}" class="auth-link">LOGOUT</a>
+						{% else %}
+							<a href="{% url 'login' %}" class="auth-link">LOG IN</a>
+						{% endif %}
 					</div>
 				</div>
 			</div>
@@ -228,7 +136,7 @@
 							<ul class="list-inline">
 							  <li class="expand active"><a href="{% url 'home' %}">HOME</a>
 							  </li>
-							  <li><a href="#">CATEGORIES</a>
+							  <li><a href="{% url 'shop_list' %}">SHOP</a>
 								<!-- Mega Menu Four Column -->
 								<div class="mega-menu">
 									{% for category in categories%}
@@ -242,14 +150,8 @@
 										{% endfor %}
 									</span>
 									{% endfor %}
-									<span class="mega-menu-img">
-										<a href="{% url 'shop_list' %}" class="mega-title">ALL PRODUCTS</a>
-										<a href="#"><img alt="" src="{% static 'assets/img/other-pg/img_menu.jpg' %}"/></a>
-									</span>
 								</div>
 							  </li>
-							  
-							  <li><a href="about-us.html">ABOUT</a></li>
 							  <li class="expand"><a href="{% url 'user_account' %}">ACCOUNT</a>
 							  </li>
 							  <li><a href="{% url 'contact_us' %}">CONTACT</a></li>
@@ -266,7 +168,7 @@
 										<nav id="mobile-nav">
 											<ul>
 												<li><a href="{% url 'home' %}">Home </a></li>
-												<li><a href="#">CATEGORIES</a>
+												<li><a href="{% url 'shop_list' %}">SHOP</a>
 												<!-- Mega Menu Four Column -->
 												<div class="mega-menu">
 													{% for category in categories%}
@@ -280,13 +182,8 @@
 														{% endfor %}
 													</span>
 													{% endfor %}
-													<span class="mega-menu-img">
-														<a href="{% url 'shop_list' %}" class="mega-title">ALL PRODUCTS</a>
-														<a href="#"><img alt="" src="{% static 'assets/img/other-pg/img_menu.jpg' %}"/></a>
-													</span>
 												</div>
 												</li>
-												<li><a href="about-us.html"> About Us </a></li>
 												<li><a href="{% url 'user_account'%}"> Account </a>
 												</li>
 												<li><a href="{% url 'contact_us' %}"> Contact Us </a></li>
@@ -413,22 +310,22 @@
 										<p class="form-row">
 											<label><span class="required">*</span>First Name</label>
 											<input type="text" name="first_name" value="{{ user.first_name }}" />
+											<span class="error-message" id="first-name-error"></span>
 										</p>
 										<p class="form-row">
 											<label><span class="required">*</span>Last Name</label>
 											<input type="text" name="last_name" value="{{ user.last_name }}" />
+											<span class="error-message" id="last-name-error"></span>
 										</p>
 										<p class="form-row">
 											<label><span class="required">*</span>Date-of-birth</label>
-											<input type="date" name="dob" value="{{ user.date_of_birth|date:'Y-m-d' }}" />
-										</p>
-										<p class="form-row">
-											<label><span class="required">*</span>E-mail address</label>
-											<input type="email" name="email" value="{{ user.email }}" />
+											<input type="date" id="dob" name="dob" value="{{ user.date_of_birth|date:'Y-m-d' }}" />
+											<span class="error-message" id="dob-error"></span>
 										</p>
 										<p class="form-row">
 											<label><span class="required">*</span>Phone</label>
 											<input type="text" name="phone_number" value="{{ user.phone_number }}" />
+											<span class="error-message" id="phone-error"></span>
 										</p>
 										<div style="display: flex; justify-content: flex-end;">
 											<button type="button" id="cancel-btn" class="btn btn-secondary mr-2" style="background-color: #FF7575; color: white; border: none; padding: 5px 10px; margin-right: 10px; cursor: pointer;">Cancel</button>
@@ -590,81 +487,102 @@
 								<!-- Add wishlist items here -->
 							</div>
 
-							<!-- Order history and details -->
+							<!-- Order History -->
 							<div id="order-history" class="account-section">
 								<h4>Order History</h4>
 								<div class="order-history">
 									{% if user_orders %}
-										<table class="table table-striped">
-											<thead>
-												<tr>
-													<th>Order ID</th>
-													<th>Item</th>
-													<th>Color/Size</th>
-													<th>Quantity</th>
-													<th>Total Price</th>
-													<th>Status</th>
-													<th>Actions</th>
-												</tr>
-											</thead>
-											<tbody>
-												{% for order in user_orders %}
-													{% for item in order.order_items.all %}
-														<tr>
-															<td><a href="{% url 'order_details' order.id %}">{{ order.order_unique_id }}</a></td>
-															<td><img src="{{ item.product_size.product_data.image_1.url }}" alt="{{ item.product_size.product_data.product_id.product_name }}" width="50" height="50"></td>
-															<td>{{ item.product_size.product_data.color_name }}/{{ item.product_size.size }}</td>
-															<td>{{ item.quantity }}</td>
-															<td>₹ {{ item.get_total_item_price }}</td>
-															<td>{{ item.status }}</td>
-															{% if order|is_paid_or_pending_cod %}
-															<td>
-																{% if item.status|not_in_list:"Delivered,Cancelled,Returned,Return Confirmed,Return Processing,Waiting For Pickup,Return Completed" %}
-																	<form method="post" id="cancel-form-{{ item.id }}" action="{% url 'cancel_order_item' item.id %}">
-																		{% csrf_token %}
-																		<button type="button" class="btn btn-danger btn-sm"  onclick="confirmCancel({{ item.id }})" {% if item.status == 'Cancelled' %}disabled{% endif %}>Cancel</button>
-																	</form>
+										<div class="table-responsive">
+											<table class="table table-striped">
+												<thead>
+													<tr>
+														<th>Order ID</th>
+														<th>Item</th>
+														<th>Color/Size</th>
+														<th>Quantity</th>
+														<th>Total Price</th>
+														<th>Status</th>
+														<th>Actions</th>
+													</tr>
+												</thead>
+												<tbody>
+													{% for order in user_orders %}
+														{% for item in order.order_items.all %}
+															<tr>
+																<td><a href="{% url 'order_details' order.id %}">{{ order.order_unique_id }}</a></td>
+																<td><img src="{{ item.product_size.product_data.image_1.url }}" alt="{{ item.product_size.product_data.product_id.product_name }}" width="50" height="50"></td>
+																<td>{{ item.product_size.product_data.color_name }}/{{ item.product_size.size }}</td>
+																<td>{{ item.quantity }}</td>
+																<td>₹ {{ item.get_total_item_price }}</td>
+																<td>{{ item.status }}</td>
+																{% if order|is_paid_or_pending_cod %}
+																<td>
+																	{% if item.status|not_in_list:"Delivered,Cancelled,Returned,Return Confirmed,Return Processing,Waiting For Pickup,Return Completed" %}
+																		<form method="post" id="cancel-form-{{ item.id }}" action="{% url 'cancel_order_item' item.id %}">
+																			{% csrf_token %}
+																			<button type="button" class="btn btn-danger btn-sm" onclick="confirmCancel({{ item.id }})" {% if item.status == 'Cancelled' %}disabled{% endif %}>Cancel</button>
+																		</form>
+																	{% endif %}
+																	{% if item.status == 'Delivered' %}
+																		<form method="post" id="return-form-{{ item.id }}" action="{% url 'return_order_item' item.id %}">
+																			{% csrf_token %}
+																			<button type="button" class="btn btn-warning btn-sm" onclick="confirmReturn({{ item.id }})" {% if item.status == 'Returned' %}disabled{% endif %}>Return</button>
+																		</form>
+																	{% endif %}
+																</td>
+																{% else %}
+																<td>
+																	Payment Failed
+																</td>
 																{% endif %}
-																{% if item.status == 'Delivered' %}
-																	<form method="post" id="return-form-{{ item.id }}" action="{% url 'return_order_item' item.id %}">
-																		{% csrf_token %}
-																		<button type="button" class="btn btn-warning btn-sm" onclick="confirmReturn({{ item.id }})" {% if item.status == 'Returned' %}disabled{% endif %}>Return</button>
-																	</form>
-																{% endif %}
-															</td>
-															{% else %}
-															<td>
-																Payment Failed
-															</td>
-															{% endif %}
-														</tr>
+															</tr>
+														{% endfor %}
 													{% endfor %}
-												{% endfor %}
-											</tbody>
-										</table>
-
+												</tbody>
+											</table>
+										</div>
+										<!-- Order History End -->
+							
 										<!-- Pagination -->
-										<div class="pagination">
-											<span class="step-links">
+										<nav aria-label="Page navigation">
+											<ul class="pagination justify-content-center">
 												{% if user_orders.has_previous %}
-													<a href="?page=1">&laquo; first</a>
-													<a href="?page={{ user_orders.previous_page_number }}">previous</a>
+													<li class="page-item">
+														<a class="page-link" href="?page=1" aria-label="First">
+															<span aria-hidden="true">&laquo;&laquo;</span>
+														</a>
+													</li>
+													<li class="page-item">
+														<a class="page-link" href="?page={{ user_orders.previous_page_number }}" aria-label="Previous">
+															<span aria-hidden="true">&laquo;</span>
+														</a>
+													</li>
 												{% endif %}
 							
-												<span class="current">
-													Page {{ user_orders.number }} of {{ user_orders.paginator.num_pages }}.
-												</span>
+												<li class="page-item active">
+													<span class="page-link">
+														Page {{ user_orders.number }} of {{ user_orders.paginator.num_pages }}
+													</span>
+												</li>
 							
 												{% if user_orders.has_next %}
-													<a href="?page={{ user_orders.next_page_number }}">next</a>
-													<a href="?page={{ user_orders.paginator.num_pages }}">last &raquo;</a>
+													<li class="page-item">
+														<a class="page-link" href="?page={{ user_orders.next_page_number }}" aria-label="Next">
+															<span aria-hidden="true">&raquo;</span>
+														</a>
+													</li>
+													<li class="page-item">
+														<a class="page-link" href="?page={{ user_orders.paginator.num_pages }}" aria-label="Last">
+															<span aria-hidden="true">&raquo;&raquo;</span>
+														</a>
+													</li>
 												{% endif %}
-											</span>
-										</div>
+											</ul>
+										</nav>
 									{% else %}
-										<p class="alert">You have not placed any orders.</p>
+										<p class="alert alert-info">You have not placed any orders.</p>
 									{% endif %}
-								</div>					
+								</div>
 							</div>
 
 
@@ -855,13 +773,13 @@
 					</div>
 					<div class="col-md-3 col-sm-4 col-xs-12">
 						<div class="address-area">
-							<a href="{% url 'home' %}"><img src="{% static 'assets/img/home-1/footer-logo.png' %}" alt="" /></a>
+							<a href="{% url 'home' %}"><img src="{% static 'assets/img/home-1/logo_dg_footer.png' %}" alt="" /></a>
 							<p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard.</p>
 							<div class="contact-details">
 								<ul>
-									<li><i class="fa fa-phone"></i>+(00) 56-888-999</li>
-									<li><i class="fa fa-envelope-o"></i> admin@DevItems.com</li>
-									<li><i class="fa fa-map-marker"></i> 1212, Bigrun street, France.</li>
+									<li><i class="fa fa-phone"></i>+91 7428730894</li>
+									<li><i class="fa fa-envelope-o"></i> dgshoes930@gmail.com</li>
+									<li><i class="fa fa-map-marker"></i> Kinfra, Malappuram,Kerala,India						</li>
 								</ul>
 							</div>
 						</div>
@@ -926,6 +844,12 @@
 				const saveBtn = document.getElementById('save-btn');
 				const displayMode = document.getElementById('display-mode');
 				const editMode = document.getElementById('edit-mode');
+
+				function clearErrors() {
+					document.querySelectorAll('.error-message').forEach(function (el) {
+						el.textContent = '';
+					});
+				}
 		
 				editBtn.addEventListener('click', function () {
 					if (editMode.style.display === 'none') {
@@ -963,13 +887,31 @@
 							document.getElementById('user-gender').textContent = formData.get('gender') === 'M' ? 'Male' : 'Female';
 							document.getElementById('user-name').textContent = formData.get('first_name') + ' ' + formData.get('last_name');
 							document.getElementById('user-dob').textContent = formData.get('dob');
-							document.getElementById('user-email').textContent = formData.get('email');
 							document.getElementById('user-phone').textContent = formData.get('phone_number');
 							displayMode.style.display = 'block';
 							editMode.style.display = 'none';
 							editBtn.textContent = 'Edit';
 						} else {
-							alert('Failed to update information.');
+							// Display validation errors in corresponding fields
+							if (data.error) {
+								if (data.error.first_name) {
+									document.getElementById('first-name-error').textContent = data.error.first_name;
+								}
+								if (data.error.last_name) {
+									document.getElementById('last-name-error').textContent = data.error.last_name;
+								}
+								if (data.error.phone_number) {
+									document.getElementById('phone-error').textContent = data.error.phone_number;
+								}
+								if (data.error.dob) {
+									document.getElementById('dob-error').textContent = data.error.dob;
+								}
+								if (data.error.gender) {
+									document.getElementById('gender-error').textContent = data.error.gender;
+								}
+							}else{
+								alert('Failed to update information.');
+							}				
 						}
 					})
 					.catch(error => {
@@ -1314,6 +1256,29 @@
 		}
 	});
 </script>
+
+	<!--SCRIPT FOR DATE OF BIRTH IN EDIT USER INFO-->
+	<script>
+		document.addEventListener('DOMContentLoaded', function () {
+			const today = new Date();
+			const minDate = new Date('1930-01-01');
+			const maxDate = new Date(today.getFullYear() - 10, today.getMonth(), today.getDate());
+
+			// Format date as YYYY-MM-DD
+			function formatDate(date) {
+				const year = date.getFullYear();
+				const month = ('0' + (date.getMonth() + 1)).slice(-2);
+				const day = ('0' + date.getDate()).slice(-2);
+				return `${year}-${month}-${day}`;
+			}
+
+			// Set min and max attributes	
+			const dobField = document.getElementById('dob');
+			dobField.setAttribute('min', formatDate(minDate));
+			dobField.setAttribute('max', formatDate(maxDate));
+		});
+	</script>
+
 			
 			
 

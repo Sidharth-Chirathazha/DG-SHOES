@@ -40,8 +40,13 @@
 		<!-- responsive css -->
         <link rel="stylesheet" href="{% static 'assets/css/responsive.css' %}">
 
-		<link rel="stylesheet" href="{% static 'assets/css/wishlist.css' %}">
+		<link rel="stylesheet" href="{% static 'assets/css/responsive.css' %}">
+
+		<link rel="stylesheet" href="{% static 'assets/css/wishlist-new.css' %}">
+
 		<!-- modernizr css -->
+
+		<link rel="stylesheet" href="{% static 'assets/css/top-nav.css' %}">
         <script src="{% static 'assets/js/vendor/modernizr-2.8.3.min.js' %}"></script>
 
 		<style>
@@ -84,6 +89,8 @@
 			}
 
 
+
+
 		</style>
     </head>
     <body class="other-page">
@@ -91,49 +98,18 @@
             <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
         <![endif]-->
 
-        <!-- HEADER TOP AREA START -->
+       <!-- HEADER TOP AREA START -->
 		<section class="header-top-area">
 			<div class="container">
-				<div class="row">
-					<div class="col-md-6">
-						<div class="left-msg pull-left">
-							<h6>FREE SHIPPING ON OVER ₹100</h6>
-						</div>
-					</div>
-					<div class="col-md-6">
-						<div class="right-login pull-right">
-							<div class="currencies-block-top curency pull-left">
-								<div class="current">
-									<span>USD</span>
-									<i class="fa fa-angle-down"></i>
-								</div>
-								<ul class="first-currencies toggle-content">
-									<li><a href="#">Dollar (USD)</a></li>
-									<li><a href="#">Pound (GBP)</a></li>
-									<li><a href="#">Pound (GBP)</a></li>
-								</ul>
-							</div>
-							<div class="languages-block-top curency pull-left">
-								<div class="current">
-									<span>LANGUAGE</span>
-									<i class="fa fa-angle-down"></i>
-								</div>
-								<ul class="first-languages toggle-content">
-									<li><a href="#">ENGLISH</a></li>
-								</ul>
-							</div>
-							<div class="curency pull-left">
-								<div class="current">
-									{% if user.is_authenticated %}
-										<i class="fa fa-user left"></i>
-										<span><a href="">Welcome, {{ user.first_name }} | </a></span>
-										<span><a href="{% url 'logout' %}"> LOGOUT</a></span>
-									{% else %}
-										<span><a href="{% url 'login' %}">LOG IN</a></span>
-									{% endif %}
-								</div> 
-							</div>
-						</div>
+				<div class="header-content">
+					<div class="user-info">
+						{% if user.is_authenticated %}
+							<i class="fa fa-user"></i>
+							<span class="welcome-text">Welcome, {{ user.first_name }}</span>
+							<a href="{% url 'logout' %}" class="auth-link">LOGOUT</a>
+						{% else %}
+							<a href="{% url 'login' %}" class="auth-link">LOG IN</a>
+						{% endif %}
 					</div>
 				</div>
 			</div>
@@ -153,7 +129,7 @@
 							<ul class="list-inline">
 							  <li class="expand active"><a href="{% url 'home' %}">HOME</a>
 							  </li>
-							  <li><a href="#">CATEGORIES</a>
+							  <li><a href="{% url 'shop_list' %}">MEN</a>
 								<!-- Mega Menu Four Column -->
 								<div class="mega-menu">
 									{% for category in categories%}
@@ -167,14 +143,8 @@
 										{% endfor %}
 									</span>
 									{% endfor %}
-									<span class="mega-menu-img">
-										<a href="{% url 'shop_list' %}" class="mega-title">ALL PRODUCTS</a>
-										<a href="#"><img alt="" src="{% static 'assets/img/other-pg/img_menu.jpg' %}"/></a>
-									</span>
 								</div>
 							  </li>
-							  
-							  <li><a href="about-us.html">ABOUT</a></li>
 							  <li class="expand"><a href="{% url 'user_account' %}">ACCOUNT</a>
 							  </li>
 							  <li><a href="{% url 'contact_us' %}">CONTACT</a></li>
@@ -191,7 +161,7 @@
 										<nav id="mobile-nav">
 											<ul>
 												<li><a href="{% url 'home' %}">Home </a></li>
-												<li><a href="#">CATEGORIES</a>
+												<li><a href="{% url 'shop_list' %}">SHOP</a>
 												<!-- Mega Menu Four Column -->
 												<div class="mega-menu">
 													{% for category in categories%}
@@ -205,13 +175,8 @@
 														{% endfor %}
 													</span>
 													{% endfor %}
-													<span class="mega-menu-img">
-														<a href="{% url 'shop_list' %}" class="mega-title">ALL PRODUCTS</a>
-														<a href="#"><img alt="" src="{% static 'assets/img/other-pg/img_menu.jpg' %}"/></a>
-													</span>
 												</div>
 												</li>
-												<li><a href="about-us.html"> About Us </a></li>
 												<li><a href="{% url 'user_account'%}"> Account </a>
 												</li>
 												<li><a href="{% url 'contact_us' %}"> Contact Us </a></li>
@@ -267,77 +232,84 @@
 			</div>
 		</section>
 		<!-- BANNER AREA END -->
-		 <!-- WISHLIST AREA START -->
+		<!-- WISHLIST AREA START -->
 		<section class="wishlist-area">
-			<h1 class="wishlist-title">My Wishlist</h1>
-			{% if wishlist_data %}
-			<form action="{% url 'add_all_items_to_cart' %}" method="post" id="add-all-to-cart-form">
-				{% csrf_token %}
-			<table class="wishlist-table">
-				<thead>
-					<tr>
-						<th>Product</th>
-						<th>Price</th>
-						<th>Size(UK)</th>
-						<th>Stock Status</th>
-						<th>Actions</th>
-					</tr>
-				</thead>
-				<tbody>
-					{% for wishlist_item in wishlist_data %}
-					<tr>
-						<td>
-							<div style="display: flex; align-items: center;">
-								<img src="{{ wishlist_item.item.product_variant.image_1.url}}" alt="Product" class="product-image" width="100px" height="150px">
-								<span class="product-name">{{ wishlist_item.item.product_variant.product_id.product_name}}</span>
-							</div>
-						</td>
-						<td>{{ wishlist_item.item.product_variant.product_id.price}}</td>
-						<td>
-							<select name="size_{{ wishlist_item.item.id }}" class="size-select" onchange="updateStockStatus(this)">
-								<option value="">Select Size</option>
-								{% for size in wishlist_item.size_data %}
-								<option value="{{ size.size }}" data-stock="{{ size.in_stock|yesno:'true,false' }}" data-quantity="{{ size.quantity }}">{{ size.size }}</option>
-								{% endfor %}
-							</select>
-						</td>
-						<td>
-							<div class="stock-status" style="font-weight: bold;">Select a size to check availability</div>
-						</td>
-						<td>
-							<button class="btn" type="submit" formaction="{% url 'add_to_cart_from_wishlist' wishlist_item.item.id %}">Add to Cart</button>
-							<button class="remove-btn" onclick="location.href='{% url 'remove_wishlist_item' wishlist_item.item.id %}'"><i class="fa fa-trash-o"></i></button>
-						</td>
-					</tr>
-					<!-- Add more product rows as needed -->
-					 {% endfor %}
-				</tbody>
-			</table>
-			<div class="wishlist-actions">
-				<a href="#" class="btn"><i class="fa fa-angle-double-left"></i> Continue Shopping</a>
-				<div>
-					<a href="{% url 'clear_wishlist' %}" class="btn">Clear Wishlist</a>
-					<a href="#" class="btn" onclick="submitAddAllToCartForm(event)">Add All to Cart</a>
-				</div>
+			<div class="wishlist-banner">
+				<h1>ITEMS</h1>
 			</div>
-		</form>
-		{% else %}
-		<!-- Empty wishlist message -->
-		<div class="empty-wishlist-container text-center">
-			<p>Your wishlist is currently empty. <a href="{% url 'home' %}">Continue shopping</a> to add items to your wishlist.</p>
+			<div class="container mt-4">
+				{% if wishlist_data %}
+				<form action="{% url 'add_all_items_to_cart' %}" method="post" id="add-all-to-cart-form">
+					{% csrf_token %}
+					<div class="table-responsive">
+						<table class="table table-hover">
+							<thead>
+								<tr>
+									<th>Product</th>
+									<th>Price</th>
+									<th>Size (UK)</th>
+									<th>Stock Status</th>
+									<th>Actions</th>
+								</tr>
+							</thead>
+							<tbody>
+								{% for wishlist_item in wishlist_data %}
+								<tr>
+									<td class="product-info">
+										<img src="{{ wishlist_item.item.product_variant.image_1.url}}" alt="Product" class="product-image">
+										<span class="product-name">{{ wishlist_item.item.product_variant.product_id.product_name }}</span>
+									</td>
+									<td class="align-middle text-center">₹{{ wishlist_item.item.product_variant.product_id.price }}</td>
+									<td class="align-middle text-center">
+										<select name="size_{{ wishlist_item.item.id }}" class="form-select size-select mx-auto" onchange="updateStockStatus(this)">
+											<option value="">Select Size</option>
+											{% for size in wishlist_item.size_data %}
+											<option value="{{ size.size }}" data-stock="{{ size.in_stock|yesno:'true,false' }}" data-quantity="{{ size.quantity }}">{{ size.size }}</option>
+											{% endfor %}
+										</select>
+									</td>
+									<td class="stock-status align-middle text-center">Select a size</td>
+									<td class="align-middle text-center">
+										<button class="btn btn-add-to-cart mb-2" type="submit" formaction="{% url 'add_to_cart_from_wishlist' wishlist_item.item.id %}">
+											Add to Cart
+										</button>
+										<a href="{% url 'remove_wishlist_item' wishlist_item.item.id %}" class="btn btn-remove">
+											<i class="fa fa-trash-o"></i>
+										</a>
+									</td>
+								</tr>
+								{% endfor %}
+							</tbody>
+						</table>
+					</div>
+					<div class="wishlist-actions">
+						<a href="{% url 'home' %}" class="btn btn-continue-shopping">Continue Shopping</a>
+						<div class="right-actions">
+							<a href="{% url 'clear_wishlist' %}" class="btn btn-clear-wishlist">Clear Wishlist</a>
+							<a href="#" class="btn btn-add-all-to-cart" onclick="submitAddAllToCartForm(event)">Add All to Cart</a>
+						</div>
+					</div>
+				</form>
+				{% else %}
+				<div class="empty-wishlist">
+					<p>Your wishlist is empty. <a href="{% url 'home' %}">Continue shopping</a> to add items to your wishlist.</p>
+				</div>
+				{% endif %}
+			</div>
+		</section>
+
+		{% if messages %}
+		<div class="container mt-4">
+			{% for message in messages %}
+			<div class="alert alert-{{ message.tags|default:'info' }} alert-dismissible fade show" role="alert">
+				{{ message }}
+				<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+			</div>
+			{% endfor %}
 		</div>
 		{% endif %}
-		</section>
-		{% if messages %}
-			<div class="messages mt-5">
-				{% for message in messages %}
-				<div class="alert {% if message.tags %}alert-{{ message.tags }}{% else %}alert-info{% endif %}">
-					{{ message }}
-				</div>
-				{% endfor %}
-			</div>
-			{% endif %}
 		<!-- WISHLIST AREA END -->
+
 		<!-- OUR BRAND AREA START -->
 		<section class="our-brand-area">
 			<div class="container">
@@ -437,13 +409,13 @@
 					</div>
 					<div class="col-md-3 col-sm-4 col-xs-12">
 						<div class="address-area">
-							<a href="{% url 'home' %}"><img src="{% static 'assets/img/home-1/footer-logo.png' %}" alt="" /></a>
+							<a href="{% url 'home' %}"><img src="{% static 'assets/img/home-1/logo_dg_footer.png' %}" alt="" /></a>
 							<p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard.</p>
 							<div class="contact-details">
 								<ul>
-									<li><i class="fa fa-phone"></i>+(00) 56-888-999</li>
-									<li><i class="fa fa-envelope-o"></i> admin@DevItems.com</li>
-									<li><i class="fa fa-map-marker"></i> 1212, Bigrun street, France.</li>
+									<li><i class="fa fa-phone"></i>+91 7428730894</li>
+									<li><i class="fa fa-envelope-o"></i> dgshoes930@gmail.com</li>
+									<li><i class="fa fa-map-marker"></i> Kinfra, Malappuram,Kerala,India						</li>
 								</ul>
 							</div>
 						</div>

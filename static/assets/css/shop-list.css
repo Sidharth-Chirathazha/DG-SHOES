@@ -1,0 +1,210 @@
+.custom-pagination .page-link {
+    color: pink;
+    border-color: pink;
+}
+
+.custom-pagination .page-item.active .page-link {
+    background-color: pink;
+    border-color: pink;
+}
+
+.custom-pagination .page-item.disabled .page-link {
+    color: lightpink;
+}
+
+
+.product-name {
+    margin-bottom: 10px;
+    height: 40px;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+}
+.rating-price-wrapper {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.pro-rating {
+    padding: 0;
+    margin: 0;
+    list-style-type: none;
+}
+.pro-rating li {
+    display: inline-block;
+}
+.pro-rating .fa-star {
+    font-size: 12px;
+}
+.out-of-stock {
+    color: red;
+}
+
+
+
+.product-name {
+    font-size: 16px;
+    font-weight: bold;
+    margin-bottom: 8px;
+    color: #333;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+}
+.rating {
+    font-size: 14px;
+    color: #555;
+    margin-bottom: 6px;
+}
+.rating .fa-star {
+    font-size: 12px;
+}
+.price {
+    font-size: 16px;
+    font-weight: bold;
+    color: #FF7575;
+}
+.original-price {
+    text-decoration: line-through;
+    color: #999;
+    font-size: 14px;
+    margin-right: 5px;
+}
+
+.sidebar-widget {
+    margin-bottom: 30px;
+}
+
+.sidebar-widget h4 {
+    font-size: 16px;
+    margin-bottom: 15px;
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 10px;
+}
+
+
+.color-options a {
+    display: inline-block;
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    margin-right: 5px;
+}
+
+
+
+    .product-grid {
+      display: flex;
+      flex-wrap: wrap;
+      margin: 0 -15px; /* Adjust based on your column padding */
+    }
+    
+    .product-grid > div {
+      flex: 0 0 33.333%; /* For 3 columns */
+      max-width: 33.333%;
+      padding: 0 15px;
+      margin-bottom: 30px; /* Adjust as needed */
+    }
+    
+    @media (max-width: 991px) {
+      .product-grid > div {
+        flex: 0 0 50%;
+        max-width: 50%;
+      }
+    }
+    
+    @media (max-width: 575px) {
+      .product-grid > div {
+        flex: 0 0 100%;
+        max-width: 100%;
+      }
+    }
+
+
+
+    .sidebar-widget form {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .color-options {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 10px;
+        margin-bottom: 15px;
+    }
+
+    .color-option {
+        position: relative;
+        width: 30px;
+        height: 30px;
+    }
+
+    .color-option input[type="checkbox"] {
+        position: absolute;
+        opacity: 0;
+        cursor: pointer;
+        height: 0;
+        width: 0;
+    }
+
+    .color-option label {
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 30px;
+        width: 30px;
+        border-radius: 50%;
+        border: 2px solid #ddd;
+        cursor: pointer;
+    }
+
+    .color-option input[type="checkbox"]:checked + label {
+        border: 2px solid #333;
+    }
+
+    .color-option label:hover {
+        opacity: 0.8;
+    }
+
+    .button-container {
+        display: flex;
+        justify-content: center;
+        width: 100%;
+    }
+
+    .apply-filters {
+        padding: 5px 10px;
+        background-color: black;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        margin-top: 15px;
+        width: 100%;
+    }
+
+    .apply-filters:hover {
+        background-color: #FF7575;
+    }
+
+    .price-range-options {
+        margin-top: 10px;
+        padding-left: 5px;
+    }
+    
+    .form-check {
+        margin-bottom: 10px; /* Adds space between each checkbox */
+    }
+    
+    .form-check-label {
+        margin-left: 50px; /* Space between the checkbox and label */
+        display: inline-block; /* Ensure the label takes up space */
+    }
+    
+    .price-range-options .form-check-input {
+        transform: scale(1.2); /* Slightly increase the size of the checkbox */
+    }

@@ -61,6 +61,7 @@
     <link rel="stylesheet" href="{% static 'assets_admin/vendor/css/rtl/core.css' %}" />
     <link rel="stylesheet" href="{% static 'assets_admin/vendor/css/rtl/theme-default.css' %}"  />
     <link rel="stylesheet" href="{% static 'assets_admin/css/demo.css' %}" />
+    <link rel="stylesheet" href="{% static 'assets_admin/css/sales-report.css' %}" />
     
     <!-- Vendors CSS -->
     <link rel="stylesheet" href="{% static 'assets_admin/vendor/libs/perfect-scrollbar/perfect-scrollbar.css' %}" />
@@ -78,122 +79,6 @@
     <!--? Config:  Mandatory theme config file contain global vars & default theme options, Set your preferred theme option in this file.  -->
     <script src="{% static 'assets_admin/js/config.js' %}"></script>
 
-    <style>
-      #sales-report {
-        background-color: #ffffff;
-        border-radius: 8px;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        padding: 15px;
-        margin-top: 15px;
-        font-size: 15px;
-      }
-    
-      #sales-report h2 {
-        font-size: 20px;
-        color: #333;
-        margin-bottom: 15px;
-        text-align: center;
-      }
-    
-      .filters-section {
-        display: flex;
-        justify-content: space-between;
-        margin-bottom: 15px;
-      }
-    
-      .date-range-filters, .quick-filters {
-        display: flex;
-        align-items: center;
-        gap: 5px;
-      }
-    
-      .date-range-filters input[type="date"] {
-        padding: 3px;
-        border: 1px solid #e0e0e0;
-        border-radius: 3px;
-        font-size: 13px;
-      }
-    
-      button {
-        background-color: #8c57ff;
-        color: white;
-        border: none;
-        padding: 5px 10px;
-        border-radius: 3px;
-        cursor: pointer;
-        transition: background-color 0.3s;
-        font-size: 13px;
-      }
-    
-      button:hover {
-        background-color: #7a4ae0;
-      }
-    
-      .summary-section {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-        gap: 10px;
-        margin-bottom: 15px;
-      }
-    
-      .summary-item {
-        background-color: #f5f5f5;
-        padding: 10px;
-        border-radius: 4px;
-        text-align: center;
-      }
-    
-      .summary-title {
-        font-size: 15px;
-        color: #666;
-        margin-bottom: 3px;
-        display: block;
-      }
-    
-      .summary-item span:last-child {
-        font-size: 14px;
-        font-weight: bold;
-        color: #333;
-      }
-    
-      .detailed-report-section {
-        overflow-x: auto;
-      }
-    
-      table {
-        width: 100%;
-        border-collapse: collapse;
-        font-size: 13px;
-      }
-    
-      th, td {
-        padding: 8px;
-        text-align: left;
-        border-bottom: 1px solid #e0e0e0;
-      }
-    
-      th {
-        background-color: #f5f5f5;
-        font-weight: bold;
-        color: #333;
-      }
-    
-      tr:hover {
-        background-color: #f9f9f9;
-      }
-    
-      .export-options {
-        display: flex;
-        justify-content: center;
-        gap: 10px;
-        margin-top: 15px;
-      }
-    
-      .export-options button, .quick-filters button {
-        font-size: 12px;
-        padding: 5px 10px;
-      }
-    </style>
     
 </head>
 
@@ -302,7 +187,7 @@
           </a>
         </li>
         <li class="menu-item">
-          <a href="app-ecommerce-order-details.html" class="menu-link">
+          <a href="#" class="menu-link">
             <div data-i18n="Order Details">Order Details</div>
           </a>
         </li>
@@ -316,12 +201,12 @@
       </a>
       <ul class="menu-sub">
         <li class="menu-item">
-          <a href="app-ecommerce-referral.html" class="menu-link">
+          <a href="#" class="menu-link">
             <div data-i18n="Referrals">Referrals</div>
           </a>
         </li>
         <li class="menu-item">
-          <a href="app-ecommerce-referral.html" class="menu-link">
+          <a href="#" class="menu-link">
             <div data-i18n="Reviews">Reviews</div>
           </a>
         </li>
@@ -340,7 +225,7 @@
           </a>
         </li>
         <li class="menu-item">
-          <a href="app-ecommerce-referral.html" class="menu-link">
+          <a href="#" class="menu-link">
             <div data-i18n="User Details">User Details</div>
           </a>
         </li>
@@ -510,6 +395,7 @@
               </div>
             
               <div class="detailed-report-section">
+                <div class="table-responsive">
                 <table>
                   <thead>
                     <tr>
@@ -540,6 +426,7 @@
                     {% endfor %}
                   </tbody>
                 </table>
+              </div>
               </div>
               <div class="export-options">
                 <a href="{% url 'export_pdf' %}{% if request.GET.start_date and request.GET.end_date %}?start_date={{ request.GET.start_date }}&end_date={{ request.GET.end_date }}{% endif %}" class="btn" id="export-pdf">PDF</a>

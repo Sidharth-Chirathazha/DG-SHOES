@@ -41,6 +41,10 @@
 		<!-- responsive css -->
         <link rel="stylesheet" href="{% static 'assets/css/responsive.css' %}">
 
+		<link rel="stylesheet" href="{% static 'assets/css/product-detail.css' %}">
+
+		<link rel="stylesheet" href="{% static 'assets/css/top-nav.css' %}">
+
 		{% comment %} <link rel="stylesheet" href="{% static 'assets/css/extras.css' %}"> {% endcomment %}
 
 		
@@ -52,69 +56,40 @@
 
 		<style>
 
-			
-			.zoom-container {
-				overflow: hidden;
-				position: relative;
-			}
-			
-			.zoom {
+
+			.section-titel {
 				display: block;
-				transition: transform 0.5s ease;
-				width: 100%; /* Adjust this to your preference */
-				cursor: zoom-in; 
-			}
-
-			{% comment %} PRODUCT SIZE STYLES {% endcomment %}
-
-			
-			.zoom-container:hover .zoom {
-				transform: scale(1.5); /* Adjust the scale to your preference */
-			}
-
-
-			.out-of-stock {
-				font-size: 0.8em;
-				color: red;
-			}
-			.low-stock {
-				font-size: 0.8em;
-				color: orange;
-			}
-
-
-
-
-			.share_buttons {
-				display: flex;
-				align-items: center;
-			}
-			
-			.product-sizes {
-				margin-right: 30px; /* Increase margin-right for more space */
-			}
-			
-			.product-images-variant {
-				display: flex;
-			}
-			
-			.product-image-variant {
-				margin-right: 20px; /* Adjust spacing between images */
-				position: relative;
 				overflow: hidden;
-			}
+				padding-bottom: 30px;
+				position: relative;
+				}
+	
+			.section-titel::after {
+				background: rgba(0, 0, 0, 0) url('{% static 'assets/img/sec-titel.png' %}') no-repeat scroll 0 0;
+				content: "";
+				height: 100%;
+				left: 39%;
+				position: absolute;
+				top: 30px;
+				width: 100%;
+				}
+			.section-titel > h3 {
+				color: #666666;
+				font-family: "Montserrat",sans-serif;
+				font-size: 20px;
+				font-weight: 400;
+				text-transform: uppercase;
+				}
+			.hot-deals-area {
+				background-attachment: scroll;
+				background-image: url("{% static 'assets/img/home-1/hot-deals.jpg' %}");
+				background-position: center center;
+				background-size: cover;
+				}
 			
-			.product-image-variant img {
-				max-width: 60px; /* Adjust image width */
-				height: auto;
-				display: block;
-				transition: transform 0.3s ease; /* Smooth transition for zoom effect */
-				cursor: pointer; /* Change cursor to hand pointer */
-			}
+
+		
 			
-			.product-image-variant img:hover {
-				transform: scale(1.2); /* Zoom effect on hover */
-			}
 
 		</style>
     </head>
@@ -123,51 +98,18 @@
             <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
         <![endif]-->
 
-        <!-- HEADER TOP AREA START -->
+       <!-- HEADER TOP AREA START -->
 		<section class="header-top-area">
 			<div class="container">
-				<div class="row">
-					<div class="col-md-6">
-						<div class="left-msg pull-left">
-							<h6>FREE SHIPPING ON OVER $100</h6>
-						</div>
-					</div>
-					<div class="col-md-6">
-						<div class="right-login pull-right">
-							<div class="currencies-block-top curency pull-left">
-								<div class="current">
-									<span>USD</span>
-									<i class="fa fa-angle-down"></i>
-								</div>
-								<ul class="first-currencies toggle-content">
-									<li><a href="#">Dollar (USD)</a></li>
-									<li><a href="#">Pound (GBP)</a></li>
-									<li><a href="#">Pound (GBP)</a></li>
-								</ul>
-							</div>
-							<div class="languages-block-top curency pull-left">
-								<div class="current">
-									<span>LANGUAGE</span>
-									<i class="fa fa-angle-down"></i>
-								</div>
-								<ul class="first-languages toggle-content">
-									<li><a href="#">ENGLISH</a></li>
-									<li><a href="#">BANGLA</a></li>
-									<li><a href="#">ARABIC</a></li>
-								</ul>
-							</div>
-							<div class="curency pull-left">
-								<div class="current">
-									{% if user.is_authenticated %}
-										<i class="fa fa-user left"></i>
-										<span><a href="">Welcome, {{ user.first_name }} | </a></span>
-										<span><a href="{% url 'logout' %}"> LOGOUT</a></span>
-									{% else %}
-										<span><a href="{% url 'login' %}">LOG IN</a></span>
-									{% endif %}
-								</div> 
-							</div>
-						</div>
+				<div class="header-content">
+					<div class="user-info">
+						{% if user.is_authenticated %}
+							<i class="fa fa-user"></i>
+							<span class="welcome-text">Welcome, {{ user.first_name }}</span>
+							<a href="{% url 'logout' %}" class="auth-link">LOGOUT</a>
+						{% else %}
+							<a href="{% url 'login' %}" class="auth-link">LOG IN</a>
+						{% endif %}
 					</div>
 				</div>
 			</div>
@@ -187,7 +129,7 @@
 							<ul class="list-inline">
 							  <li class="expand active"><a href="{% if user.is_authenticated %}{% url 'home' %}{% else %}{% url 'index' %}{% endif %}">HOME</a>
 							  </li>
-							  <li><a href="#">CATEGORIES</a>
+							  <li><a href="{% url 'shop_list' %}">SHOP</a>
 								<!-- Mega Menu Four Column -->
 								<div class="mega-menu">
 									{% for category in categories%}
@@ -201,14 +143,8 @@
 										{% endfor %}
 									</span>
 									{% endfor %}
-									<span class="mega-menu-img">
-										<a href="{% url 'shop_list' %}" class="mega-title">ALL PRODUCTS</a>
-										<a href="#"><img alt="" src="{% static 'assets/img/other-pg/img_menu.jpg' %}"/></a>
-									</span>
 								</div>
 							  </li>
-							  
-							  <li><a href="about-us.html">ABOUT</a></li>
 							  <li class="expand"><a href="{% url 'user_account' %}">ACCOUNT</a>
 							  </li>
 							  <li><a href="{% url 'contact_us' %}">CONTACT</a></li>
@@ -225,7 +161,7 @@
 										<nav id="mobile-nav">
 											<ul>
 												<li><a href="{% if user.is_authenticated %}{% url 'home' %}{% else %}{% url 'index' %}{% endif %}">Home </a></li>
-												<li><a href="#">CATEGORIES</a>
+												<li><a href="{% url 'shop_list' %}">SHOP</a>
 												<!-- Mega Menu Four Column -->
 												<div class="mega-menu">
 													{% for category in categories%}
@@ -239,13 +175,8 @@
 														{% endfor %}
 													</span>
 													{% endfor %}
-													<span class="mega-menu-img">
-														<a href="{% url 'shop_list' %}" class="mega-title">ALL PRODUCTS</a>
-														<a href="#"><img alt="" src="{% static 'assets/img/other-pg/img_menu.jpg' %}"/></a>
-													</span>
 												</div>
 												</li>
-												<li><a href="about-us.html"> About Us </a></li>
 												<li><a href="{% url 'user_account'%}"> Account </a>
 												</li>
 												<li><a href="{% url 'contact_us' %}"> Contact Us </a></li>
@@ -429,104 +360,23 @@
 		<div class="product-tab-area">
 			<div class="container">
 				<div class="row">
-					<div class="col-lg-9 col-md-9">
-						<div class="product-tabs">
-							<div>
-							  <!-- Nav tabs -->
-							  <ul class="nav nav-tabs" role="tablist">
-								<li role="presentation" class="active"><a href="#tab-desc" aria-controls="tab-desc" role="tab" data-toggle="tab">Description</a></li>
-								<li role="presentation"><a href="#page-comments" aria-controls="page-comments" role="tab" data-toggle="tab">Reviews (1)</a></li>
-							  </ul>
-							  <!-- Tab panes -->
-							  <div class="tab-content">
-								<div role="tabpanel" class="tab-pane active" id="tab-desc">
-									<div class="product-tab-desc">
-										<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam fringilla augue nec est tristique auctor. Donec non est at libero vulputate rutrum. Morbi ornare lectus quis justo gravida semper. Nulla tellus mi, vulputate adipiscing cursus eu, suscipit id nulla.</p>
-										<p>Pellentesque aliquet, sem eget laoreet ultrices, ipsum metus feugiat sem, quis fermentum turpis eros eget velit. Donec ac tempus ante. Fusce ultricies massa massa. Fusce aliquam, purus eget sagittis vulputate, sapien libero hendrerit est, sed commodo augue nisi non neque. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed tempor, lorem et placerat vestibulum, metus nisi posuere nisl, in accumsan elit odio quis mi. Cras neque metus, consequat et blandit et, luctus a nunc. Etiam gravida vehicula tellus, in imperdiet ligula euismod eget.</p>
-									</div>
-								</div>
-								<div role="tabpanel" class="tab-pane" id="page-comments">
-									<div class="product-tab-desc">
-										<div class="product-page-comments">
-											<h2>1 review for Integer consequat ante lectus</h2>
-											<ul>
-												<li>
-													<div class="product-comments">
-														<img src="{% static 'assets/img/blog/avatar.png' %}" alt="" />
-														<div class="product-comments-content">
-															<p><strong>admin</strong> -
-																<span>March 7, 2015:</span>
-																<span class="pro-comments-rating">
-																	<i class="fa fa-star"></i>								
-																	<i class="fa fa-star"></i>								
-																	<i class="fa fa-star"></i>								
-																	<i class="fa fa-star"></i>								
-																</span>
-															</p>
-															<div class="desc">
-																Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam fringilla augue nec est tristique auctor. Donec non est at libero vulputate rutrum.
-															</div>
-														</div>
-													</div>
-												</li>
-											</ul>
-											<div class="review-form-wrapper">
-												<h3>Add a review</h3>
-												<form action="#">
-													<input type="text" placeholder="your name"/>
-													<input type="email" placeholder="your email"/>
-													<div class="your-rating">
-														<h5>Your Rating</h5>
-														<span>
-															<a href="#"><i class="fa fa-star"></i></a>
-															<a href="#"><i class="fa fa-star"></i></a>
-														</span>
-														<span>
-															<a href="#"><i class="fa fa-star"></i></a>
-															<a href="#"><i class="fa fa-star"></i></a>
-															<a href="#"><i class="fa fa-star"></i></a>
-														</span>
-														<span>
-															<a href="#"><i class="fa fa-star"></i></a>
-															<a href="#"><i class="fa fa-star"></i></a>
-															<a href="#"><i class="fa fa-star"></i></a>
-															<a href="#"><i class="fa fa-star"></i></a>
-														</span>
-														<span>
-															<a href="#"><i class="fa fa-star"></i></a>
-															<a href="#"><i class="fa fa-star"></i></a>
-															<a href="#"><i class="fa fa-star"></i></a>
-															<a href="#"><i class="fa fa-star"></i></a>
-															<a href="#"><i class="fa fa-star"></i></a>
-														</span>
-													</div>
-													<textarea id="product-message" cols="30" rows="10" placeholder="Your Rating"></textarea>
-													<input type="submit" value="submit" />
-												</form>
-											</div>
-										</div>
-									</div>
-								</div>
-							  </div>
-							</div>						
-						</div>
-						<div class="clear"></div>
+					<div class="col-12">
 						<div class="upsells_products_widget">
 							<div class="text-center">
 								<div class="section-titel">
-									<h3>Featured Products</h3>
+									<h3>Related Products</h3>
 								</div>
 							</div>
-							<div class="row">
+							<div class="row featured-products-row">
 								<!-- single-product start -->
-								{% for product in featured_products %}
+								{% for product in related_products %}
 								{% with product.productcolorimage_set.first as color_image %}
-								<div class="col-md-4 col-sm-4">
+								<div class="col-lg-4 col-md-6 col-sm-12 mb-4">
 									<div class="single-product">
 										<div class="product-image">
 											<a class="product-img" href="{% url 'product_detail' product.id %}?variant={{color_image.id}}">
-												<img class="primary-img" src="{{ color_image.image_1.url}}" alt="{{product.product_name}}" />
-												<img class="secondary-img" src="{{ color_image.image_2.url}}" alt="{{product.product_name}}" />
+												<img class="primary-img img-fluid" src="{{ color_image.image_1.url}}" alt="{{product.product_name}}" />
+												<img class="secondary-img img-fluid" src="{{ color_image.image_2.url}}" alt="{{product.product_name}}" />
 											</a>
 										</div>
 										{% if product.is_offer_applied %}
@@ -539,20 +389,10 @@
 											<span class="price">₹ {{ product.price }}</span>
 										</div>
 										<div class="pro-action">
-											<ul>
+											<ul class="list-unstyled">
 												<li>
-													<a class="test all_src_icon" href="#" title="" data-toggle="tooltip" data-placement="top"  data-original-title="Shop Cart">
-													<i class="fa fa-retweet" aria-hidden="true"></i>
-													</a>
-												</li>
-												<li>
-													<a class="test all_src_icon" href="#" title="" data-toggle="tooltip" data-placement="top" data-original-title="Add Wishlist">
-													<i class="fa fa-heart" aria-hidden="true"></i>
-													</a>
-												</li>
-												<li>
-													<a class="test all_src_icon" href="#" title="" data-toggle="tooltip" data-placement="top" data-original-title="Compare">
-													<i class="fa fa-shopping-cart" aria-hidden="true"></i>
+													<a class="test all_src_icon" href="{% url 'add_to_wishlist' color_image.id %}" title="" data-toggle="tooltip" data-placement="top" data-original-title="Add Wishlist">
+														<i class="fa fa-heart" aria-hidden="true"></i>
 													</a>
 												</li>
 											</ul>
@@ -561,98 +401,14 @@
 								</div>
 								{% endwith %}
 								{% endfor %}
-								<!-- single-product end -->								
+								<!-- single-product end -->
 							</div>
 						</div>
-					</div>
-					<div class="col-lg-3 col-md-3">
-						<!-- widget-recent start -->
-						<aside class="widget top-product-widget">
-							<h3 class="sidebar-title">Recent</h3>
-							<ul>
-								<li>
-									<div class="single-product">
-										<div class="product-img">
-											<a href="#">
-												<img class="primary-image" src="{% static 'assets/img/single-product/r1.jpg' %}" alt="" />
-												<img class="secondary-image" src="{% static 'assets/img/single-product/r2.jpg' %}" alt="" />
-											</a>						
-										</div>
-										<div class="productsngl-content">
-											<div class="pro-info">
-												<h2 class="product-name"><a href="#">Curabitur vulputate</a></h2>
-												<div class="price-box">
-													<span class="new-price">£90.00</span>
-													<span class="old-price">£120.00</span>
-												</div>								
-											</div>									
-										</div>
-									</div>
-								</li>
-								<li>
-									<div class="single-product">
-										<div class="product-img">
-											<a href="#">
-												<img class="primary-image" src="{% static 'assets/img/single-product/r3.jpg' %}" alt="" />
-												<img class="secondary-image" src="{% static 'assets/img/single-product/r4.jpg' %}" alt="" />
-											</a>						
-										</div>
-										<div class="productsngl-content">
-											<div class="pro-info">
-												<h2 class="product-name"><a href="#">Aliquam lobortis est</a></h2>
-												<div class="price-box">
-													<span class="new-price">£70.00</span>
-													<span class="old-price">£100.00</span>
-												</div>								
-											</div>								
-										</div>
-									</div>	
-								</li>
-								<li>
-									<div class="single-product">
-										<div class="product-img">
-											<a href="#">
-												<img class="primary-image" src="{% static 'assets/img/single-product/r2.jpg' %}" alt="" />
-												<img class="secondary-image" src="{% static 'assets/img/single-product/r1.jpg' %}" alt="" />
-											</a>						
-										</div>
-										<div class="productsngl-content">
-											<div class="pro-info">
-												<h2 class="product-name"><a href="#">Nulla sed libero</a></h2>
-												<div class="price-box">
-													<span class="new-price">£80.00</span>
-													<span class="old-price">£120.00</span>
-												</div>								
-											</div>								
-										</div>
-									</div>	
-								</li>
-								<li>
-									<div class="single-product">
-										<div class="product-img">
-											<a href="#">
-												<img class="primary-image" src="{% static 'assets/img/single-product/r4.jpg' %}" alt="" />
-												<img class="secondary-image" src="{% static 'assets/img/single-product/r3.jpg' %}" alt="" />
-											</a>						
-										</div>
-										<div class="productsngl-content">
-											<div class="pro-info">
-												<h2 class="product-name"><a href="#">Pellentesque posuere</a></h2>
-												<div class="price-box">
-													<span class="new-price">£50.00</span>
-												</div>								
-											</div>									
-										</div>
-									</div>
-								</li>
-							</ul>
-						</aside>
-						<!-- widget-recent end -->				
 					</div>
 				</div>
 			</div>
 		</div>
-		<!-- PRODUCT TAB AREA START -->
+		<!-- PRODUCT TAB AREA END -->
 		<!-- OUR BRAND AREA START -->
 		<section class="our-brand-area">
 			<div class="container">
@@ -756,9 +512,9 @@
 							<p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard.</p>
 							<div class="contact-details">
 								<ul>
-									<li><i class="fa fa-phone"></i>+(00) 56-888-999</li>
-									<li><i class="fa fa-envelope-o"></i> admin@DevItems.com</li>
-									<li><i class="fa fa-map-marker"></i> 1212, Bigrun street, France.</li>
+									<li><i class="fa fa-phone"></i>+91 7428730894</li>
+									<li><i class="fa fa-envelope-o"></i> dgshoes930@gmail.com</li>
+									<li><i class="fa fa-map-marker"></i> Kinfra, Malappuram,Kerala,India						</li>
 								</ul>
 							</div>
 						</div>

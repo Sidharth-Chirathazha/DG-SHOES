@@ -41,6 +41,8 @@
         <link rel="stylesheet" href="{% static 'assets/css/responsive.css' %}">
 
 		<link rel="stylesheet" href="{% static 'assets/css/index.css' %}">
+
+		<link rel="stylesheet" href="{% static 'assets/css/top-nav.css' %}">
 		<!-- modernizr css -->
         <script src="{% static 'assets/js/vendor/modernizr-2.8.3.min.js' %}"></script>
 		<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/assets/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">			
@@ -96,48 +98,16 @@ f
             <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
         <![endif]-->
 
-        <!-- HEADER TOP AREA START -->
+         <!-- HEADER TOP AREA START -->
 		<section class="header-top-area">
 			<div class="container">
-				<div class="row">
-					<div class="col-md-6">
-						<div class="left-msg pull-left">
-							<h6>FREE SHIPPING ON OVER $100</h6>
-						</div>
-					</div>
-					<div class="col-md-6">
-						<div class="right-login pull-right">
-							<div class="currencies-block-top curency pull-left">
-								<div class="current">
-									<span>USD</span>
-									<i class="fa fa-angle-down"></i>
-								</div>
-								<ul class="first-currencies toggle-content">
-									<li><a href="#">Dollar (USD)</a></li>
-									<li><a href="#">Pound (GBP)</a></li>
-									<li><a href="#">Pound (GBP)</a></li>
-								</ul>
-							</div>
-							<div class="languages-block-top curency pull-left">
-								<div class="current">
-									<span>LANGUAGE</span>
-									<i class="fa fa-angle-down"></i>
-								</div>
-								<ul class="first-languages toggle-content">
-									<li><a href="#">ENGLISH</a></li>
-								</ul>
-							</div>
-							<div class="curency pull-left">
-								<div class="current">
-									<span><a href="{% url 'login' %}">LOG IN</a></span>
-								</div>
-							</div>
-						</div>
+				<div class="header-content">
+					<div class="user-info">
+						<a href="{% url 'login' %}" class="auth-link">LOGIN</a>
 					</div>
 				</div>
 			</div>
 		</section>
-        <!-- HEADER TOP AREA END -->
 		<!-- MENU AREA START -->
 		<div class="menu-area">
 			<div class="container">
@@ -152,7 +122,7 @@ f
 							<ul class="list-inline">
 							  <li class="expand active"><a href="{% url 'index' %}">HOME</a>
 							  </li>
-							  <li><a href="#">CATEGORIES</a>
+							  <li><a href="{% url 'shop_list' %}">SHOP</a>
 								<!-- Mega Menu Four Column -->
 								<div class="mega-menu">
 									{% for category in categories%}
@@ -166,14 +136,8 @@ f
 										{% endfor %}
 									</span>
 									{% endfor %}
-									<span class="mega-menu-img">
-										<a href="{% url 'shop_list' %}" class="mega-title">ALL PRODUCTS</a>
-										<a href="#"><img alt="" src="{% static 'assets/img/other-pg/img_menu.jpg' %}"/></a>
-									</span>
 								</div>
 							  </li>
-							  
-							  <li><a href="about-us.html">ABOUT</a></li>
 							  <li class="expand"><a href="{% url 'user_account' %}">ACCOUNT</a>
 							  </li>
 							  <li><a href="{% url 'contact_us' %}">CONTACT</a></li>
@@ -190,7 +154,7 @@ f
 										<nav id="mobile-nav">
 											<ul>
 												<li><a href="{% url 'index' %}">Home </a></li>
-												<li><a href="#">CATEGORIES</a>
+												<li><a href="{% url 'shop_list' %}">SHOP</a>
 												<!-- Mega Menu Four Column -->
 												<div class="mega-menu">
 													{% for category in categories%}
@@ -204,10 +168,6 @@ f
 														{% endfor %}
 													</span>
 													{% endfor %}
-													<span class="mega-menu-img">
-														<a href="{% url 'shop_list' %}" class="mega-title">ALL PRODUCTS</a>
-														<a href="#"><img alt="" src="{% static 'assets/img/other-pg/img_menu.jpg' %}"/></a>
-													</span>
 												</div>
 												</li>
 												<li><a href="{% url 'user_account'%}"> Account </a>
@@ -310,15 +270,15 @@ f
 					</div>
 					<div class="col-md-3 col-sm-3">
 						<div class="banner-left-side">
-							<a class="mr-btm promo-link" href="#">
-								<img src="{% static 'assets/img/home-1/banner-2.jpg' %}" alt="" />
-								<h1>NEW COLLECTION</h1>
+							<a class="mr-btm promo-link" href="{% url 'shop_list' %}?category=MEN&subcategory=FORMALS MEN">
+								<img src="{% static 'assets/img/home-1/banner-2-new.jpg' %}" alt="" />
+								<h1>MEN FORMAL SHOES</h1>
 								<span class="sl-btn">SALE</span>
 								<div class="promo-hover"></div>
 							</a>
-							<a class="promo-link xs-res-mrbtm" href="#">
-								<img src="{% static 'assets/img/home-1/banner-3.jpg' %}" alt="" />
-								<h1>BEST MEN’S COLLECTION</h1>
+							<a class="promo-link xs-res-mrbtm" href="{% url 'shop_list' %}?category=MEN&subcategory=CASUALS MEN">
+								<img src="{% static 'assets/img/home-1/banner-3-new.jpg' %}" alt="" />
+								<h1>MEN CASUAL SHOES</h1>
 								<span class="sl-btn">SALE</span>
 								<div class="promo-hover"></div>
 							</a>
@@ -335,15 +295,15 @@ f
 					</div>
 					<div class="col-md-3 col-sm-3">
 						<div class="banner-right-side">
-							<a class="mr-btm promo-link" href="#">
-								<img src="{% static 'assets/img/home-1/banner-5.jpg' %}" alt="" />
-								<h1>NEW COLLECTION</h1>
+							<a class="mr-btm promo-link" href="{% url 'shop_list' %}?category=WOMEN&subcategory=FORMALS WOMEN">
+								<img src="{% static 'assets/img/home-1/banner-5-new.jpg' %}" alt="" />
+								<h1>WOMEN FORMAL SHOES</h1>
 								<span class="sl-btn">SALE</span>
 								<div class="promo-hover"></div>
 							</a>
-							<a class="promo-link" href="#">
-								<img src="{% static 'assets/img/home-1/banner-6.jpg' %}" alt="" />
-								<h1>WOMEN’S COLLECTION</h1>
+							<a class="promo-link" href="{% url 'shop_list' %}?category=WOMEN&subcategory=CASUALS WOMEN">
+								<img src="{% static 'assets/img/home-1/banner-6-new.jpg' %}" alt="" />
+								<h1>WOMEN CASUAL SHOES</h1>
 								<span class="sl-btn">SALE</span>
 								<div class="promo-hover"></div>
 							</a>
@@ -362,31 +322,26 @@ f
 							<h3>Featured Products</h3>
 						</div>
 					</div>
-					{% comment %} <div class="featured-tab">
-						<ul class="text-center">
-						  <li class="active"><a data-toggle="tab" href="#home">WOMEN</a></li>
-						  <li><a data-toggle="tab" href="#menu1">MEN</a></li>
-						  <li><a data-toggle="tab" href="#menu2">KID</a></li>
-						</ul>
-					</div> {% endcomment %}
-					<div class="tab-content">
-						<div id="home" class="tab-pane active">
-							<div id="features-curosel" class="indicator-style">
-								{% for product in featured_products %}
-								{% with product.productcolorimage_set.first as color_image %}
-								<div class="col-md-12">
-									<div class="single-product">
-										<div class="product-image">
-											<a class="product-img" href="{% url 'product_detail' product.id %}?variant={{color_image.id}}">
-												<img class="primary-img" src="{{ color_image.image_1.url}}" alt="{{product.product_name}}" />
-												<img class="secondary-img" src="{{ color_image.image_2.url}}" alt="{{product.product_name}}" />
-											</a>
-										</div>
+					<div class="featured-products-area">
+						<div id="features-curosel" class="indicator-style">
+							{% for product in featured_products %}
+							{% with product.productcolorimage_set.first as color_image %}
+							<div class="col-md-12">
+								<div class="single-product">
+									<div class="product-image">
+										<a class="product-img" href="{% url 'product_detail' product.id %}?variant={{color_image.id}}">
+											<img class="primary-img" src="{{ color_image.image_1.url}}" alt="{{product.product_name}}" />
+											<img class="secondary-img" src="{{ color_image.image_2.url}}" alt="{{product.product_name}}" />
+										</a>
+										{% if product.is_offer_applied%}
 										<span class="onsale">
-											<span class="sale-text">Sale</span>
+											<span class="sale-text">{{product.discount_percentage}}%</span>
 										</span>
-										<div class="product-action">
-											<h4><a href="{% url 'product_detail' product.id %}?variant={{ color_image.id }}">{{product.product_name}}</a></h4>
+										{% endif %}
+									</div>
+									<div class="product-info">
+										<h4 class="product-name"><a href="{% url 'product_detail' product.id %}?variant={{ color_image.id }}">{{product.product_name}}</a></h4>
+										<div class="product-rating">
 											<ul class="pro-rating">
 												<li class="pro-ratcolor"><i class="fa fa-star"></i></li>
 												<li class="pro-ratcolor"><i class="fa fa-star"></i></li>
@@ -394,32 +349,32 @@ f
 												<li><i class="fa fa-star"></i></li>
 												<li><i class="fa fa-star"></i></li>
 											</ul>
-											<span class="price">₹ {{ product.price }}</span>
 										</div>
-										<div class="pro-action">
-											<ul>
-												<li>
-													<a class="test all_src_icon" href="#" title="" data-toggle="tooltip" data-placement="top"  data-original-title="Shop Cart">
-													<i class="fa fa-retweet" aria-hidden="true"></i>
-													</a>
-												</li>
-												<li>
-													<a class="test all_src_icon" href="#" title="" data-toggle="tooltip" data-placement="top" data-original-title="Add Wishlist">
-													<i class="fa fa-heart" aria-hidden="true"></i>
-													</a>
-												</li>
-												<li>
-													<a class="test all_src_icon" href="#" title="" data-toggle="tooltip" data-placement="top" data-original-title="Compare">
-													<i class="fa fa-shopping-cart" aria-hidden="true"></i>
-													</a>
-												</li>
-											</ul>
-										</div>
+										<span class="price">₹ {{ product.price }}</span>
+									</div>
+									<div class="pro-action">
+										<ul>
+											<li>
+												<a class="test all_src_icon" href="#" title="" data-toggle="tooltip" data-placement="top"  data-original-title="Shop Cart">
+												<i class="fa fa-retweet" aria-hidden="true"></i>
+												</a>
+											</li>
+											<li>
+												<a class="test all_src_icon" href="#" title="" data-toggle="tooltip" data-placement="top" data-original-title="Add Wishlist">
+												<i class="fa fa-heart" aria-hidden="true"></i>
+												</a>
+											</li>
+											<li>
+												<a class="test all_src_icon" href="#" title="" data-toggle="tooltip" data-placement="top" data-original-title="Compare">
+												<i class="fa fa-shopping-cart" aria-hidden="true"></i>
+												</a>
+											</li>
+										</ul>
 									</div>
 								</div>
-								{% endwith %}
-								{% endfor %}
 							</div>
+							{% endwith %}
+							{% endfor %}
 						</div>
 					</div>
 				</div>
@@ -492,9 +447,11 @@ f
 											<img class="primary-img" src="{{color_image.image_1.url}}" alt="{{color_image.product_id.product_name}}" />
 											<img class="secondary-img" src="{{color_image.image_2.url}}" alt="{{color_image.product_id.product_name}}" />
 										</a>
+										{% if color_image.product_id.is_offer_applied%}
 										<span class="onsale">
-											<span class="sale-text">Sale</span>
+											<span class="sale-text">{{color_image.product_id.discount_percentage}}</span>
 										</span>
+										{% endif %}
 									</div>
 									<div class="product-info">
 										<h4 class="product-name"><a href="{% url 'product_detail' color_image.product_id.id %}?variant={{ color_image.id }}">{{color_image.product_id.product_name}}</a></h4>
@@ -693,9 +650,9 @@ f
 							<p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard.</p>
 							<div class="contact-details">
 								<ul>
-									<li><i class="fa fa-phone"></i>+(00) 56-888-999</li>
-									<li><i class="fa fa-envelope-o"></i> admin@DevItems.com</li>
-									<li><i class="fa fa-map-marker"></i> 1212, Bigrun street, France.</li>
+									<li><i class="fa fa-phone"></i>+91 7428730894</li>
+									<li><i class="fa fa-envelope-o"></i> dgshoes930@gmail.com</li>
+									<li><i class="fa fa-map-marker"></i> Kinfra, Malappuram,Kerala,India						</li>
 								</ul>
 							</div>
 						</div>

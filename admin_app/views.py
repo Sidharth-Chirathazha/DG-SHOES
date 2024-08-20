@@ -485,8 +485,10 @@ def unblock_user(request, user_id):
 
 @user_passes_test(lambda u: u.is_superuser, login_url="/admin_login/")
 def orders_list(request):
-
-    orders = Order.objects.select_related('ordered_user','delivery_address').prefetch_related('order_items__product_size__product_data__product_id')
+ 
+    orders = Order.objects.select_related('ordered_user','delivery_address')\
+        .prefetch_related('order_items__product_size__product_data__product_id')\
+            .order_by('-order_date')
 
     query = request.GET.get('q')
     if query:
