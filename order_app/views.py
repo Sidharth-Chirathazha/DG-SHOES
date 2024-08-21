@@ -100,7 +100,11 @@ def checkout_view(request):
                     )
                     order,should_redirect = create_order(user, selected_address, payment_method, coupon, cart_total, discount,refund_percent, razorpay_order_id,offer_total)
                     if order:
-                        return redirect('order_success', order_id=order.id)
+                        return JsonResponse({
+                            'success': True,
+                            'message': 'Order placed successfully',
+                            'redirect': reverse('order_success', args=[order.id])
+                        })
                     if should_redirect:
                         return JsonResponse({
                             'success' : False,
@@ -167,7 +171,11 @@ def checkout_view(request):
                 # Handle other payment methods as before
                 order,should_redirect = create_order(user, selected_address, payment_method, coupon, cart_total, discount, refund_percent, razorpay_order_id, offer_total)
                 if order:
-                    return redirect('order_success', order_id=order.id)
+                    return JsonResponse({
+                        'success': True,
+                        'message': 'Order placed successfully',
+                        'redirect': reverse('order_success', args=[order.id])
+                    })
                 if should_redirect:
                         return JsonResponse({
                             'success' : False,
