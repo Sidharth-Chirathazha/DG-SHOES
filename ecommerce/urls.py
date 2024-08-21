@@ -18,6 +18,8 @@ from django.contrib import admin
 from django.urls import path,include
 from . import settings
 from django.conf.urls.static import static
+from django.conf.urls import handler404
+from user.views import custom_404_view
 
 
 urlpatterns = [
@@ -33,7 +35,9 @@ urlpatterns = [
     path('',include('wallet_app.urls')),
     path('',include('offer_app.urls')),
     path('accounts/',include('allauth.urls')),
-] 
+]
+
+handler404 = 'user.views.custom_404_view'
 
 if settings.DEBUG:
  
