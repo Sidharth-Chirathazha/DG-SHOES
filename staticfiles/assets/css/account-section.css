@@ -1,0 +1,110 @@
+.my-account-area {
+    padding: 40px 0;
+}
+
+.account-sidebar ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.account-sidebar ul li {
+    margin-bottom: 10px;
+}
+
+.account-sidebar ul li a {
+    display: block;
+    padding: 10px 15px;
+    background-color: #f8f9fa;
+    color: #333;
+    text-decoration: none;
+    border-radius: 5px;
+}
+
+.account-sidebar ul li a.active,
+.account-sidebar ul li a:hover {
+    background-color: #FF7575;
+    color: white;
+}
+
+.account-content {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+.account-section {
+    display: none;
+}
+
+.account-section.active {
+    display: block;
+}
+
+
+.wallet-balance {
+    background-color: #f8f9fa;
+    padding: 20px;
+    border-radius: 5px;
+    margin-bottom: 20px;
+}
+
+.wallet-balance .balance {
+    font-size: 24px;
+    font-weight: bold;
+    color: #28a745;
+}
+
+.wallet-transactions table {
+    width: 100%;
+}
+
+.wallet-transactions th {
+    background-color: #f8f9fa;
+}
+
+
+
+.table-responsive {
+    overflow-x: auto;
+}
+
+.table img {
+    max-width: 50px;
+    height: auto;
+}
+
+.pagination {
+    margin-top: 20px;
+}
+
+.page-link {
+    color: #007bff;
+    background-color: #fff;
+    border: 1px solid #dee2e6;
+}
+
+.page-item.active .page-link {
+    z-index: 3;
+    color: #fff;
+    background-color: #007bff;
+    border-color: #007bff;
+}
+
+.page-link:hover {
+    color: #0056b3;
+    text-decoration: none;
+    background-color: #e9ecef;
+    border-color: #dee2e6;
+}
+
+@media (max-width: 768px) {
+    .table th, .table td {
+        font-size: 14px;
+    }
+
+    .btn-sm {
+        font-size: 12px;
+        padding: 0.25rem 0.5rem;
+    }
+}

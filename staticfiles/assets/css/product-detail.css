@@ -1,3 +1,35 @@
+.zoom-container {
+    overflow: hidden;
+    position: relative;
+}
+
+.zoom {
+    display: block;
+    transition: transform 0.5s ease;
+    width: 100%; /* Adjust this to your preference */
+    cursor: zoom-in; 
+}
+
+
+
+
+.zoom-container:hover .zoom {
+    transform: scale(1.5); /* Adjust the scale to your preference */
+}
+
+
+.out-of-stock {
+    font-size: 0.8em;
+    color: red;
+}
+.low-stock {
+    font-size: 0.8em;
+    color: orange;
+}
+
+
+
+
 .share_buttons {
     display: flex;
     align-items: center;
@@ -33,6 +65,5 @@
 
 
 
-
-/* Category section in shoplist */
+/* Related Products CSS */
 
