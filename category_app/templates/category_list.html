@@ -375,7 +375,6 @@
               <tr>
                 <th>Category</th>
                 <th>Image</th>
-                <th>Actions</th>
               </tr>
             </thead>
             <tbody>
@@ -388,16 +387,6 @@
                   {% else %}
                   No image
                   {% endif %}
-                </td>
-                <td>
-                  <form action="" method="post" class="d-inline">
-                    {% csrf_token %}
-                    {% if field.category %}
-                    <button type="submit" class="btn btn-sm btn-danger">Unlist</button>
-                    {% else %}
-                    <button type="submit" class="btn btn-sm btn-success">List</button>
-                    {% endif %}
-                  </form>
                 </td>
               </tr>
               {% endfor %}
