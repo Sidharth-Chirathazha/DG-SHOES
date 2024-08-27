@@ -551,7 +551,7 @@
 												<div class="error-message" id="address-error">Please select an address to continue.</div>
 												<!-- Add New Address Button -->
 												<div class="buttons-set">
-													<button class="button" type="button" id="add-address-btn"><a href="{% url 'user_account' %}">Add Address</a></button>
+													<button class="button" type="button" id="add-address-btn"><a href="{% url 'user_account' %}?next={% url 'checkout' %}">Add Address</a></button>
 													<button class="button continue-btn" type="button" data-next="collapse2"><span>Continue</span></button>
 												</div>
 
@@ -623,11 +623,12 @@
 												<div class="payment-options">
 													{% for value,label in payment_method_choices %}
 													<div class="payment-option">
-														<input type="radio" id="p_method_{{value}}" name="payment_method" value="{{value}}" class="radio">
+														<input type="radio" id="p_method_{{value}}" name="payment_method" value="{{value}}" class="radio"
+														{% if value == 'Wallet' and user_wallet.balance < cart_total|sub:discount %}disabled{% endif %}>															
 														<label for="p_method_{{value}}">
 															{{ label }}
 															{% if value == 'Wallet' %}
-																{% if user_wallet.balance > 0 %}
+																{% if user_wallet.balance >= cart_total|sub:discount %}
 																<span style="font-size: 0.85em; color: #4CAF50;">(Balance: ₹ {{ user_wallet.balance }})</span>
 																{% else %}
 																<span style="font-size: 0.85em; color: #f44336;">(Insufficient Balance)</span>

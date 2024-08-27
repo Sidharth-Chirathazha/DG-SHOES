@@ -22,10 +22,11 @@ from reportlab.lib.pagesizes import letter
 from io import BytesIO
 from django.template.loader import render_to_string
 from xhtml2pdf import pisa
+from django.contrib.auth import logout
 
 # Create your views here.
 
-
+#=========================USER ACCOUNT VIEW==============================#
 @login_required
 def user_account_view(request):
 
@@ -62,7 +63,11 @@ def user_account_view(request):
 
     return render(request,'user_account.html',context)
 
+#=========================USER ACCOUNT VIEW END==============================#
 
+
+
+#=========================USER INFO EDIT SECTION==============================#
 @csrf_exempt
 @login_required
 def update_user_info(request):
@@ -100,6 +105,11 @@ def update_user_info(request):
         
         return JsonResponse({'success': True})
     return JsonResponse({'success': False}, status=400)
+
+#=========================USER INFO EDIT SECTION END==============================#
+
+
+#=========================USER ADDRESS ADD AND EDIT SECTION==============================#
 
 @csrf_exempt
 @login_required
@@ -153,6 +163,11 @@ def add_address(request):
         )
 
         address.save()
+        
+        # Check if there is a 'next' parameter in the POST data
+        next_page = request.POST.get('next')
+        if next_page:
+            return redirect(next_page)
 
         return redirect('user_account')
 
@@ -217,6 +232,10 @@ def get_address_details(request):
         'landmark': address.landmark,
     })
 
+#=========================USER ADDRESS ADD AND EDIT SECTION END==============================#
+
+
+#=========================USER PASSWORD SECTION==============================#
 @login_required
 @csrf_exempt
 def change_password(request):
@@ -239,13 +258,17 @@ def change_password(request):
 
             user.set_password(new_password)
             user.save()
-            return JsonResponse({'success': True})
+            logout(request)
+            return JsonResponse({'success': True, 'message': 'Password changed successfully. You have been logged out.'})
         else:
             return JsonResponse({'success': False, 'errors': ['Incorrect current password.']})
     
     return redirect('user_account')
 
+#=========================USER PASSWORD SECTION END==============================#
 
+
+#=========================USER ORDERS SECTION==============================#
 @login_required
 @require_POST
 def cancel_order_item(request,item_id):
@@ -286,10 +309,8 @@ def return_order_item(request,item_id):
         order_item.return_requested = True
         order_item.save()
         messages.success(request, 'Order return requested successfully.')
-        print("item returned")
     else:
         messages.error(request, 'Cannot request return. Return period may have expired.')
-        print("item not returned")
 
 
     return redirect('user_account')
@@ -307,6 +328,10 @@ def order_details(request,order_id):
 
     return render(request,'order_details.html',context)
 
+#=========================USER ORDERS SECTION END==============================#
+
+
+#=========================PAYMENT RETRY SECTION==============================#
 @login_required
 @csrf_exempt
 def retry_payment(request,order_id):
@@ -342,11 +367,14 @@ def retry_payment(request,order_id):
             'order_id': order.id,
         })
     except Exception as e:
-        print(f"Error creating Razorpay order for retry: {str(e)}")
+        # print(f"Error creating Razorpay order for retry: {str(e)}")
         return JsonResponse({'error': 'Failed to create Razorpay order for retry'}, status=500)
     
+#=========================PAYMENT RETRY SECTION END==============================#
 
 
+
+#=========================INVOICE SECTION==============================#
 
 def generate_invoice_pdf(order,order_items):
     # Render the HTML template with the order context
@@ -394,3 +422,5 @@ def download_invoice(request, order_id):
     response.write(pdf_buffer.getvalue())
     
     return response
+
+#=========================INVOICE SECTION END==============================#

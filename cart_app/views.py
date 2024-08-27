@@ -12,6 +12,8 @@ from coupon_app.models import Coupons
 
 # Create your views here.
 
+
+#=========================CART MANAGEMENT SECTION==============================#
 @login_required
 def cart_view(request):
 
@@ -136,7 +138,10 @@ def clear_cart(request):
     cart.items.all().delete()
     return redirect('cart_detail')
 
+#=========================CART MANAGEMENT SECTION END==============================#
 
+
+#=========================WISHLIST MANAGEMENT SECTION==============================#
 @login_required
 def wishlist_view(request):
 
@@ -180,7 +185,7 @@ def add_to_wishlist(request,product_variant_id):
 
     if not created:
 
-        messages.error("Item already exist in wishlist")
+        messages.error(request,"Item already exist in wishlist")
 
     else:
        
@@ -228,20 +233,12 @@ def add_to_cart_from_wishlist(request,wishlist_item_id):
 @login_required
 def add_all_items_to_cart(request):
 
-    print("inside add all items view")
     wishlist_items = Wishlist.objects.filter(user=request.user)
     cart,created = Cart.objects.get_or_create(user=request.user)
-    print("cart created/recieved")
 
     for wishlist_item in wishlist_items:
-        print("inside forloop")
         product_variant = wishlist_item.product_variant
-        if product_variant:
-            print("product variant recieved")
         selected_size = request.POST.get(f'size_{wishlist_item.id}')
-
-        if selected_size:
-            print("selected size received")
 
         if not selected_size:
             messages.error(request, f'Please select a size for {product_variant.product_id.product_name} before adding to cart.')
@@ -259,13 +256,11 @@ def add_all_items_to_cart(request):
 
         )
         messages.success(request,'All items added to cart.')
-        print("cart created")
 
         if not created and cart_item.quantity < 5:
             cart_item.quantity += 1
             cart_item.save()
             messages.success(request,'Cart items updated.')
-            print("cart saved")
         elif not created:
             messages.error(request, f'Cart limit for {product_variant.product_id.product_name} reached.')
 
@@ -287,6 +282,8 @@ def remove_wishlist_item(request, wishlist_item_id):
     else:
         messages.error(request,'Unable to delete item.')
     return redirect('wishlist')
+
+#=========================WISHLIST MANAGEMENT SECTION END==============================#
 
 
 

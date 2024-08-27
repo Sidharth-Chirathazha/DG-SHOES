@@ -322,6 +322,11 @@
 									{% if selected_subcategory %}<input type="hidden" name="subcategory" value="{{ selected_subcategory }}">{% endif %}
 									{% if query %}<input type="hidden" name="q" value="{{ query }}">{% endif %}
 									
+									<!-- Preserve selected price ranges -->
+									{% for price_range in selected_price_ranges %}
+									<input type="hidden" name="price_ranges[]" value="{{ price_range }}">
+									{% endfor %}
+
 									<div class="color-options">
 										<div class="color-option">
 											<input type="checkbox" id="color-red" name="color" value="red" {% if 'red' in selected_colors %}checked{% endif %}>
@@ -371,11 +376,11 @@
 											<div class="sort-position">
 												<label><i class="fa fa-sort-amount-asc"></i>Sort by : </label>
 												<select onchange="location = this.value;">
-													<option value="?sort=price_asc{% if selected_category %}&category={{ selected_category }}{% endif %}{% if selected_subcategory %}&subcategory={{ selected_subcategory }}{% endif %}{% if query %}&q={{ query }}{% endif %}" {% if sort_by == 'price_asc' %}selected{% endif %}>Price (Low-High)</option>
-													<option value="?sort=price_desc{% if selected_category %}&category={{ selected_category }}{% endif %}{% if selected_subcategory %}&subcategory={{ selected_subcategory }}{% endif %}{% if query %}&q={{ query }}{% endif %}" {% if sort_by == 'price_desc' %}selected{% endif %}>Price (High-Low)</option>
-													<option value="?sort=name_asc{% if selected_category %}&category={{ selected_category }}{% endif %}{% if selected_subcategory %}&subcategory={{ selected_subcategory }}{% endif %}{% if query %}&q={{ query }}{% endif %}" {% if sort_by == 'name_asc' %}selected{% endif %}>Name (A-Z)</option>
-													<option value="?sort=name_desc{% if selected_category %}&category={{ selected_category }}{% endif %}{% if selected_subcategory %}&subcategory={{ selected_subcategory }}{% endif %}{% if query %}&q={{ query }}{% endif %}" {% if sort_by == 'name_desc' %}selected{% endif %}>Name (Z-A)</option>
-													<option value="?sort=latest{% if selected_category %}&category={{ selected_category }}{% endif %}{% if selected_subcategory %}&subcategory={{ selected_subcategory }}{% endif %}{% if query %}&q={{ query }}{% endif %}" {% if sort_by == 'latest' %}selected{% endif %}>Latest</option>
+													<option value="?sort=price_asc{% if selected_category %}&category={{ selected_category }}{% endif %}{% if selected_subcategory %}&subcategory={{ selected_subcategory }}{% endif %}{% if query %}&q={{ query }}{% endif %}{% for color in selected_colors %}&color={{ color }}{% endfor %}{% for price_range in selected_price_ranges %}&price_ranges[]={{ price_range }}{% endfor %}" {% if sort_by == 'price_asc' %}selected{% endif %}>Price (Low-High)</option>
+													<option value="?sort=price_desc{% if selected_category %}&category={{ selected_category }}{% endif %}{% if selected_subcategory %}&subcategory={{ selected_subcategory }}{% endif %}{% if query %}&q={{ query }}{% endif %}{% for color in selected_colors %}&color={{ color }}{% endfor %}{% for price_range in selected_price_ranges %}&price_ranges[]={{ price_range }}{% endfor %}" {% if sort_by == 'price_desc' %}selected{% endif %}>Price (High-Low)</option>
+													<option value="?sort=name_asc{% if selected_category %}&category={{ selected_category }}{% endif %}{% if selected_subcategory %}&subcategory={{ selected_subcategory }}{% endif %}{% if query %}&q={{ query }}{% endif %}{% for color in selected_colors %}&color={{ color }}{% endfor %}{% for price_range in selected_price_ranges %}&price_ranges[]={{ price_range }}{% endfor %}" {% if sort_by == 'name_asc' %}selected{% endif %}>Name (A-Z)</option>
+													<option value="?sort=name_desc{% if selected_category %}&category={{ selected_category }}{% endif %}{% if selected_subcategory %}&subcategory={{ selected_subcategory }}{% endif %}{% if query %}&q={{ query }}{% endif %}{% for color in selected_colors %}&color={{ color }}{% endfor %}{% for price_range in selected_price_ranges %}&price_ranges[]={{ price_range }}{% endfor %}" {% if sort_by == 'name_desc' %}selected{% endif %}>Name (Z-A)</option>
+													<option value="?sort=latest{% if selected_category %}&category={{ selected_category }}{% endif %}{% if selected_subcategory %}&subcategory={{ selected_subcategory }}{% endif %}{% if query %}&q={{ query }}{% endif %}{% for color in selected_colors %}&color={{ color }}{% endfor %}{% for price_range in selected_price_ranges %}&price_ranges[]={{ price_range }}{% endfor %}" {% if sort_by == 'latest' %}selected{% endif %}>Latest</option>
 												</select>
 											</div>
 										</li>

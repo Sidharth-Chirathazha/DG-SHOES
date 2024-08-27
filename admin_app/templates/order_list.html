@@ -399,7 +399,7 @@
       <form method="get" action="{% url 'order_list' %}">
         <div class="input-group input-group-merge w-25">
           <span class="input-group-text" id="basic-addon-search31"><i class="ri-search-line ri-20px"></i></span>
-          <input type="text" class="form-control" placeholder="Search..." aria-label="Search..." aria-describedby="basic-addon-search31" name="q" value="{{ query }}" />
+          <input type="text" class="form-control" placeholder="Search..." aria-label="Search..." aria-describedby="basic-addon-search31" name="q" value="{{ query|default_if_none:'' }}" />
         </div>
       </form>
       <div class="table-responsive text-nowrap">

@@ -29,7 +29,7 @@ from django.contrib import messages
 from django.core.exceptions import ValidationError
 
 
-
+#=========================PRODUCT LIST VIEW==============================#
 # Create your views here.
 @user_passes_test(lambda u: u.is_superuser, login_url="/admin_login/")
 def productList(request):
@@ -49,12 +49,6 @@ def productList(request):
      
     context = {
 
-        # 'categories' : Category.objects.all(),
-        # 'subcategories' : SubCategory.objects.all(),
-        # 'products' : Product.objects.all(),
-        # 'colors' : ProductColorImage.objects.all(),
-        # 'sizes' : ProductSize.objects.all(),
-        # 'products_info' : products_info,
         'page_obj' : page_obj,
         'query' : query,
         'offers' : offers
@@ -62,7 +56,11 @@ def productList(request):
 
     return render(request,'product_list.html',context)
 
+#=========================PRODUCT LIST VIEW END==============================#
 
+
+
+#=========================PRODUCT ADD AND EDIT SECTION==============================#
 @user_passes_test(lambda u: u.is_superuser, login_url="/admin_login/")
 def addProduct(request):
 
@@ -165,22 +163,6 @@ def addProduct(request):
     return render(request,'product_add.html',context)
 
 
-
-def list_products_view(request,color_image_id):
-    
-    color_image = get_object_or_404(ProductColorImage,id=color_image_id)
-    color_image.product_id.is_listed = True
-    color_image.product_id.save()
-    return redirect('variant_list',product_id=color_image.product_id.id)
-
-def unlist_products_view(request,color_image_id):
-
-    color_image = get_object_or_404(ProductColorImage,id=color_image_id)
-    color_image.product_id.is_listed = False
-    color_image.product_id.save()
-    return redirect('variant_list', product_id=color_image.product_id.id)
-
-
 @user_passes_test(lambda u: u.is_superuser, login_url="/admin_login/")
 def editProduct(request,product_id):
 
@@ -240,6 +222,26 @@ def editProduct(request,product_id):
 
     }
     return render(request,'product_edit.html',context)
+
+#=========================PRODUCT ADD AND EDIT SECTION END==============================#
+
+
+#=========================PRODUCT COLOR VARIANT SECTION==============================#
+
+def list_products_view(request,color_image_id):
+    
+    color_image = get_object_or_404(ProductColorImage,id=color_image_id)
+    color_image.is_listed = True
+    color_image.save()
+    return redirect('variant_list',product_id=color_image.product_id.id)
+
+def unlist_products_view(request,color_image_id):
+
+    color_image = get_object_or_404(ProductColorImage,id=color_image_id)
+    color_image.is_listed = False
+    color_image.save()
+    return redirect('variant_list', product_id=color_image.product_id.id)
+
 
 
 @user_passes_test(lambda u: u.is_superuser, login_url="/admin_login/")
@@ -309,7 +311,10 @@ def add_color_variant(request,product_id):
 
     return render(request, 'add_color_variant.html', {'product': product})
 
+#=========================PRODUCT COLOR VARIANT SECTION END==============================#
 
+
+#=========================PRODUCT SIZE VARIANT SECTION==============================#
 @user_passes_test(lambda u: u.is_superuser, login_url="/admin_login/")
 @csrf_exempt
 def add_size_quantity(request, color_image_id):
@@ -334,7 +339,6 @@ def add_size_quantity(request, color_image_id):
             product_data=color_variant,
             quantity=quantity
         )
-        print('size variant created')
 
         return redirect('variant_list',product_id = color_variant.product_id.id)  # Replace with appropriate view name
 
@@ -381,8 +385,11 @@ def edit_size_quantity(request, color_image_id):
 
     return render(request, 'edit_size_quantity.html', {'color_variant': color_variant, 'sizes': sizes})
 
+#=========================PRODUCT SIZE VARIANT SECTION END==============================#
 
 
+
+#=========================FEATURED PRODUCTS AND OFFER SECTION==============================#
 @user_passes_test(lambda u: u.is_superuser, login_url="/admin_login/")
 @require_POST
 def toggle_featured(request,product_id):
@@ -419,3 +426,5 @@ def apply_or_disable_offer_product(request,product_id):
         product.save()
 
     return redirect(reverse('product_list'))
+
+#=========================FEATURED PRODUCTS AND OFFER SECTION==============================#

@@ -73,9 +73,14 @@
 <link rel="stylesheet" href="{% static 'assets_admin/vendor/libs/quill/katex.css' %}">
 <link rel="stylesheet" href="{% static 'assets_admin/vendor/libs/quill/editor.css' %}">
 
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
+
+
     <!-- Page CSS -->
     
 <link rel="stylesheet" href="{% static 'assets_admin/vendor/css/pages/app-ecommerce.css' %}">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.18/dist/sweetalert2.min.css">
 
     <!-- Helpers -->
     <script src="{% static 'assets_admin/vendor/js/helpers.js' %}"></script>
@@ -87,61 +92,40 @@
 
     <style>
 
-      .btn-featured {
-        padding: 0.25rem 0.5rem;
-        font-size: 0.875rem;
+      .custom-alert {
+        padding: 1rem;
+        border-radius: 0.375rem;
+        box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1);
       }
       
-      /* General styles for the messages list */
-      ul.messages {
-          list-style-type: none;
-          padding: 0;
-          margin: 0;
+      .custom-alert .bi {
+        font-size: 1.25rem;
       }
-
-      ul.messages li.message {
-          border-radius: 5px;
-          padding: 10px 15px;
-          margin: 5px 0;
-          font-size: 16px;
-          display: flex;
-          align-items: center;
+      
+      .alert-success {
+        background-color: #d4edda;
+        color: #155724;
+        border-color: #c3e6cb;
       }
-
-      ul.messages li.message.error {
-          background-color: #f8d7da;
-          color: #721c24;
-          border: 1px solid #f5c6cb;
+      
+      .alert-danger {
+        background-color: #f8d7da;
+        color: #721c24;
+        border-color: #f5c6cb;
       }
-
-      ul.messages li.message.success {
-          background-color: #d4edda;
-          color: #155724;
-          border: 1px solid #c3e6cb;
+      
+      .alert-warning {
+        background-color: #fff3cd;
+        color: #856404;
+        border-color: #ffeeba;
       }
-
-      ul.messages li.message.warning {
-          background-color: #fff3cd;
-          color: #856404;
-          border: 1px solid #ffeeba;
+      
+      .alert-info {
+        background-color: #d1ecf1;
+        color: #0c5460;
+        border-color: #bee5eb;
       }
-
-      ul.messages li .icon {
-          margin-right: 10px;
-          font-size: 20px;
-      }
-
-      ul.messages li .error-icon {
-          color: #721c24;
-      }
-
-      ul.messages li .success-icon {
-          color: #155724;
-      }
-
-      ul.messages li .warning-icon {
-          color: #856404;
-      }
+      
     </style>
 
     
@@ -440,6 +424,7 @@
                       <th>Status</th>
                       <th>Actions</th>
                       <th>Offers</th>
+                      <th>Edit</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -494,6 +479,9 @@
                         <small class="text-muted">No offers available</small>
                         {% endif %}
                       </td>
+                      <td>
+                        <button type="button" class="btn btn-sm btn-secondary" data-bs-toggle="modal" data-bs-target="#editSubcategoryModal" onclick="populateEditForm({{ field.id }})">Edit</button>
+                      </td>
                     </tr>
                     {% endfor %}
                   </tbody>
@@ -503,13 +491,28 @@
               {% if messages %}
               <div class="mt-3">
                 {% for message in messages %}
-                <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
-                  {{ message|safe }}
+                <div class="alert alert-{{ message.tags }} alert-dismissible fade show custom-alert" role="alert">
+                  <div class="d-flex align-items-center">
+                    <!-- Icon based on the message type -->
+                    {% if message.tags == 'success' %}
+                    <i class="bi bi-check-circle-fill me-2"></i>
+                    {% elif message.tags == 'error' or message.tags == 'danger' %}
+                    <i class="bi bi-exclamation-circle-fill me-2"></i>
+                    {% elif message.tags == 'warning' %}
+                    <i class="bi bi-exclamation-triangle-fill me-2"></i>
+                    {% elif message.tags == 'info' %}
+                    <i class="bi bi-info-circle-fill me-2"></i>
+                    {% endif %}
+                    <div>
+                      {{ message|safe }}
+                    </div>
+                  </div>
                   <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
                 {% endfor %}
               </div>
               {% endif %}
+
             
               <!-- Modal to add new subcategory -->
               <div class="modal fade" id="addSubcategoryModal" tabindex="-1" aria-labelledby="addSubcategoryModalLabel" aria-hidden="true">
@@ -545,6 +548,48 @@
                         </div>
                       </form>
                     </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+
+
+            <!-- Edit Modal -->
+            <div class="modal fade" id="editSubcategoryModal" tabindex="-1" aria-labelledby="editSubcategoryModalLabel" aria-hidden="true">
+              <div class="modal-dialog">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="editSubcategoryModalLabel">Edit Subcategory</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                  </div>
+                  <div class="modal-body">
+                    <form id="editSubcategoryForm" method="post" action="" enctype="multipart/form-data" onsubmit="return validateEditForm()">
+                      {% csrf_token %}
+                      <input type="hidden" id="edit_subcategory_id" name="subcategory_id">
+                      <div class="mb-3">
+                        <label for="edit_subcategory_name" class="form-label">Subcategory Name</label>
+                        <input type="text" class="form-control" id="edit_subcategory_name" name="subcategory_name" required pattern="[A-Za-z][A-Za-z\s]*" title="Subcategory name must start with a letter and can only contain letters and spaces.">
+                      </div>
+                      <div class="mb-3">
+                        <label for="edit_subcategory_image" class="form-label">Subcategory Image</label>
+                        <input type="file" class="form-control" id="edit_subcategory_image" name="subcategory_image">
+                        <small class="form-text text-muted">Leave empty to keep the current image.</small>
+                      </div>
+                      <div class="mb-3">
+                        <label for="edit_parent_category" class="form-label">Parent Category</label>
+                        <select id="edit_parent_category" class="form-select" name="parent_category" required>
+                          <option value="">Select Parent Category</option>
+                          {% for category in categories %}
+                          <option value="{{ category.id }}">{{ category.category_name }}</option>
+                          {% endfor %}
+                        </select>
+                      </div>
+                      <div class="text-end">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-primary">Save Changes</button>
+                      </div>
+                    </form>
                   </div>
                 </div>
               </div>
@@ -643,37 +688,151 @@
   <!-- Page JS -->
   <script src="{% static 'assets_admin/js/app-ecommerce-category-list.js' %}"></script>
 
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.18/dist/sweetalert2.all.min.js"></script>
+
 
   <script>
     function validateForm() {
-        var subcategoryName = document.getElementById("addSubcategoryForm").elements["subcategory_name"].value.trim();
-        var subcategoryImage = document.getElementById("addSubcategoryForm").elements["subcategory_image"].value.trim();
-        var parentCategory = document.getElementById("addSubcategoryForm").elements["parent_category"].value.trim();
-    
+      var subcategoryName = document.getElementById("addSubcategoryForm").elements["subcategory_name"].value.trim();
+      var subcategoryImage = document.getElementById("addSubcategoryForm").elements["subcategory_image"].value.trim();
+      var parentCategory = document.getElementById("addSubcategoryForm").elements["parent_category"].value.trim();
+  
+      // Validation logic
+      if (subcategoryName === "") {
+          Swal.fire({
+              icon: 'error',
+              title: 'Validation Error',
+              text: 'Subcategory name is required.',
+          });
+          return false;
+      }
+  
+      if (!/^[A-Za-z][A-Za-z\s]*$/.test(subcategoryName)) {
+          Swal.fire({
+              icon: 'error',
+              title: 'Validation Error',
+              text: 'Subcategory name must start with a letter and can only contain letters and spaces.',
+          });
+          return false;
+      }
+  
+      if (subcategoryImage === "") {
+          Swal.fire({
+              icon: 'error',
+              title: 'Validation Error',
+              text: 'Image is required.',
+          });
+          return false;
+      }
+  
+      if (parentCategory === "") {
+          Swal.fire({
+              icon: 'error',
+              title: 'Validation Error',
+              text: 'Parent category is required.',
+          });
+          return false;
+      }
+  
+      return true; // Return true if all validations pass
+  }
+  </script>
+
+
+  <script>
+      function validateEditForm() {
+        var subcategoryName = document.getElementById("editSubcategoryForm").elements["subcategory_name"].value.trim();
+        var parentCategory = document.getElementById("editSubcategoryForm").elements["parent_category"].value.trim();
+
         // Validation logic
         if (subcategoryName === "") {
-            alert("Subcategory name is required.");
+            Swal.fire({
+                icon: 'error',
+                title: 'Validation Error',
+                text: 'Subcategory name is required.',
+            });
             return false;
         }
-    
+
         if (!/^[A-Za-z][A-Za-z\s]*$/.test(subcategoryName)) {
-            alert("Subcategory name must start with a letter and can only contain letters and spaces.");
+            Swal.fire({
+                icon: 'error',
+                title: 'Validation Error',
+                text: 'Subcategory name must start with a letter and can only contain letters and spaces.',
+            });
             return false;
         }
-    
-        if (subcategoryImage === "") {
-            alert("Image is required.");
-            return false;
-        }
-    
+
         if (parentCategory === "") {
-            alert("Parent category is required.");
+            Swal.fire({
+                icon: 'error',
+                title: 'Validation Error',
+                text: 'Parent category is required.',
+            });
             return false;
         }
-    
+
         return true; // Return true if all validations pass
     }
-    </script>
+</script>
+
+  <script>
+    function populateEditForm(fieldId) {
+      fetch(`/edit_subcategory/${fieldId}/`)
+        .then(response => response.json())
+        .then(data => {
+          document.getElementById('edit_subcategory_name').value = data.name;
+          document.getElementById('edit_parent_category').value = data.parent_category_id;
+          document.getElementById('edit_subcategory_id').value = data.id;
+
+          document.getElementById('editSubcategoryForm').action = `/edit_subcategory/${data.id}/`;
+          
+          // If you want to show the current image
+          if (data.image_url) {
+            let currentImage = document.getElementById('current_subcategory_image');
+            if (currentImage) {
+              currentImage.src = data.image_url;
+              currentImage.style.display = 'block';
+            }
+          }
+        });
+    }
+    
+    document.getElementById('editSubcategoryForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      let formData = new FormData(this);
+      let subcategoryId = document.getElementById('edit_subcategory_id').value;
+      
+      fetch(`/edit_subcategory/${subcategoryId}/`, {
+        method: 'POST',
+        body: formData
+      })
+      .then(response => response.json())
+      .then(data => {
+
+        // Close the modal first
+        $('#editSubcategoryModal').modal('hide');
+
+        if (data.status === 'success') {
+          Swal.fire({
+              icon: 'success',
+              title: 'Success',
+              text: data.message,
+          }).then(() => {
+              // Refresh the page or update the table
+              location.reload();
+          });
+      } else {
+          Swal.fire({
+              icon: 'error',
+              title: 'Error',
+              text: data.message,
+          });
+      }
+      });
+    });
+  </script>
   
 </body>
 

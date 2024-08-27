@@ -12,5 +12,7 @@ urlpatterns = [
     path('unlist_subcategory/<int:category_id>/<int:subcategory_id>/',views.unlist_subcategory,name='unlist_subcategory'),
     path('list_subcategory/<int:category_id>/<int:subcategory_id>/',views.list_subcategory,name='list_subcategory'),
     path('apply-offer/<int:subcategory_id>/',views.apply_or_disable_offer,name='apply_or_disable_offer'),
+    path('edit-category/', views.editCategory, name='edit_category'),
+    path('edit_subcategory/<int:subcategory_id>/',views.editSubCategory,name='edit_subcategory'),
  
 ]

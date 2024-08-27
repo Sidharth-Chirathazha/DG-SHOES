@@ -429,8 +429,8 @@
               </div>
               </div>
               <div class="export-options">
-                <a href="{% url 'export_pdf' %}{% if request.GET.start_date and request.GET.end_date %}?start_date={{ request.GET.start_date }}&end_date={{ request.GET.end_date }}{% endif %}" class="btn" id="export-pdf">PDF</a>
-                <a href="{% url 'export_excel' %}{% if request.GET.start_date and request.GET.end_date %}?start_date={{ request.GET.start_date }}&end_date={{ request.GET.end_date }}{% endif %}" class="btn" id="export-excel">Excel</a>
+                <a href="{% url 'export_pdf' %}?start_date={{ request.GET.start_date }}&end_date={{ request.GET.end_date }}" class="btn" id="export-pdf">PDF</a>
+                <a href="{% url 'export_excel' %}?start_date={{ request.GET.start_date }}&end_date={{ request.GET.end_date }}" class="btn" id="export-excel">Excel</a>
               </div>
               <div class="pagination-section">
                 <div id="pagination-container">
@@ -458,6 +458,8 @@
                 </div>
               </div>
             </section>
+
+            <div id="loading-indicator" style="display: none;">Loading...</div>
             
             
 </div>
@@ -544,99 +546,184 @@
   <!--Filtering Script-->
 
   <script>
-        function filterOrders(startDate, endDate) {
-          fetch(`/sales_report?start_date=${startDate}&end_date=${endDate}`, {
-              method: 'GET',
-              headers: {
-                  'X-Requested-With': 'XMLHttpRequest'
-              }
-          })
-          .then(response => response.json())
-          .then(data => {
-              const tableBody = document.getElementById('report-table-body');
-              tableBody.innerHTML = '';
-              data.detailed_orders.forEach(order => {
-                  const row = `
-                      <tr>
-                          <td>${order.date}</td>
-                          <td>${order.order_id}</td>
-                          <td>${order.customer_name}</td>
-                          <td>₹ ${order.original_amount}</td>
-                          <td>₹ ${order.coupon_discount}</td>
-                          <td>₹ ${order.offer_discount}</td>
-                          <td>₹ ${order.final_amount}</td>
-                          <td>${order.refund_amount ? '₹ ' + order.refund_amount : '-'}</td>
-                      </tr>
-                  `;
-                  tableBody.insertAdjacentHTML('beforeend', row);
-              });
-
-
-
-              // Update pagination controls
-              const paginationContainer = document.getElementById('pagination-container');
-              paginationContainer.innerHTML = '';
-
-              for (let i = 1; i <= data.total_pages; i++) {
-                const pageLink = document.createElement('a');
-                pageLink.href = '#';
-                pageLink.textContent = i;
-                pageLink.classList.add('page-link');
-                pageLink.addEventListener('click', () => filterOrders(startDate, endDate, i));
-
-                if (i === data.current_page) {
-                  pageLink.classList.add('active');
-                }
-
-                paginationContainer.appendChild(pageLink);
-              }
-
-              // Update summary information
-              document.getElementById('overall-sales-count').textContent = data.overall_sales_count;
-              document.getElementById('overall-order-amount').textContent = `₹ ${data.overall_order_amount}`;
-              document.getElementById('overall-discount-amount').textContent = `₹ ${data.total_discount_amount}`;
-              document.getElementById('final-total-amount').textContent = `₹ ${data.final_total_amount}`;
-              document.getElementById('overall-refund-amount').textContent = `₹ ${data.overall_refund_amount}`;
-          })
-          .catch(error => {
-              console.error('Error:', error);
-          });
+    document.addEventListener('DOMContentLoaded', function() {
+      function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+          const cookies = document.cookie.split(';');
+          for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+              cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+              break;
+            }
+          }
+        }
+        return cookieValue;
       }
-      
-      // Add event listeners to your filter buttons
-      document.getElementById('filter-button').addEventListener('click', () => {
-          const startDate = document.getElementById('start-date').value;
-          const endDate = document.getElementById('end-date').value;
+
+      //FOR TESTING, REMOVE IF CAUSING ERRORS
+      document.getElementById('filter-button').addEventListener('click', function() {
+        const startDate = document.getElementById('start-date').value;
+        const endDate = document.getElementById('end-date').value;
+        
+        // Ensure we have both dates
+        if (startDate && endDate) {
           filterOrders(startDate, endDate);
+        } else {
+          alert('Please select both start and end dates.');
+        }
       });
-      
-      document.getElementById('last-day').addEventListener('click', () => {
-          const today = new Date();
-          const startDate = new Date(today);
+      //FOR TESTING, REMOVE IF CAUSING ERRORS END
+    
+      function filterOrders(startDate, endDate, page = 1) {
+        console.log(`Filtering orders from ${startDate} to ${endDate}, page ${page}`);
+        const csrftoken = getCookie('csrftoken');
+        const loadingIndicator = document.getElementById('loading-indicator');
+        
+        if (loadingIndicator) {
+          loadingIndicator.style.display = 'block';
+        }
+
+        // Convert Date objects to ISO string if necessary
+         // Format dates correctly, whether they're Date objects or strings
+        const formatDate = (date) => {
+          if (date instanceof Date) {
+            return date.toISOString().split('T')[0];
+          }
+          return date; // If it's already a string, return as is
+        };
+
+        const formattedStartDate = formatDate(startDate);
+        const formattedEndDate = formatDate(endDate);
+    
+        fetch(`/dashboard/sales_report/?start_date=${formattedStartDate}&end_date=${formattedEndDate}&page=${page}`, {
+          method: 'GET',
+          headers: {
+            'X-Requested-With': 'XMLHttpRequest',
+            'X-CSRFToken': csrftoken
+          }
+        })
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Network response was not ok');
+          }
+          return response.json();
+        })
+        .then(data => {
+          console.log("Received data:", data);
+          
+          const tableBody = document.getElementById('report-table-body');
+          if (tableBody) {
+            tableBody.innerHTML = '';
+            data.detailed_orders.forEach(order => {
+              const row = `
+                <tr>
+                  <td>${order.date}</td>
+                  <td>${order.order_id}</td>
+                  <td>${order.payment_method}</td>
+                  <td>${order.customer_name}</td>
+                  <td>₹ ${order.original_amount}</td>
+                  <td>₹ ${order.coupon_discount}</td>
+                  <td>₹ ${order.offer_discount}</td>
+                  <td>₹ ${order.final_amount}</td>
+                  <td>${order.refund_amount ? '₹ ' + order.refund_amount : '-'}</td>
+                </tr>
+              `;
+              tableBody.insertAdjacentHTML('beforeend', row);
+            });
+          }
+    
+          // Update pagination controls
+          const paginationContainer = document.getElementById('pagination-container');
+          if (paginationContainer) {
+            paginationContainer.innerHTML = '';
+            for (let i = 1; i <= data.total_pages; i++) {
+              const pageLink = document.createElement('a');
+              pageLink.href = '#';
+              pageLink.textContent = i;
+              pageLink.classList.add('page-link');
+              if (i === data.current_page) {
+                pageLink.classList.add('active');
+              }
+              pageLink.addEventListener('click', (e) => {
+                e.preventDefault();
+                filterOrders(startDate, endDate, i);
+              });
+              paginationContainer.appendChild(pageLink);
+            }
+          }
+    
+          // Update summary information
+          updateSummary(data);
+    
+          if (loadingIndicator) {
+            loadingIndicator.style.display = 'none';
+          }
+        })
+        .catch(error => {
+          console.error('Error:', error);
+          alert('An error occurred while fetching data. Please try again.');
+          if (loadingIndicator) {
+            loadingIndicator.style.display = 'none';
+          }
+        });
+      }
+    
+      function updateSummary(data) {
+        const elements = {
+          'overall-sales-count': data.overall_sales_count,
+          'overall-order-amount': `₹ ${data.overall_order_amount}`,
+          'overall-discount-amount': `₹ ${data.total_discount_amount}`,
+          'final-total-amount': `₹ ${data.final_total_amount}`,
+          'overall-refund-amount': `₹ ${data.overall_refund_amount}`
+        };
+    
+        for (const [id, value] of Object.entries(elements)) {
+          const element = document.getElementById(id);
+          if (element) {
+            element.textContent = value;
+          }
+        }
+      }
+    
+      // Event delegation for all filter buttons
+      document.addEventListener('click', function(event) {
+        const today = new Date();
+        let startDate, endDate;
+    
+        if (event.target.id === 'filter-button') {
+          startDate = document.getElementById('start-date').value;
+          endDate = document.getElementById('end-date').value;
+        } else if (event.target.id === 'last-day') {
+          startDate = new Date(today);
           startDate.setDate(today.getDate() - 1);
-          filterOrders(startDate.toISOString().split('T')[0], today.toISOString().split('T')[0]);
-      });
-      
-      document.getElementById('last-week').addEventListener('click', () => {
-          const today = new Date();
-          const startDate = new Date(today);
+          endDate = today;
+        } else if (event.target.id === 'last-week') {
+          startDate = new Date(today);
           startDate.setDate(today.getDate() - 7);
-          filterOrders(startDate.toISOString().split('T')[0], today.toISOString().split('T')[0]);
-      });
-      
-      document.getElementById('last-month').addEventListener('click', () => {
-          const today = new Date();
-          const startDate = new Date(today);
+          endDate = today;
+        } else if (event.target.id === 'last-month') {
+          startDate = new Date(today);
           startDate.setDate(today.getDate() - 30);
-          filterOrders(startDate.toISOString().split('T')[0], today.toISOString().split('T')[0]);
-      });
-      
-      document.getElementById('yearly').addEventListener('click', () => {
-          const today = new Date();
-          const startDate = new Date(today);
+          endDate = today;
+        } else if (event.target.id === 'yearly') {
+          startDate = new Date(today);
           startDate.setFullYear(today.getFullYear() - 1);
-          filterOrders(startDate.toISOString().split('T')[0], today.toISOString().split('T')[0]);
+          endDate = today;
+        } else {
+          return; // Not a filter button, do nothing
+        }
+    
+        console.log(`Filter button ${event.target.id} clicked`);
+        filterOrders(startDate.toISOString().split('T')[0], endDate.toISOString().split('T')[0]);
       });
+    
+      // Initial load
+      const defaultStartDate = new Date();
+      defaultStartDate.setDate(defaultStartDate.getDate() - 30); // Default to last 30 days
+      filterOrders(defaultStartDate.toISOString().split('T')[0], new Date().toISOString().split('T')[0]);
+    });
   
 </script>
 

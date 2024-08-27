@@ -509,7 +509,7 @@
             </td>
             <td>
               <div class="d-flex">
-                {% if color_image.product_id.is_listed %}
+                {% if color_image.is_listed %}
                   <span class="badge rounded-pill bg-label-success me-1">Listed</span>
                 {% else %}
                   <span class="badge rounded-pill bg-label-warning me-1">Unlisted</span>
@@ -517,7 +517,7 @@
                   <div class="dropdown">
                     <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown"><i class="ri-more-2-line"></i></button>
                     <div class="dropdown-menu">
-                        {% if color_image.product_id.is_listed %}
+                        {% if color_image.is_listed %}
                         <form action="{% url 'unlist_products' color_image.id %}" method="post">
                           {% csrf_token %}
                           <button class="dropdown-item" type="submit"><span class="badge rounded-pill bg-label-danger me-1"> Unlist</button>

@@ -68,6 +68,7 @@ class ProductColorImage(models.Model):
     image_3 = models.ImageField(upload_to='product_images/', null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    is_listed = models.BooleanField(default=True)
     
     def __str__(self):
         return f"{self.product_id.product_name} - {self.color_name}"

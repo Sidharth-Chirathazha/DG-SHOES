@@ -31,6 +31,8 @@ User = get_user_model()
 
 logger = logging.getLogger(__name__)
 
+
+#=========================DASHBOARD SECTION==============================#
 @user_passes_test(lambda u: u.is_superuser, login_url="/admin_login/")
 def dashboard(request):
 
@@ -50,7 +52,6 @@ def dashboard(request):
             'image': product_image.image_1 if product_image else None
         })
 
-
     context = {
         'username': request.user.username,
         'popular_products': products
@@ -58,6 +59,7 @@ def dashboard(request):
     if request.headers.get('x-requested-with') == 'XMLHttpRequest':
         return get_dashboard_data(request)
     return render(request, 'dashboard.html', context)
+
 
 
 def get_dashboard_data(request):
@@ -142,8 +144,10 @@ def get_dashboard_data(request):
 
     return JsonResponse(response_data)
     
+#=========================DASHBOARD SECTION END==============================#
 
 
+#=========================SALES REPORT SECTION==============================#
 
 @user_passes_test(lambda u: u.is_superuser, login_url="/admin_login/")
 def sales_report(request):
@@ -197,12 +201,9 @@ def sales_report(request):
             'refund_amount' : refund_amount,
         })
 
-        # print(f"Overall Refund:{overall_refund_amount}, Overall Final: {final_total_amount}")
-
-
 
     paginator = Paginator(detailed_orders, 10)
-    page_number = request.GET.get('page')
+    page_number = request.GET.get('page',1)
     page_obj = paginator.get_page(page_number)
 
     if request.headers.get('x-requested-with') == 'XMLHttpRequest':
@@ -217,7 +218,6 @@ def sales_report(request):
             'total_pages': paginator.num_pages,
         })
     
-    # print(f"Overall Refund:{overall_refund_amount}, Overall Final: {final_total_amount}")
     
    
     context ={ 
@@ -314,8 +314,6 @@ def export_pdf(request):
 
 
 
-
-
 @user_passes_test(lambda u: u.is_superuser, login_url="/admin_login/")
 def export_excel(request):
     # Reuse the logic from the dashboard view
@@ -408,11 +406,10 @@ def export_excel(request):
     
     return response
 
+#=========================SALES REPORT SECTION END==============================#
 
 
-
-
-    
+#=========================ADMIN LOGIN,LOGOUT SECTION==============================#   
 @never_cache
 def adminLogin(request):
 
@@ -441,12 +438,10 @@ def adminLogout(request):
         logout(request)
     return redirect('admin_login')
 
-
-def forgot_admin_password(request):
-
-    return render(request, )
+#=========================ADMIN LOGIN,LOGOUT SECTION==============================# 
 
 
+#=========================USER MANAGEMENT SECTION==============================#
 @user_passes_test(lambda u: u.is_superuser, login_url="/admin_login/")
 def user_management(request):
 
@@ -482,7 +477,11 @@ def unblock_user(request, user_id):
     user.save()
     return redirect('user_management')
 
+#=========================USER MANAGEMENT SECTION END==============================#
 
+
+
+#=========================ORDER MANAGEMENT SECTION==============================#
 @user_passes_test(lambda u: u.is_superuser, login_url="/admin_login/")
 def orders_list(request):
  
@@ -490,7 +489,7 @@ def orders_list(request):
         .prefetch_related('order_items__product_size__product_data__product_id')\
             .order_by('-order_date')
 
-    query = request.GET.get('q')
+    query = request.GET.get('q', '').strip()
     if query:
         orders = orders.filter(order_unique_id__icontains=query)
 
@@ -510,12 +509,6 @@ def orders_list(request):
         orders = paginator.page(paginator.num_pages)
 
     
-    # Debugging print statements
-    print(f"Current Page: {page}")
-    print(f"Number of Items on Current Page: {orders.object_list.count()}")
-
-
-
     context = {
 
         'orders' : orders,
@@ -592,3 +585,5 @@ def order_info(request, order_id):
     }
 
     return render(request,'order_info.html',context)
+
+#=========================ORDER MANAGEMENT SECTION END==============================#

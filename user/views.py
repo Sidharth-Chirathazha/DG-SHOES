@@ -22,6 +22,7 @@ from decimal import Decimal
 from order_app.models import OrderItem
 from django.db.models import Q
 
+
 # Create your views here.
 
 User = get_user_model()
@@ -121,7 +122,7 @@ def registerPage(request):
             'username' : username,
             'email' : email,
             'phone' : phone,
-            'referral_code' : referral_code if referral_code else None,
+            'referral_code' : referral_code if referral_code else '',
             'password':password,
             'password_cnf':password_cnf
         }
@@ -201,7 +202,6 @@ def otpVerification(request):
                 user = User.objects.create(username=username,email=email,phone_number=phone,
                                            password=password,first_name=first_name,last_name=last_name,gender=gender,date_of_birth=date_of_birth)
                 user.set_password(password)
-                print('user is created')
                 user.save()
 
                 # Create a wallet for the new user
@@ -351,10 +351,10 @@ def verifyPassword(request):
 
     return render(request,'verify_password.html')
 
-#===============END====================#
+#=========================END==============================#
 
 
-
+#=========================INDEX , HOME PAGE VIEWS==============================#
 @never_cache
 @login_required
 def homePage(request):
@@ -362,12 +362,18 @@ def homePage(request):
     categories = Category.objects.filter(is_listed = True).prefetch_related('subcategories').filter(subcategories__is_listed =True).distinct()
     first_name = request.user.first_name
     latest_products = Product.objects.filter(is_listed = True).order_by('-created_at')[:6]
-    featured_products = Product.objects.filter(featured=True,is_listed=True).prefetch_related('productcolorimage_set')
+    featured_products = Product.objects.filter(
+            featured=True, 
+            is_listed=True
+        ).prefetch_related(
+            Prefetch('productcolorimage_set', queryset=ProductColorImage.objects.filter(is_listed=True))
+        )
+
     latest_product_colors = {}
 
     for product in latest_products:
 
-        latest_color_image = ProductColorImage.objects.filter(product_id=product, product_id__is_listed=True).order_by('-created_at').first()
+        latest_color_image = ProductColorImage.objects.filter(product_id=product,is_listed=True).order_by('-created_at').first()
         if latest_color_image:
             latest_product_colors[product.id] = latest_color_image
 
@@ -381,18 +387,23 @@ def homePage(request):
     return render(request,'home.html',context)
 
 
-
+@never_cache
 def indexPage(request):
 
     categories = Category.objects.filter(is_listed = True).prefetch_related('subcategories').filter(subcategories__is_listed =True).distinct()
     latest_products = Product.objects.filter(is_listed = True).order_by('-created_at')[:6]
-    featured_products = Product.objects.filter(featured=True,is_listed=True).prefetch_related('productcolorimage_set')
+    featured_products = Product.objects.filter(
+            featured=True, 
+            is_listed=True
+        ).prefetch_related(
+            Prefetch('productcolorimage_set', queryset=ProductColorImage.objects.filter(is_listed=True))
+        )
 
     latest_product_colors = {}
 
     for product in latest_products:
 
-        latest_color_image = ProductColorImage.objects.filter(product_id=product, product_id__is_listed=True).order_by('-created_at').first()
+        latest_color_image = ProductColorImage.objects.filter(product_id=product,is_listed=True).order_by('-created_at').first()
         if latest_color_image:
             latest_product_colors[product.id] = latest_color_image
 
@@ -405,6 +416,11 @@ def indexPage(request):
 
     return render(request,'index.html',context)
 
+#=========================END==============================#
+
+
+
+#=========================LOGOUT VIEW==============================#
 
 @login_required
 def logoutView(request):
@@ -413,6 +429,11 @@ def logoutView(request):
         logout(request)
     return redirect('login')
 
+#=========================END==============================#
+
+
+
+#=========================SHOP LIST AND PRODUCT DETAIL VIEWS==============================#
 def shopList(request):
     
     category_name = request.GET.get('category')
@@ -453,14 +474,10 @@ def shopList(request):
     
     color_images = []
     for product in products:
-        color_images_for_product = product.productcolorimage_set.all()
+        color_images_for_product = product.productcolorimage_set.filter(is_listed=True)
         if selected_colors:
-            print("inside selected colors")
             color_images_for_product = color_images_for_product.filter(color_name__in=[color.capitalize() for color in selected_colors])
 
-            #Debugging
-            print(color_images_for_product)
-            #END 
 
         for color_image in color_images_for_product:
             color_image.total_quantity = color_image.product_size.aggregate(
@@ -471,7 +488,7 @@ def shopList(request):
     # If no colors are selected and no color images were found, include all products
     if not selected_colors and not color_images:
         for product in products:
-            for color_image in product.productcolorimage_set.all():
+            for color_image in product.productcolorimage_set.filter(is_listed=True):
                 color_image.total_quantity = color_image.product_size.aggregate(
                     total_quantity=Sum('quantity')
                 )['total_quantity'] or 0
@@ -492,23 +509,6 @@ def shopList(request):
         color_images.sort(key=lambda x: x[0].created_at, reverse=True) # Default ordering by latest
 
 
-    popular_products = OrderItem.objects.values(
-        'product_size__product_data__product_id'
-    ).annotate(
-        total_orders=Sum('quantity')
-    ).order_by('-total_orders')[:4]
-
-    popular_products_list = []
-    for item in popular_products:
-        product = Product.objects.get(id=item['product_size__product_data__product_id'])
-        product_image = ProductColorImage.objects.filter(product_id=product).first()
-        popular_products_list.append({
-            'product': product,
-            'image': product_image.image_1 if product_image else None
-        })
-
-
-
     paginator = Paginator(color_images,9)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
@@ -524,7 +524,6 @@ def shopList(request):
         'selected_subcategory': subcategory_name,
         'page_obj' : page_obj,
         'sort_by' : sort_by,
-        'popular_products' : popular_products_list,
         'selected_colors' : selected_colors,
         'selected_price_ranges': selected_price_ranges,
     }
@@ -534,20 +533,18 @@ def shopList(request):
 
 
 
-# def normalize_string(value):
-
-#     return value.lower().replace(' ','')
-
-
 def product_detail_view(request,pk):
 
     categories = Category.objects.filter(is_listed = True).prefetch_related('subcategories').filter(subcategories__is_listed =True).distinct()
     product = get_object_or_404(Product, pk=pk, is_listed = True)
-    color_variants = product.productcolorimage_set.all().prefetch_related('product_size')
+    color_variants = product.productcolorimage_set.filter(is_listed=True).prefetch_related('product_size')
 
     related_products = Product.objects.filter(
-        category_id = product.category_id, subcategory_id = product.subcategory_id, is_listed=True
-        ).exclude(id=product.id).distinct()[:3]
+        category_id=product.category_id,
+        subcategory_id=product.subcategory_id,
+        is_listed=True,
+        productcolorimage__is_listed=True
+    ).exclude(id=product.id).distinct()[:3]
 
 
     selected_variant_id = request.GET.get('variant')
@@ -584,7 +581,10 @@ def product_detail_view(request,pk):
 
     return render(request,'product_detail.html',context)
 
+#=========================END==============================#
 
+
+#=========================CONTACT AND CUSTOM ERROR PAGE VIEWS==============================#
 def contactUs(request):
 
     categories = Category.objects.filter(is_listed = True).prefetch_related('subcategories').filter(subcategories__is_listed =True).distinct()
@@ -600,3 +600,5 @@ def contactUs(request):
 def custom_404_view(request, exception):
 
     return render(request, '404.html', status=404)
+
+#=========================END==============================#

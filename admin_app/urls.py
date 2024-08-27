@@ -6,7 +6,6 @@ urlpatterns = [
 
     path('dashboard/',views.dashboard,name='dashboard'),
     path('admin_login/',views.adminLogin,name='admin_login'),
-    path('admin_reset_password/',views.forgot_admin_password,name='admin_reset_password'),
     path('admin_logout/',views.adminLogout,name='admin_logout'),
     path('user_management/',views.user_management,name='user_management'),
     path('block_user/<int:user_id>/',views.block_user,name='block_user'),
@@ -18,6 +17,6 @@ urlpatterns = [
     path('order_info/<int:order_id>/',views.order_info,name='order_info'),
     path('dashboard/export_pdf/', views.export_pdf, name='export_pdf'),
     path('dashboard/export_excel/', views.export_excel, name='export_excel'),
-    path('dashboard/sales_report',views.sales_report,name='sales_report'),
+    path('dashboard/sales_report/',views.sales_report,name='sales_report'),
     path('get_dashboard_data/', views.get_dashboard_data, name='get_dashboard_data'),
 ]

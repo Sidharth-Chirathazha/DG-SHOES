@@ -22,6 +22,7 @@ from django.urls import reverse
 
 # Create your views here.
 
+#=========================CHECKOUT SECTION==============================#
 @login_required
 def checkout_view(request):
 
@@ -44,8 +45,6 @@ def checkout_view(request):
         cart_total_without_discount = sum((item.product.price * item.quantity) for item in cart_items)
         offer_total = cart_total_without_discount - cart_total
 
-        print(f"{cart_total_without_discount}, cart total with discount created")
-        print(f"{offer_total},Offer total creating section , created")
         #Apply coupon if one is already associated with cart
         coupon = cart.applied_coupon
         discount = 0
@@ -124,8 +123,6 @@ def checkout_view(request):
                     return redirect('checkout')
                 
             elif payment_method == 'RazorPay':
-                print("Inside razorpay payment method ")
-
                 try:
                     # Create a Razorpay order
                     client = razorpay.Client(auth=(settings.RAZORPAY_KEY_ID, settings.RAZORPAY_KEY_SECRET))
@@ -164,7 +161,7 @@ def checkout_view(request):
                             'redirect': reverse('home')  # Replace 'home' with your home page URL name
                         })
                 except Exception as e:
-                    print(f"Error creating Razorpay order: {str(e)}")
+                    # print(f"Error creating Razorpay order: {str(e)}")
                     return JsonResponse({'error': 'Failed to create Razorpay order'}, status=500)
             
             else:
@@ -209,9 +206,8 @@ def checkout_view(request):
 
     return render(request,'checkout.html',context)
 
-def create_order(user,address,payment_method,coupon,cart_total,discount,refund_percent,razorpay_order_id,offer_total):
 
-    print(f"{offer_total},Offer total reached create order function")
+def create_order(user,address,payment_method,coupon,cart_total,discount,refund_percent,razorpay_order_id,offer_total):
 
     # Create OrderItems and update product quantities
     cart = Cart.objects.get(user=user)
@@ -267,11 +263,13 @@ def create_order(user,address,payment_method,coupon,cart_total,discount,refund_p
     cart.save()
 
     return order,False
+#=========================CHECKOUT SECTION END==============================#
 
+
+#=========================RAZOR PAY PAYMENT VERIFICATION==============================#
 @login_required
 @csrf_exempt
 def verify_payment(request):
-    print("Inside verify payment")
     if request.method == 'POST':
         data = json.loads(request.body)
         try:
@@ -299,7 +297,7 @@ def verify_payment(request):
                 'redirect_url': reverse('order_success', args=[order.id])
             })
         except Exception as e:
-            print(f"Payment verification failed: {str(e)}")
+            # print(f"Payment verification failed: {str(e)}")
             order = Order.objects.get(id=data['order_id'])
             order.payment_status = 'Pending'
             order.save()
@@ -310,9 +308,9 @@ def verify_payment(request):
             }, status=400)
     return JsonResponse({'error': 'Invalid request'}, status=400)
 
+#=========================RAZOR PAY PAYMENT VERIFICATION END==============================#
 
-
-
+#=========================ORDER SUCCESS VIEW==============================#
 @login_required
 def order_success_view(request,order_id):
 
@@ -330,7 +328,9 @@ def order_success_view(request,order_id):
 
     return render(request, 'order_success.html', context)
 
+#=========================ORDER SUCCESS VIEW END==============================#
 
+#=========================COUPON APPLY REMOVE SECTION==============================#
 @login_required
 @require_POST
 def apply_coupon(request):
@@ -389,5 +389,5 @@ def remove_coupon(request):
     except Cart.DoesNotExist:
         return JsonResponse({'status': 'error', 'message': 'Cart not found.'})
     
-    
+#=========================COUPON APPLY REMOVE SECTION END==============================#
 

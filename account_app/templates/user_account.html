@@ -341,6 +341,7 @@
 								<h4>Add New Address</h4>
 								<form id="address-form" method="post" action="{% url 'add_address' %}">
 									{% csrf_token %}
+									<input type="hidden" name="next" value="{{ request.GET.next }}">
 									<p class="form-row">
 										<label>Address Title<span class="required">*</span></label>
 										<input type="text" id="address_title" name="address_title" value="{{ address_title }}">
