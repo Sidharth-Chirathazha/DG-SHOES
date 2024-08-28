@@ -429,8 +429,8 @@
               </div>
               </div>
               <div class="export-options">
-                <a href="{% url 'export_pdf' %}?start_date={{ request.GET.start_date }}&end_date={{ request.GET.end_date }}" class="btn" id="export-pdf">PDF</a>
-                <a href="{% url 'export_excel' %}?start_date={{ request.GET.start_date }}&end_date={{ request.GET.end_date }}" class="btn" id="export-excel">Excel</a>
+                <a href="{% url 'export_pdf' %}" class="btn" id="export-pdf" data-base-url="{% url 'export_pdf' %}">PDF</a>
+                <a href="{% url 'export_excel' %}" class="btn" id="export-excel" data-base-url="{% url 'export_excel' %}">Excel</a>
               </div>
               <div class="pagination-section">
                 <div id="pagination-container">
@@ -459,7 +459,7 @@
               </div>
             </section>
 
-            <div id="loading-indicator" style="display: none;">Loading...</div>
+          <div id="loading-indicator" style="display: none;">Loading...</div>
             
             
 </div>
@@ -547,6 +547,7 @@
 
   <script>
     document.addEventListener('DOMContentLoaded', function() {
+      // Utility function to get CSRF token
       function getCookie(name) {
         let cookieValue = null;
         if (document.cookie && document.cookie !== '') {
@@ -561,21 +562,13 @@
         }
         return cookieValue;
       }
-
-      //FOR TESTING, REMOVE IF CAUSING ERRORS
-      document.getElementById('filter-button').addEventListener('click', function() {
-        const startDate = document.getElementById('start-date').value;
-        const endDate = document.getElementById('end-date').value;
-        
-        // Ensure we have both dates
-        if (startDate && endDate) {
-          filterOrders(startDate, endDate);
-        } else {
-          alert('Please select both start and end dates.');
-        }
-      });
-      //FOR TESTING, REMOVE IF CAUSING ERRORS END
     
+      // Function to format date as YYYY-MM-DD
+      function formatDate(date) {
+        return date.toISOString().split('T')[0];
+      }
+    
+      // Main filter function
       function filterOrders(startDate, endDate, page = 1) {
         console.log(`Filtering orders from ${startDate} to ${endDate}, page ${page}`);
         const csrftoken = getCookie('csrftoken');
@@ -584,20 +577,8 @@
         if (loadingIndicator) {
           loadingIndicator.style.display = 'block';
         }
-
-        // Convert Date objects to ISO string if necessary
-         // Format dates correctly, whether they're Date objects or strings
-        const formatDate = (date) => {
-          if (date instanceof Date) {
-            return date.toISOString().split('T')[0];
-          }
-          return date; // If it's already a string, return as is
-        };
-
-        const formattedStartDate = formatDate(startDate);
-        const formattedEndDate = formatDate(endDate);
     
-        fetch(`/dashboard/sales_report/?start_date=${formattedStartDate}&end_date=${formattedEndDate}&page=${page}`, {
+        fetch(`/dashboard/sales_report/?start_date=${startDate}&end_date=${endDate}&page=${page}`, {
           method: 'GET',
           headers: {
             'X-Requested-With': 'XMLHttpRequest',
@@ -613,49 +594,10 @@
         .then(data => {
           console.log("Received data:", data);
           
-          const tableBody = document.getElementById('report-table-body');
-          if (tableBody) {
-            tableBody.innerHTML = '';
-            data.detailed_orders.forEach(order => {
-              const row = `
-                <tr>
-                  <td>${order.date}</td>
-                  <td>${order.order_id}</td>
-                  <td>${order.payment_method}</td>
-                  <td>${order.customer_name}</td>
-                  <td>₹ ${order.original_amount}</td>
-                  <td>₹ ${order.coupon_discount}</td>
-                  <td>₹ ${order.offer_discount}</td>
-                  <td>₹ ${order.final_amount}</td>
-                  <td>${order.refund_amount ? '₹ ' + order.refund_amount : '-'}</td>
-                </tr>
-              `;
-              tableBody.insertAdjacentHTML('beforeend', row);
-            });
-          }
-    
-          // Update pagination controls
-          const paginationContainer = document.getElementById('pagination-container');
-          if (paginationContainer) {
-            paginationContainer.innerHTML = '';
-            for (let i = 1; i <= data.total_pages; i++) {
-              const pageLink = document.createElement('a');
-              pageLink.href = '#';
-              pageLink.textContent = i;
-              pageLink.classList.add('page-link');
-              if (i === data.current_page) {
-                pageLink.classList.add('active');
-              }
-              pageLink.addEventListener('click', (e) => {
-                e.preventDefault();
-                filterOrders(startDate, endDate, i);
-              });
-              paginationContainer.appendChild(pageLink);
-            }
-          }
-    
-          // Update summary information
+          updateTableContent(data);
+          updatePagination(data, startDate, endDate);
           updateSummary(data);
+          updateExportLinks(startDate, endDate);
     
           if (loadingIndicator) {
             loadingIndicator.style.display = 'none';
@@ -670,6 +612,53 @@
         });
       }
     
+      // Function to update table content
+      function updateTableContent(data) {
+        const tableBody = document.getElementById('report-table-body');
+        if (tableBody) {
+          tableBody.innerHTML = '';
+          data.detailed_orders.forEach(order => {
+            const row = `
+              <tr>
+                <td>${order.date}</td>
+                <td>${order.order_id}</td>
+                <td>${order.payment_method}</td>
+                <td>${order.customer_name}</td>
+                <td>₹ ${order.original_amount}</td>
+                <td>₹ ${order.coupon_discount}</td>
+                <td>₹ ${order.offer_discount}</td>
+                <td>₹ ${order.final_amount}</td>
+                <td>${order.refund_amount ? '₹ ' + order.refund_amount : '-'}</td>
+              </tr>
+            `;
+            tableBody.insertAdjacentHTML('beforeend', row);
+          });
+        }
+      }
+    
+      // Function to update pagination
+      function updatePagination(data, startDate, endDate) {
+        const paginationContainer = document.getElementById('pagination-container');
+        if (paginationContainer) {
+          paginationContainer.innerHTML = '';
+          for (let i = 1; i <= data.total_pages; i++) {
+            const pageLink = document.createElement('a');
+            pageLink.href = '#';
+            pageLink.textContent = i;
+            pageLink.classList.add('page-link');
+            if (i === data.current_page) {
+              pageLink.classList.add('active');
+            }
+            pageLink.addEventListener('click', (e) => {
+              e.preventDefault();
+              filterOrders(startDate, endDate, i);
+            });
+            paginationContainer.appendChild(pageLink);
+          }
+        }
+      }
+    
+      // Function to update summary information
       function updateSummary(data) {
         const elements = {
           'overall-sales-count': data.overall_sales_count,
@@ -687,44 +676,78 @@
         }
       }
     
-      // Event delegation for all filter buttons
-      document.addEventListener('click', function(event) {
-        const today = new Date();
-        let startDate, endDate;
-    
-        if (event.target.id === 'filter-button') {
-          startDate = document.getElementById('start-date').value;
-          endDate = document.getElementById('end-date').value;
-        } else if (event.target.id === 'last-day') {
-          startDate = new Date(today);
-          startDate.setDate(today.getDate() - 1);
-          endDate = today;
-        } else if (event.target.id === 'last-week') {
-          startDate = new Date(today);
-          startDate.setDate(today.getDate() - 7);
-          endDate = today;
-        } else if (event.target.id === 'last-month') {
-          startDate = new Date(today);
-          startDate.setDate(today.getDate() - 30);
-          endDate = today;
-        } else if (event.target.id === 'yearly') {
-          startDate = new Date(today);
-          startDate.setFullYear(today.getFullYear() - 1);
-          endDate = today;
-        } else {
-          return; // Not a filter button, do nothing
+      // Function to update export links
+      function updateExportLinks(startDate, endDate) {
+        const pdfLink = document.getElementById('export-pdf');
+        const excelLink = document.getElementById('export-excel');
+        
+        if (pdfLink) {
+          const pdfBaseUrl = pdfLink.getAttribute('data-base-url');
+          pdfLink.href = `${pdfBaseUrl}?start_date=${startDate}&end_date=${endDate}`;
         }
+        if (excelLink) {
+          const excelBaseUrl = excelLink.getAttribute('data-base-url');
+          excelLink.href = `${excelBaseUrl}?start_date=${startDate}&end_date=${endDate}`;
+        }
+      }
     
-        console.log(`Filter button ${event.target.id} clicked`);
-        filterOrders(startDate.toISOString().split('T')[0], endDate.toISOString().split('T')[0]);
+      // Event listeners for filter buttons
+      const filterButton = document.getElementById('filter-button');
+      const startDateInput = document.getElementById('start-date');
+      const endDateInput = document.getElementById('end-date');
+      const quickFilterButtons = document.querySelectorAll('.quick-filters button');
+    
+      filterButton.addEventListener('click', function() {
+        const startDate = startDateInput.value;
+        const endDate = endDateInput.value;
+        if (startDate && endDate) {
+          filterOrders(startDate, endDate);
+        } else {
+          alert('Please select both start and end dates.');
+        }
+      });
+    
+      quickFilterButtons.forEach(button => {
+        button.addEventListener('click', function() {
+          const today = new Date();
+          let startDate = new Date(today);
+    
+          switch(this.id) {
+            case 'last-day':
+              startDate.setDate(today.getDate() - 1);
+              break;
+            case 'last-week':
+              startDate.setDate(today.getDate() - 7);
+              break;
+            case 'last-month':
+              startDate.setDate(today.getDate() - 30);
+              break;
+            case 'yearly':
+              startDate.setFullYear(today.getFullYear() - 1);
+              break;
+          }
+    
+          startDateInput.value = formatDate(startDate);
+          endDateInput.value = formatDate(today);
+    
+          filterOrders(formatDate(startDate), formatDate(today));
+        });
       });
     
       // Initial load
       const defaultStartDate = new Date();
       defaultStartDate.setDate(defaultStartDate.getDate() - 30); // Default to last 30 days
-      filterOrders(defaultStartDate.toISOString().split('T')[0], new Date().toISOString().split('T')[0]);
+      filterOrders(formatDate(defaultStartDate), formatDate(new Date()));
     });
   
+</script>
+
+<script>
+  // Get today's date in YYYY-MM-DD format
+  const today = new Date().toISOString().split('T')[0];
+
+  // Set the max attribute of the date input to today's date
+  document.getElementById('end-date').setAttribute('max', today);
 </script>
 
   

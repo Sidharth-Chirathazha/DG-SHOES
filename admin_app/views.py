@@ -24,6 +24,10 @@ import logging
 from product_app.models import Product,ProductColorImage
 from django.db.models import Count
 from django.shortcuts import render
+from weasyprint.text.fonts import FontConfiguration
+from django.conf import settings
+import os
+from django.utils.timezone import make_aware
 # from .utils import superuser_required
 
 User = get_user_model()
@@ -67,8 +71,8 @@ def get_dashboard_data(request):
     start_date = request.GET.get('start_date')
     end_date = request.GET.get('end_date')
     
-    start_date = datetime.strptime(start_date, '%Y-%m-%d') if start_date else datetime.now() - timedelta(days=30)
-    end_date = datetime.strptime(end_date, '%Y-%m-%d') if end_date else datetime.now()
+    start_date =  make_aware(datetime.strptime(start_date, '%Y-%m-%d')) if start_date else datetime.now() - timedelta(days=30)
+    end_date =make_aware(datetime.strptime(end_date, '%Y-%m-%d').replace(hour=23, minute=59, second=59)) if end_date else datetime.now()
     
     orders = Order.objects.filter(payment_status='Paid', order_date__range=(start_date, end_date))
     
@@ -155,14 +159,13 @@ def sales_report(request):
     orders = Order.objects.filter(payment_status='Paid')
 
     # Get filter parameters
-    start_date = request.GET.get('start_date')
-    end_date = request.GET.get('end_date')
+    start_date = request.GET.get('start_date','')
+    end_date = request.GET.get('end_date','')
 
     if start_date and end_date:
-        start_date = datetime.strptime(start_date, '%Y-%m-%d')
-        end_date = datetime.strptime(end_date, '%Y-%m-%d')
+        start_date = make_aware(datetime.strptime(start_date, '%Y-%m-%d'))
+        end_date = make_aware(datetime.strptime(end_date, '%Y-%m-%d').replace(hour=23, minute=59, second=59))
         orders = orders.filter(order_date__range=(start_date, end_date))
-
 
     # Calculate overall sales count
     overall_sales_count = orders.count()
@@ -231,6 +234,8 @@ def sales_report(request):
         'overall_refund_amount':  overall_refund_amount,
         'current_page': page_obj.number,
         'total_pages': paginator.num_pages,
+        'start_date_passed' : start_date,
+        'end_date_passed' : end_date,
         
         }
 
@@ -248,9 +253,10 @@ def export_pdf(request):
     end_date = request.GET.get('end_date')
     
     if start_date and end_date:
-        start_date = datetime.strptime(start_date, '%Y-%m-%d')
-        end_date = datetime.strptime(end_date, '%Y-%m-%d')
+        start_date = make_aware(datetime.strptime(start_date, '%Y-%m-%d'))
+        end_date = make_aware(datetime.strptime(end_date, '%Y-%m-%d').replace(hour=23, minute=59, second=59))
         orders = orders.filter(order_date__range=(start_date, end_date))
+
     
     # Calculate overall sales count
     overall_sales_count = orders.count()
@@ -295,14 +301,21 @@ def export_pdf(request):
         'final_total_amount': final_total_amount - overall_refund_amount,
         'detailed_orders': detailed_orders,
         'overall_refund_amount': overall_refund_amount,
+        'start_date': start_date,
+        'end_date': end_date,
     }
     
     # Render the HTML template
     html_string = render_to_string('sales_report_pdf_template.html', context)
+
+    # Configure WeasyPrint
+    font_config = FontConfiguration()
+    base_url = settings.STATIC_ROOT if settings.STATIC_ROOT else os.path.join(settings.BASE_DIR, 'static')
+    
     
     # Create a PDF file
-    html = HTML(string=html_string)
-    result = html.write_pdf()
+    html = HTML(string=html_string, base_url=base_url)
+    result = html.write_pdf(font_config=font_config)
     
     # Generate HTTP response
     response = HttpResponse(content_type='application/pdf;')
@@ -324,8 +337,8 @@ def export_excel(request):
     end_date = request.GET.get('end_date')
     
     if start_date and end_date:
-        start_date = datetime.strptime(start_date, '%Y-%m-%d')
-        end_date = datetime.strptime(end_date, '%Y-%m-%d')
+        start_date = make_aware(datetime.strptime(start_date, '%Y-%m-%d'))
+        end_date = make_aware(datetime.strptime(end_date, '%Y-%m-%d').replace(hour=23, minute=59, second=59))
         orders = orders.filter(order_date__range=(start_date, end_date))
     
     # Calculate overall totals

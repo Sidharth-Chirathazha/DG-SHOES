@@ -87,6 +87,53 @@
 			background-position: center center;
 			background-size: cover;
 			}
+			
+
+
+			.custom-messages-container {
+				max-width: 600px;
+				margin: 20px auto;
+				padding: 10px;
+			}
+			
+			.custom-alert {
+				position: relative;
+				padding: 15px;
+				margin-bottom: 10px;
+				border-radius: 4px;
+				color: #fff;
+				text-align: left;
+				box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+				font-size: 16px;
+			}
+			
+			.custom-alert-info {
+				background-color: #5bc0de;
+			}
+			
+			.custom-alert-success {
+				background-color: #5cb85c;
+			}
+			
+			.custom-alert-warning {
+				background-color: #f0ad4e;
+			}
+			
+			.custom-alert-error {
+				background-color: #d9534f;
+			}
+			
+			.close-btn {
+				position: absolute;
+				top: 10px;
+				right: 10px;
+				background: transparent;
+				border: none;
+				color: #fff;
+				font-size: 20px;
+				cursor: pointer;
+			}
+			
 
 
 
@@ -299,15 +346,18 @@
 		</section>
 
 		{% if messages %}
-		<div class="container mt-4">
-			{% for message in messages %}
-			<div class="alert alert-{{ message.tags|default:'info' }} alert-dismissible fade show" role="alert">
-				{{ message }}
-				<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+			<div class="custom-messages-container">
+				{% for message in messages %}
+					<div class="custom-alert custom-alert-{{ message.tags|default:'info' }}">
+						<span>{{ message }}</span>
+						<button class="close-btn" onclick="this.parentElement.style.display='none';">&times;</button>
+					</div>
+				{% endfor %}
 			</div>
-			{% endfor %}
-		</div>
 		{% endif %}
+
+
+
 		<!-- WISHLIST AREA END -->
 
 		<!-- OUR BRAND AREA START -->

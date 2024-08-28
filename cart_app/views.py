@@ -173,6 +173,7 @@ def wishlist_view(request):
         'categories' : categories,
     }
 
+
     return render(request,'wishlist.html',context)
 
 
@@ -208,24 +209,32 @@ def add_to_cart_from_wishlist(request,wishlist_item_id):
     product_size = get_object_or_404(ProductSize, product_data=product_variant, size=selected_size)
     product = product_variant.product_id
 
-    cart,created = Cart.objects.get_or_create(user=request.user)
-    cart_item,created = CartItem.objects.get_or_create(
+    cart, _ = Cart.objects.get_or_create(user=request.user)
+
+    cart_item_exists = CartItem.objects.filter(
         cart=cart,
         product=product,
-        product_size = product_size,
-        product_color = product_variant,
-        defaults={'quantity': 1},
-    )
+        product_size=product_size,
+        product_color=product_variant
+    ).exists()
 
-    if created:
-        messages.success(request, 'Item added to cart.')
+    if cart_item_exists:
+        messages.error(request, 'Item already exists in your cart.')
     else:
-        if cart_item.quantity < 5:
-            cart_item.quantity += 1
-            cart_item.save()
-            messages.success(request, 'Item quantity updated in cart.')
-        else:
-            messages.error(request, 'Cart limit for this product reached.')
+        cart,created = Cart.objects.get_or_create(user=request.user)
+        cart_item,created = CartItem.objects.get_or_create(
+            cart=cart,
+            product=product,
+            product_size = product_size,
+            product_color = product_variant,
+            defaults={'quantity': 1},
+        )
+
+        if created:
+            messages.success(request, 'Item added to cart.')
+
+        # Remove the item from the wishlist
+        wishlist_item.delete()
 
     return redirect('wishlist')
 
@@ -234,7 +243,7 @@ def add_to_cart_from_wishlist(request,wishlist_item_id):
 def add_all_items_to_cart(request):
 
     wishlist_items = Wishlist.objects.filter(user=request.user)
-    cart,created = Cart.objects.get_or_create(user=request.user)
+    cart, _ = Cart.objects.get_or_create(user=request.user)
 
     for wishlist_item in wishlist_items:
         product_variant = wishlist_item.product_variant
@@ -247,22 +256,29 @@ def add_all_items_to_cart(request):
         product_size = get_object_or_404(ProductSize,product_data=product_variant,size=selected_size)
         product = product_variant.product_id
 
-        cart_item,created = CartItem.objects.get_or_create(
+        # Check if the item is already in the cart
+        cart_item_exists = CartItem.objects.filter(
             cart=cart,
-            product_size = product_size,
-            product = product,
-            product_color = product_variant,
-            defaults={'quantity': 1},
+            product=product,
+            product_size=product_size,
+            product_color=product_variant
+        ).exists()
 
-        )
-        messages.success(request,'All items added to cart.')
+        if cart_item_exists:
+            messages.error(request, f'{product_variant.product_id.product_name}({product_variant.color_name}) already exists in your cart.')
+        else:
+            cart_item,created = CartItem.objects.get_or_create(
+                cart=cart,
+                product_size = product_size,
+                product = product,
+                product_color = product_variant,
+                defaults={'quantity': 1},
 
-        if not created and cart_item.quantity < 5:
-            cart_item.quantity += 1
-            cart_item.save()
-            messages.success(request,'Cart items updated.')
-        elif not created:
-            messages.error(request, f'Cart limit for {product_variant.product_id.product_name} reached.')
+            )
+            if created:
+                messages.success(request, f'{product_variant.product_id.product_name} added to cart.')
+            wishlist_item.delete()
+
 
     return redirect('wishlist')
 
